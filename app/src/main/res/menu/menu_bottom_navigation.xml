@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_today"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="Today"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_inbox"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="Inbox"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/action_todolist"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="ToDoList"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="Search"
+        app:showAsAction="ifRoom"
+        />
+</menu>
