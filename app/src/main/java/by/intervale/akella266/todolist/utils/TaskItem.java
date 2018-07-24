@@ -1,40 +1,57 @@
 package by.intervale.akella266.todolist.utils;
 
+import android.support.annotation.NonNull;
+
 import java.util.Date;
 
-public class TaskItem {
+public class TaskItem implements Comparable<TaskItem> {
 
-    private String mName;
+    private long mId;
+    private String mTitle;
     private Date mDate;
     private String mNotes;
 
-    public TaskItem(String mName, Date mDate, String mNotes) {
-        this.mName = mName;
+    public TaskItem(long mId, String mName, Date mDate, String mNotes) {
+        this.mId = mId;
+        this.mTitle = mName;
         this.mDate = mDate;
         this.mNotes = mNotes;
     }
 
-    public String getmName() {
-        return mName;
+    public String getTitle() {
+        return mTitle;
     }
 
-    public void setmName(String mName) {
-        this.mName = mName;
+    public void setTitle(String mName) {
+        this.mTitle = mName;
     }
 
-    public Date getmDate() {
+    public Date getDate() {
         return mDate;
     }
 
-    public void setmDate(Date mDate) {
+    public void setDate(Date mDate) {
         this.mDate = mDate;
     }
 
-    public String getmNotes() {
+    public String getNotes() {
         return mNotes;
     }
 
-    public void setmNotes(String mNotes) {
+    public void setNotes(String mNotes) {
         this.mNotes = mNotes;
+    }
+
+    public long getmId() {
+        return mId;
+    }
+
+    public void setmId(long mId) {
+        this.mId = mId;
+    }
+
+    @Override
+    public int compareTo(@NonNull TaskItem taskItem) {
+        return mId == taskItem.getmId() ? 0 : 1;
     }
 }

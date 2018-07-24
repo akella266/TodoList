@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical">
+
+      <TextView
+          android:id="@+id/task_title"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/default_margin"
+          android:layout_marginLeft="@dimen/default_margin"
+          android:layout_marginRight="@dimen/default_margin"
+          tools:text="This is task with Reminder"
+          />
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+          <View
+          android:layout_width="0dp"
+          android:layout_height="0dp"
+          android:layout_weight="1"
+          />
+
+
+          <ImageButton
+              android:id="@+id/button_arrow"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:background="@drawable/ic_chevron_right_grey_24dp"/>
+
+      </LinearLayout>
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          android:layout_marginBottom="@dimen/default_margin"
+          android:layout_marginLeft="@dimen/default_margin"
+          android:layout_marginRight="@dimen/default_margin">
+
+          <TextView
+              android:id="@+id/task_note"
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:layout_marginBottom="4dp"
+              tools:text="This is a note"/>
+
+          <TextView
+              android:id="@+id/task_date"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              tools:text="08.06.2018"/>
+      </LinearLayout>
+  </LinearLayout>
+</android.support.v7.widget.CardView>

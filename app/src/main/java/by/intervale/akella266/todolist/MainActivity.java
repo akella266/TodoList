@@ -1,14 +1,11 @@
 package by.intervale.akella266.todolist;
 
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
+import android.support.v7.widget.Toolbar;
+
 
 import by.intervale.akella266.todolist.adapters.ViewPagerAdapter;
 import by.intervale.akella266.todolist.fragments.FragmentInbox;
@@ -18,11 +15,20 @@ import by.intervale.akella266.todolist.fragments.FragmentToday;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Toolbar mToolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle(R.string.app_name);
+        initTabs();
+    }
+
+    private void initTabs(){
         TabLayout tabs = (TabLayout)findViewById(R.id.tabLayout);
         ViewPager viewPager = (ViewPager)findViewById(R.id.viewPager);
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -34,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
         tabs.setupWithViewPager(viewPager);
-
     }
+
+
 }
