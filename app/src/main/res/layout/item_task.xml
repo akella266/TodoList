@@ -29,8 +29,7 @@
           />
 
 
-          <ImageButton
-              android:id="@+id/button_arrow"
+          <ImageView
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:background="@drawable/ic_chevron_right_grey_24dp"/>
@@ -50,6 +49,8 @@
               android:layout_height="wrap_content"
               android:layout_weight="1"
               android:layout_marginBottom="4dp"
+              android:maxLines="1"
+              android:ellipsize="end"
               tools:text="This is a note"/>
 
           <TextView

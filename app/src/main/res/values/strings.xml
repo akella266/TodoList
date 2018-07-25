@@ -4,5 +4,22 @@
     <string name="title_inbox">Inbox</string>
     <string name="title_todolist">ToDoList</string>
     <string name="title_search">Search</string>
+    <string name="title_add">Add item</string>
+    <string name="title_edit">Edit item</string>
     <string name="completed_tasks">Completed</string>
+    <string name="details_title">TASK</string>
+    <string name="hint_text">Name</string>
+    <string name="details_reminder">REMINDER</string>
+    <string name="details_remind_description">Remind me On a Day</string>
+    <string name="details_priority">PRIORITY</string>
+    <string name="details_priority_description">Priority</string>
+    <string name="details_notes">NOTES</string>
+    <string name="details_notes_description">Description…</string>
+    <string name="dialog_title_date">Select Priority</string>
+    <string name="menu_fargment_today_adding_task">Add task</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="menu_fragment_add_done">Done</string>
+    <string name="additional_button_edit">Edit</string>
+
+    <string name="error_no_title">Please, enter name of task!</string>
 </resources>

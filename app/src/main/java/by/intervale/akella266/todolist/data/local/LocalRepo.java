@@ -12,33 +12,26 @@ import by.intervale.akella266.todolist.utils.TaskItem;
 
 public class LocalRepo implements Repository<TaskItem> {
 
-    private List<TaskItem> mCurrentTaskItems;
-    private List<TaskItem> mCompletedTaskItems;
+    private List<TaskItem> mTaskItems;
 
     public LocalRepo() {
-        mCurrentTaskItems = new ArrayList<>();
-        mCompletedTaskItems = new ArrayList<>();
+        mTaskItems = new ArrayList<>();
     }
 
     @Override
     public void add(TaskItem item) {
-        mCurrentTaskItems.add(item);
+        mTaskItems.add(item);
     }
-
-    public void addCompleted(TaskItem item) {
-        mCompletedTaskItems.add(item);
-    }
-
 
     @Override
     public void update(TaskItem item) {
-        int pos = Collections.binarySearch(mCurrentTaskItems, item);
-        mCurrentTaskItems.set(pos, item);
+        int pos = Collections.binarySearch(mTaskItems, item);
+        mTaskItems.set(pos, item);
     }
 
     @Override
     public void remove(TaskItem item) {
-        mCurrentTaskItems.remove(item);
+        mTaskItems.remove(item);
     }
 
     @Override
@@ -48,10 +41,20 @@ public class LocalRepo implements Repository<TaskItem> {
         ResponseSpecification resp = spec.getType();
         switch (resp.getType()){
             case GET_CURRENT:{
-                return mCurrentTaskItems;
+                List<TaskItem> currentTasks = new ArrayList<>();
+                for(TaskItem item : mTaskItems){
+                    if (!item.isComplete())
+                        currentTasks.add(item);
+                }
+                return currentTasks;
             }
             case GET_COMPLETED:{
-                return mCompletedTaskItems;
+                List<TaskItem> compeleteTasks = new ArrayList<>();
+                for(TaskItem item : mTaskItems){
+                    if (item.isComplete())
+                        compeleteTasks.add(item);
+                }
+                return compeleteTasks;
             }
             default:
                 return null;

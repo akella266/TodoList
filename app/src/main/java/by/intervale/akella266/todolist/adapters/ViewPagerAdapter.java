@@ -23,6 +23,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter{
     public void addFragment(Fragment fragment, String title){
         mFragments.add(fragment);
         mTitles.add(title);
+        
     }
 
     @Override

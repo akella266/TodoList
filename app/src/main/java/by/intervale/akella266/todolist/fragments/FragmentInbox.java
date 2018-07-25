@@ -12,10 +12,6 @@ import by.intervale.akella266.todolist.R;
 
 public class FragmentInbox extends Fragment {
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Nullable
     @Override
