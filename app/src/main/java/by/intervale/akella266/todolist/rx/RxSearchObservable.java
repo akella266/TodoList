@@ -5,7 +5,7 @@ import android.util.Log;
 
 import java.util.List;
 
-import by.intervale.akella266.todolist.data.local.GetCurrentTasksByNameSpecification;
+import by.intervale.akella266.todolist.data.local.GetTasksByNameSpecification;
 import by.intervale.akella266.todolist.data.local.LocalRepo;
 import by.intervale.akella266.todolist.utils.Initializer;
 import by.intervale.akella266.todolist.utils.TaskItem;
@@ -20,13 +20,15 @@ public class RxSearchObservable {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                subject.onComplete();
+                Log.i("SearchView", "Submit:" + query);
+//                subject.onComplete();
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                List<TaskItem> items = repo.query(new GetCurrentTasksByNameSpecification(newText));
+                Log.i("SearchView", "Change:" + newText);
+                List<TaskItem> items = repo.query(new GetTasksByNameSpecification(newText));
                 subject.onNext(items);
                 return true;
             }

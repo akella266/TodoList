@@ -10,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,12 +27,11 @@ import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.adapters.TasksAdapter;
 import by.intervale.akella266.todolist.rx.RxSearchObservable;
 import by.intervale.akella266.todolist.utils.TaskItem;
+import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
 import static android.view.View.GONE;
@@ -44,7 +42,7 @@ public class FragmentSearch extends Fragment {
     private Toolbar mToolbar;
     private TextView mEdit;
     private Button mBtnSearch;
-    private TextView mNoReslt;
+    private TextView mNoResult;
     private ToggleButton mBtnActive;
     private ToggleButton mBtnCompleted;
     private RecyclerView mRecyclerView;
@@ -54,7 +52,6 @@ public class FragmentSearch extends Fragment {
     private LinearLayout mSearchPanel;
     private SearchView mSearch;
     private Button mCancel;
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,7 +66,7 @@ public class FragmentSearch extends Fragment {
         configureToolbar();
 
         mBtnSearch = view.findViewById(R.id.search_btn_search);
-        mNoReslt = view.findViewById(R.id.search_no_result);
+        mNoResult = view.findViewById(R.id.search_no_result);
         mBtnActive = view.findViewById(R.id.search_btn_active);
         mBtnCompleted = view.findViewById(R.id.search_btn_completed);
         mViewFilter = view.findViewById(R.id.search_filter);
@@ -95,23 +92,29 @@ public class FragmentSearch extends Fragment {
         mBtnActive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b){
-                    mBtnCompleted.setChecked(false);
+                if (!b && !mBtnCompleted.isChecked())
                     mBtnActive.setChecked(true);
+                else if (b) {
                     mBtnActive.setTextColor(getResources().getColor(R.color.colorPrimary));
-                    mBtnCompleted.setTextColor(getResources().getColor(R.color.colorAccent));
+                    mBtnCompleted.setChecked(false);
+                    updateUI();
                 }
+                else
+                    mBtnActive.setTextColor(getResources().getColor(R.color.colorAccent));
             }
         });
         mBtnCompleted.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b){
-                    mBtnActive.setChecked(false);
+                if (!b && !mBtnActive.isChecked())
                     mBtnCompleted.setChecked(true);
+                else if (b) {
                     mBtnCompleted.setTextColor(getResources().getColor(R.color.colorPrimary));
-                    mBtnActive.setTextColor(getResources().getColor(R.color.colorAccent));
+                    mBtnActive.setChecked(false);
+                    updateUI();
                 }
+                else
+                    mBtnCompleted.setTextColor(getResources().getColor(R.color.colorAccent));
             }
         });
     }
@@ -120,20 +123,19 @@ public class FragmentSearch extends Fragment {
     private void setUpSearch() {
         RxSearchObservable.fromView(mSearch)
                 .debounce(300, TimeUnit.MILLISECONDS)
+//                .distinctUntilChanged()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<TaskItem>>() {
                     @Override
                     public void accept(List<TaskItem> taskItems) throws Exception {
                         if (taskItems.isEmpty()){
-                            mNoReslt.setVisibility(VISIBLE);
+                            mNoResult.setVisibility(VISIBLE);
                             mRecyclerView.setVisibility(GONE);
                         }
                         else{
                             mListTasks.clear();
                             mListTasks.addAll(taskItems);
-                            mNoReslt.setVisibility(GONE);
-                            mRecyclerView.setVisibility(VISIBLE);
                             updateUI();
                         }
 
@@ -149,6 +151,10 @@ public class FragmentSearch extends Fragment {
                 mBtnSearch.setVisibility(GONE);
                 mSearchPanel.setVisibility(VISIBLE);
                 mViewFilter.setVisibility(VISIBLE);
+
+                mSearch.setFocusable(true);
+                mSearch.setIconified(false);
+                mSearch.requestFocusFromTouch();
             }
         });
 
@@ -174,6 +180,18 @@ public class FragmentSearch extends Fragment {
         });
     }
 
+    private List<TaskItem> getRequestedTasks(){
+        List<TaskItem> filterItems = new ArrayList<>();
+        for(int i = 0; i < mListTasks.size(); i++){
+            TaskItem currItem = mListTasks.get(i);
+            if ((mBtnActive.isChecked() && !currItem.isComplete()) ||
+                    (mBtnCompleted.isChecked() && currItem.isComplete())) {
+                filterItems.add(currItem);
+            }
+        }
+        return filterItems;
+    }
+
     private void updateUI(){
         if (mAdapter == null){
             mListTasks = new ArrayList<>();
@@ -181,7 +199,13 @@ public class FragmentSearch extends Fragment {
             mRecyclerView.setAdapter(mAdapter);
         }
 
-        mAdapter.setTasks(mListTasks);
+        mAdapter.setTasks(getRequestedTasks());
+
+        if(mAdapter.getItemCount() != 0) {
+            mNoResult.setVisibility(GONE);
+            mRecyclerView.setVisibility(VISIBLE);
+        }
+
         mAdapter.notifyDataSetChanged();
     }
 

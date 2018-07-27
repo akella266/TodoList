@@ -48,15 +48,6 @@ public class LocalRepo implements Repository<TaskItem> {
                 }
                 return currentTasks;
             }
-            case GET_CURRENT_BY_NAME:{
-                List<TaskItem> currentTasks = new ArrayList<>();
-                String name = (String)resp.getArgs().get(0);
-                for(TaskItem item : mTaskItems){
-                    if (!item.isComplete() && item.getTitle().toLowerCase().contains(name.toLowerCase()))
-                        currentTasks.add(item);
-                }
-                return currentTasks;
-            }
             case GET_COMPLETED:{
                 List<TaskItem> compeleteTasks = new ArrayList<>();
                 for(TaskItem item : mTaskItems){
@@ -64,6 +55,17 @@ public class LocalRepo implements Repository<TaskItem> {
                         compeleteTasks.add(item);
                 }
                 return compeleteTasks;
+            }
+            case GET_BY_NAME:{
+                List<TaskItem> tasks = new ArrayList<>();
+                String name = (String)resp.getArgs().get(0);
+                if(!name.isEmpty()) {
+                    for (TaskItem item : mTaskItems) {
+                        if (item.getTitle().toLowerCase().contains(name.toLowerCase()))
+                            tasks.add(item);
+                    }
+                }
+                return tasks;
             }
             default:
                 return null;

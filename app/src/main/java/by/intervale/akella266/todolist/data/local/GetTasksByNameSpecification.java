@@ -8,11 +8,11 @@ import by.intervale.akella266.todolist.data.ResponseSpecification;
 import by.intervale.akella266.todolist.data.TypeOperation;
 import by.intervale.akella266.todolist.data.interfaces.local.LocalSpecification;
 
-public class GetCurrentTasksByNameSpecification implements LocalSpecification {
+public class GetTasksByNameSpecification implements LocalSpecification {
 
     private String name;
 
-    public GetCurrentTasksByNameSpecification(String name) {
+    public GetTasksByNameSpecification(String name) {
         this.name = name;
     }
 
@@ -20,6 +20,6 @@ public class GetCurrentTasksByNameSpecification implements LocalSpecification {
     public ResponseSpecification getType() {
         List<Object> resp = new ArrayList<>();
         resp.add(name);
-        return new ResponseSpecification(TypeOperation.GET_CURRENT_BY_NAME, resp);
+        return new ResponseSpecification(TypeOperation.GET_BY_NAME, resp);
     }
 }

@@ -19,7 +19,7 @@ public class Initializer {
                     Calendar.getInstance().getTime(), "This is note"));
             repo.add(new TaskItem(UUID.randomUUID(), "This is task withour reminder",
                     Calendar.getInstance().getTime(), "This is note"));
-            repo.add(new TaskItem(UUID.randomUUID(), "This is task withour reminder",
+            repo.add(new TaskItem(UUID.randomUUID(), "This is task without reminder",
                     Calendar.getInstance().getTime(), "This is note", true));
             repo.add(new TaskItem(UUID.randomUUID(), "This is task without reminder",
                     Calendar.getInstance().getTime(), "This is note", true));
