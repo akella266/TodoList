@@ -1,7 +1,8 @@
 package by.intervale.akella266.todolist.data;
 
 public enum TypeOperation {
-    GET_CURRENT,
-    GET_COMPLETED,
-    GET_BY_NAME
+    GET_CURRENT_TASKS,
+    GET_COMPLETED_TASKS,
+    GET_BY_NAME_TASKS,
+    GET_GROUPS
 }

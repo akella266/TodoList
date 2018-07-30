@@ -7,15 +7,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
-import by.intervale.akella266.todolist.fragments.FragmentDetails;
-import by.intervale.akella266.todolist.utils.TaskItem;
+import by.intervale.akella266.todolist.fragments.TaskDetailsFragment;
+import by.intervale.akella266.todolist.data.models.TaskItem;
 
-public class DetailsActivity extends AppCompatActivity {
+public class TaskDetailsActivity extends AppCompatActivity {
 
     public static final String EXTRA_ADD_DATA = "akella299.intent.task_data";
 
     public static Intent newIntent(Context context, TaskItem item){
-        Intent intent = new Intent(context, DetailsActivity.class);
+        Intent intent = new Intent(context, TaskDetailsActivity.class);
         intent.putExtra(EXTRA_ADD_DATA, item);
         return intent;
     }
@@ -23,7 +23,7 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_details);
+        setContentView(R.layout.activity_task_details);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -31,7 +31,7 @@ public class DetailsActivity extends AppCompatActivity {
         TaskItem item = (TaskItem) intent.getSerializableExtra(EXTRA_ADD_DATA);
 
         FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction().add(R.id.fragment_container, FragmentDetails.getInstance(item))
+        fm.beginTransaction().add(R.id.fragment_container, TaskDetailsFragment.getInstance(item))
                 .addToBackStack(null).commit();
     }
 }

@@ -8,13 +8,13 @@ import by.intervale.akella266.todolist.data.ResponseSpecification;
 import by.intervale.akella266.todolist.data.interfaces.local.LocalSpecification;
 import by.intervale.akella266.todolist.data.interfaces.Repository;
 import by.intervale.akella266.todolist.data.interfaces.Specification;
-import by.intervale.akella266.todolist.utils.TaskItem;
+import by.intervale.akella266.todolist.data.models.TaskItem;
 
-public class LocalRepo implements Repository<TaskItem> {
+public class TaskItemLocalRepository implements Repository<TaskItem> {
 
     private List<TaskItem> mTaskItems;
 
-    public LocalRepo() {
+    public TaskItemLocalRepository() {
         mTaskItems = new ArrayList<>();
     }
 
@@ -40,7 +40,7 @@ public class LocalRepo implements Repository<TaskItem> {
 
         ResponseSpecification resp = spec.getType();
         switch (resp.getType()){
-            case GET_CURRENT:{
+            case GET_CURRENT_TASKS:{
                 List<TaskItem> currentTasks = new ArrayList<>();
                 for(TaskItem item : mTaskItems){
                     if (!item.isComplete())
@@ -48,7 +48,7 @@ public class LocalRepo implements Repository<TaskItem> {
                 }
                 return currentTasks;
             }
-            case GET_COMPLETED:{
+            case GET_COMPLETED_TASKS:{
                 List<TaskItem> compeleteTasks = new ArrayList<>();
                 for(TaskItem item : mTaskItems){
                     if (item.isComplete())
@@ -56,7 +56,7 @@ public class LocalRepo implements Repository<TaskItem> {
                 }
                 return compeleteTasks;
             }
-            case GET_BY_NAME:{
+            case GET_BY_NAME_TASKS:{
                 List<TaskItem> tasks = new ArrayList<>();
                 String name = (String)resp.getArgs().get(0);
                 if(!name.isEmpty()) {

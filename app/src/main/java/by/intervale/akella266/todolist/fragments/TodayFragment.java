@@ -5,9 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,20 +15,21 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import by.intervale.akella266.todolist.DetailsActivity;
+import by.intervale.akella266.todolist.TaskDetailsActivity;
 import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.adapters.TasksAdapter;
+import by.intervale.akella266.todolist.data.models.TaskItem;
 import by.intervale.akella266.todolist.utils.Initializer;
 import by.intervale.akella266.todolist.data.interfaces.Repository;
-import by.intervale.akella266.todolist.data.local.GetCompletedTaskSpecification;
-import by.intervale.akella266.todolist.data.local.GetCurrentTasksSpecification;
+import by.intervale.akella266.todolist.data.local.specifications.GetCompletedTaskSpecification;
+import by.intervale.akella266.todolist.data.local.specifications.GetCurrentTasksSpecification;
 
-public class FragmentToday extends Fragment
+public class TodayFragment extends Fragment
         implements View.OnClickListener{
 
-    private Repository mRepo;
+    private Repository<TaskItem> mRepo;
+    private Toolbar mToolbar;
     private RecyclerView mCurrentRecycler;
     private RecyclerView mCompletedRecycler;
     private TasksAdapter mCurrentAdapter;
@@ -44,7 +45,7 @@ public class FragmentToday extends Fragment
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_today, container, false);
         setHasOptionsMenu(true);
-        configureToolbar(view);
+
         mRepo = Initializer.getTasksLocal();
 
         mCurrentRecycler = view.findViewById(R.id.recyclerView_current_tasks);
@@ -63,32 +64,23 @@ public class FragmentToday extends Fragment
         updateUI();
     }
 
-    private void configureToolbar(View view){
-        AppCompatActivity activity;
-        if ((activity = (AppCompatActivity)getActivity()) != null) {
-                TextView edit = activity.findViewById(R.id.toolbar_additional_button);
-                edit.setText(R.string.additional_button_edit);
-                edit.setOnClickListener(this);
-                TextView title = activity.findViewById(R.id.toolbar_title);
-                title.setText(R.string.title_today);
-        }
-    }
 
     private void updateUI(){
         if(mCurrentAdapter == null){
             mCurrentAdapter = new TasksAdapter(mRepo.query(new GetCurrentTasksSpecification()));
-            mCurrentRecycler.setAdapter(mCurrentAdapter);
         }
         if(mCompletedAdapter == null){
             mCompletedAdapter = new TasksAdapter(mRepo.query(new GetCompletedTaskSpecification()));
-            mCompletedRecycler.setAdapter(mCompletedAdapter);
         }
 
+        mCurrentRecycler.setAdapter(mCurrentAdapter);
+        mCompletedRecycler.setAdapter(mCompletedAdapter);
         mCurrentAdapter.setTasks(mRepo.query(new GetCurrentTasksSpecification()));
         mCompletedAdapter.setTasks(mRepo.query(new GetCompletedTaskSpecification()));
         mCurrentAdapter.notifyDataSetChanged();
         mCompletedAdapter.notifyDataSetChanged();
     }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -99,8 +91,8 @@ public class FragmentToday extends Fragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_fragment_today_add:{
-                Log.i("FragmentToday", "Add item");
-                Intent intent = DetailsActivity.newIntent(getContext(), null);
+                Log.i("TodayFragment", "Add item");
+                Intent intent = TaskDetailsActivity.newIntent(getContext(), null);
                 startActivity(intent);
                 return true;
             }
@@ -110,6 +102,6 @@ public class FragmentToday extends Fragment
 
     @Override
     public void onClick(View view) {
-        Log.i("FragmentToday", "Edit click");
+        Log.i("fragmentToday", "OnEditClick");
     }
 }

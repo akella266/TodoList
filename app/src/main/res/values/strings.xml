@@ -20,9 +20,12 @@
     <string name="button_cancel">Cancel</string>
     <string name="menu_fragment_add_done">Done</string>
     <string name="additional_button_edit">Edit</string>
-
     <string name="error_no_title">Please, enter name of task!</string>
     <string name="fragment_search_active">Active Tasks</string>
     <string name="fragment_search_completed">Completed</string>
     <string name="search_no_results">No Results</string>
+    <string name="item_group_count_tasks">(%1$s)</string>
+    <string name="menu_fragment_todolist_add_group">Add Group</string>
+    <string name="group_details_name">Name</string>
+    <string name="group_details_title_add_project">Add Project</string>
 </resources>

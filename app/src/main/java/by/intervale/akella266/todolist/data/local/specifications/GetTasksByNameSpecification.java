@@ -1,7 +1,6 @@
-package by.intervale.akella266.todolist.data.local;
+package by.intervale.akella266.todolist.data.local.specifications;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import by.intervale.akella266.todolist.data.ResponseSpecification;
@@ -20,6 +19,6 @@ public class GetTasksByNameSpecification implements LocalSpecification {
     public ResponseSpecification getType() {
         List<Object> resp = new ArrayList<>();
         resp.add(name);
-        return new ResponseSpecification(TypeOperation.GET_BY_NAME, resp);
+        return new ResponseSpecification(TypeOperation.GET_BY_NAME_TASKS, resp);
     }
 }

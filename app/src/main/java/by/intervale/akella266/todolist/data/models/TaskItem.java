@@ -1,4 +1,4 @@
-package by.intervale.akella266.todolist.utils;
+package by.intervale.akella266.todolist.data.models;
 
 import android.support.annotation.NonNull;
 
@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
+import by.intervale.akella266.todolist.utils.Priority;
+
 public class TaskItem implements Comparable<TaskItem>, Serializable {
 
     private UUID id;
@@ -16,25 +18,27 @@ public class TaskItem implements Comparable<TaskItem>, Serializable {
     private String notes;
     private Priority priority;
     private boolean isComplete;
+    private UUID groupId;
 
-    public TaskItem(UUID id, String title, Date date, String notes, Priority priority, boolean isComplete) {
-        this.id = id;
+    public TaskItem(String title, Date date, String notes, Priority priority, UUID groupId, boolean isComplete) {
+        this.id = UUID.randomUUID();
         this.title = title;
         this.date = date;
         this.notes = notes;
         this.priority = priority;
+        this.groupId = groupId;
         this.isComplete = isComplete;
     }
 
-    public TaskItem(UUID id, String title, Date date, String notes,boolean isComplete) {
-        this(id, title, date, notes,Priority.NONE, isComplete);
+    public TaskItem(String title, Date date, String notes,UUID groupId, boolean isComplete) {
+        this(title, date, notes,Priority.NONE, groupId, isComplete);
     }
 
-    public TaskItem(UUID id, String title, Date date, String notes) {
-        this(id, title, date, notes,Priority.NONE, false);
+    public TaskItem(String title, Date date, String notes,UUID groupId) {
+        this(title, date, notes, Priority.NONE, groupId, false);
     }
     public TaskItem(){
-        this(UUID.randomUUID(), "", Calendar.getInstance(Locale.getDefault()).getTime(), "", Priority.NONE, false);
+        this("", Calendar.getInstance(Locale.getDefault()).getTime(), "", Priority.NONE, null, false);
     }
 
     public String getTitle() {
@@ -83,6 +87,14 @@ public class TaskItem implements Comparable<TaskItem>, Serializable {
 
     public void setComplete(boolean complete) {
         isComplete = complete;
+    }
+
+    public UUID getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(UUID groupId) {
+        this.groupId = groupId;
     }
 
     @Override

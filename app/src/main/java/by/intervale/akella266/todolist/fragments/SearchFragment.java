@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,21 +27,17 @@ import java.util.concurrent.TimeUnit;
 import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.adapters.TasksAdapter;
 import by.intervale.akella266.todolist.rx.RxSearchObservable;
-import by.intervale.akella266.todolist.utils.TaskItem;
-import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
+import by.intervale.akella266.todolist.data.models.TaskItem;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-public class FragmentSearch extends Fragment {
+public class SearchFragment extends Fragment {
 
     private Toolbar mToolbar;
-    private TextView mEdit;
     private Button mBtnSearch;
     private TextView mNoResult;
     private ToggleButton mBtnActive;
@@ -63,8 +60,7 @@ public class FragmentSearch extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        configureToolbar();
-
+        mToolbar = ((AppCompatActivity)getActivity()).findViewById(R.id.toolbar);
         mBtnSearch = view.findViewById(R.id.search_btn_search);
         mNoResult = view.findViewById(R.id.search_no_result);
         mBtnActive = view.findViewById(R.id.search_btn_active);
@@ -209,22 +205,9 @@ public class FragmentSearch extends Fragment {
         mAdapter.notifyDataSetChanged();
     }
 
-    private void configureToolbar(){
-        AppCompatActivity activity;
-        if ((activity = (AppCompatActivity)getActivity()) != null) {
-            mToolbar = activity.findViewById(R.id.toolbar);
-            mEdit = activity.findViewById(R.id.toolbar_additional_button);
-            mEdit.setVisibility(GONE);
-            TextView mTitle = activity.findViewById(R.id.toolbar_title);
-            mTitle.setText(R.string.title_search);
-        }
-    }
-
     @Override
     public void onPause() {
         super.onPause();
-        mEdit.setVisibility(VISIBLE);
         mToolbar.setVisibility(VISIBLE);
-
     }
 }

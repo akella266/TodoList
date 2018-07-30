@@ -29,10 +29,10 @@ import java.util.Locale;
 import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.utils.Initializer;
 import by.intervale.akella266.todolist.utils.Priority;
-import by.intervale.akella266.todolist.utils.TaskItem;
+import by.intervale.akella266.todolist.data.models.TaskItem;
 
-public class FragmentDetails extends Fragment
-        implements DialogFragmentPriority.DialogPriorityListener, View.OnClickListener{
+public class TaskDetailsFragment extends Fragment
+        implements DialogFragmentPriority.DialogPriorityListener{
 
     public static final String TAG = "todolist.fragments.fragmentdetails";
     public static final String ARGS_DETAILS = "bundle.details";
@@ -46,10 +46,10 @@ public class FragmentDetails extends Fragment
     private SimpleDateFormat mDateFormater;
     private boolean isEdit;
 
-    public static FragmentDetails getInstance(TaskItem item){
+    public static TaskDetailsFragment getInstance(TaskItem item){
         Bundle args = new Bundle();
         args.putSerializable(ARGS_DETAILS, item);
-        FragmentDetails fragment = new FragmentDetails();
+        TaskDetailsFragment fragment = new TaskDetailsFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,7 +57,7 @@ public class FragmentDetails extends Fragment
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add, container, false);
+        View view = inflater.inflate(R.layout.fragment_task_details, container, false);
         setHasOptionsMenu(true);
         if (getArguments() != null)
             mTask = (TaskItem) getArguments().getSerializable(ARGS_DETAILS);
@@ -136,13 +136,13 @@ public class FragmentDetails extends Fragment
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_fragment_add, menu);
+        inflater.inflate(R.menu.menu_fragment_details_done, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.menu_fragment_add_done:{
+            case R.id.menu_fragment_details_done:{
                 String title;
                 if ((title = mTitle.getText().toString()).isEmpty()){
                     Snackbar.make(mTitle, getString(R.string.error_no_title), Snackbar.LENGTH_SHORT)
@@ -176,16 +176,16 @@ public class FragmentDetails extends Fragment
         if ((activity = (AppCompatActivity)getActivity()) != null) {
             TextView edit = activity.findViewById(R.id.toolbar_additional_button);
             edit.setText(R.string.button_cancel);
-            edit.setOnClickListener(this);
+            edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.i("TaskDetailsFragment", "cancel");
+                    getActivity().finish();
+                }
+            });
             TextView title = activity.findViewById(R.id.toolbar_title);
             if (isEdit) title.setText(R.string.title_edit);
             else title.setText(R.string.title_add);
         }
-    }
-
-    @Override
-    public void onClick(View view) {
-        Log.i("FragmentDetails", "cancel");
-        getActivity().finish();
     }
 }

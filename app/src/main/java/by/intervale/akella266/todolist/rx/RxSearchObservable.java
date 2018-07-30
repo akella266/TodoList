@@ -5,10 +5,10 @@ import android.util.Log;
 
 import java.util.List;
 
-import by.intervale.akella266.todolist.data.local.GetTasksByNameSpecification;
-import by.intervale.akella266.todolist.data.local.LocalRepo;
+import by.intervale.akella266.todolist.data.local.specifications.GetTasksByNameSpecification;
+import by.intervale.akella266.todolist.data.local.TaskItemLocalRepository;
 import by.intervale.akella266.todolist.utils.Initializer;
-import by.intervale.akella266.todolist.utils.TaskItem;
+import by.intervale.akella266.todolist.data.models.TaskItem;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 
@@ -16,7 +16,7 @@ public class RxSearchObservable {
 
     public static Observable<List<TaskItem>> fromView(SearchView searchView){
         final PublishSubject<List<TaskItem>> subject = PublishSubject.create();
-        final LocalRepo repo = Initializer.getTasksLocal();
+        final TaskItemLocalRepository repo = Initializer.getTasksLocal();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

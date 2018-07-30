@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import by.intervale.akella266.todolist.R;
-import by.intervale.akella266.todolist.utils.TaskItem;
+import by.intervale.akella266.todolist.data.models.TaskItem;
 
 public class TasksAdapter extends RecyclerView.Adapter<TaskViewHolder> {
 
@@ -33,7 +33,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TaskViewHolder> {
         TaskItem task = mTasks.get(position);
         holder.mTitle.setText(task.getTitle());
         holder.mNote.setText(task.getNotes());
-        SimpleDateFormat format = new SimpleDateFormat("dd.mm.yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
         holder.mDate.setText(format.format(task.getDate()));
     }
 

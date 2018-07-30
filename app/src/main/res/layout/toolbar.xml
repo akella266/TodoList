@@ -9,8 +9,6 @@
     android:background="?attr/colorPrimary"
     android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-    app:contentInsetLeft="0dp"
-    app:contentInsetStart="0dp"
     >
 
     <LinearLayout
