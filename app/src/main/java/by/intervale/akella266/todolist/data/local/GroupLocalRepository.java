@@ -3,6 +3,7 @@ package by.intervale.akella266.todolist.data.local;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import by.intervale.akella266.todolist.data.ResponseSpecification;
 import by.intervale.akella266.todolist.data.interfaces.Repository;
@@ -43,6 +44,18 @@ public class GroupLocalRepository implements Repository<Group> {
         switch (resp.getType()){
             case GET_GROUPS:{
                 return mGroups;
+            }
+            case GET_NAME_GROUP_BY_ID:{
+                UUID id = (UUID) resp.getArgs().get(0);
+                Group resultGroup = new Group("");
+                for(Group group : mGroups){
+                    if (group.getId().equals(id)){
+                        resultGroup = group;
+                    }
+                }
+                List<Group> resultList = new ArrayList<>();
+                resultList.add(resultGroup);
+                return resultList;
             }
             default:
                 return null;

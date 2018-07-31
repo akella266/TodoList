@@ -28,4 +28,6 @@
     <string name="menu_fragment_todolist_add_group">Add Group</string>
     <string name="group_details_name">Name</string>
     <string name="group_details_title_add_project">Add Project</string>
+    <string name="inbox_date">Date</string>
+    <string name="inbox_group">Group</string>
 </resources>

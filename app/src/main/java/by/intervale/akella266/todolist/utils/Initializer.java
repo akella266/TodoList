@@ -1,6 +1,7 @@
 package by.intervale.akella266.todolist.utils;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 import by.intervale.akella266.todolist.data.local.GroupLocalRepository;
@@ -29,8 +30,11 @@ public class Initializer {
                 Calendar.getInstance().getTime(), "This is note", inbox.getId()));
         inbox.addTask();
         repoTasks.add(new TaskItem("This is task withour reminder",
-                Calendar.getInstance().getTime(), "This is note", inbox.getId()));
+                new Date(Calendar.getInstance().getTime().getTime()+100000000L), "This is note", inbox.getId()));
         inbox.addTask();
+        repoTasks.add(new TaskItem("This is task withour reminder",
+                new Date(Calendar.getInstance().getTime().getTime()+100000000L), "This is note", work.getId()));
+        work.addTask();
         repoTasks.add(new TaskItem("This is task without reminder",
                 Calendar.getInstance().getTime(), "This is note", work.getId(),true));
         work.addTask();
