@@ -43,4 +43,8 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupViewHolder> {
     public void setList(List<Group> list) {
         this.list = list;
     }
+
+    public List<Group> getList() {
+        return list;
+    }
 }

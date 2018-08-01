@@ -58,16 +58,23 @@ public class MainActivity extends AppCompatActivity {
                         mToolbar.setNavigationOnClickListener(
                                 (TodayFragment)viewPagerAdapter.getItem(tab.getPosition()));
                         setDisplayHomeUp(true);
+                        viewPagerAdapter.updateFragments();
                         break;
                     }
                     case 1:{
                         mToolbar.setTitle(R.string.title_inbox);
+                        mToolbar.setNavigationOnClickListener(
+                                (InboxFragment)viewPagerAdapter.getItem(tab.getPosition()));
                         setDisplayHomeUp(true);
+                        viewPagerAdapter.updateFragments();
                         break;
                     }
                     case 2:{
                         mToolbar.setTitle(R.string.title_todolist);
+                        mToolbar.setNavigationOnClickListener(
+                                (ToDoListFragment)viewPagerAdapter.getItem(tab.getPosition()));
                         setDisplayHomeUp(true);
+                        viewPagerAdapter.updateFragments();
                         break;
                     }
                     case 3:{

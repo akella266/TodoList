@@ -99,6 +99,6 @@ public class TaskItem implements Comparable<TaskItem>, Serializable {
 
     @Override
     public int compareTo(@NonNull TaskItem taskItem) {
-        return id == taskItem.getId() ? 0 : 1;
+        return id.compareTo(taskItem.getId());
     }
 }

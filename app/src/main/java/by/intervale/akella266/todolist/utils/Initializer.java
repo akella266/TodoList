@@ -30,6 +30,9 @@ public class Initializer {
                 Calendar.getInstance().getTime(), "This is note", inbox.getId()));
         inbox.addTask();
         repoTasks.add(new TaskItem("This is task withour reminder",
+                Calendar.getInstance().getTime(), "This is note", inbox.getId()));
+        inbox.addTask();
+        repoTasks.add(new TaskItem("This is task withour reminder",
                 new Date(Calendar.getInstance().getTime().getTime()+100000000L), "This is note", inbox.getId()));
         inbox.addTask();
         repoTasks.add(new TaskItem("This is task withour reminder",

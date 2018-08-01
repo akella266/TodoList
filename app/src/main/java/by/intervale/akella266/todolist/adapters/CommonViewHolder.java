@@ -6,12 +6,12 @@ import android.widget.TextView;
 
 import by.intervale.akella266.todolist.R;
 
-public class InboxViewHolder extends RecyclerView.ViewHolder {
+public class CommonViewHolder extends RecyclerView.ViewHolder {
 
     TextView categoryName;
     RecyclerView listItems;
 
-    public InboxViewHolder(View itemView) {
+    public CommonViewHolder(View itemView) {
         super(itemView);
 
         categoryName = itemView.findViewById(R.id.inbox_name_category);

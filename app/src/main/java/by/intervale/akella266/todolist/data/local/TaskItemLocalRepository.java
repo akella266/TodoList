@@ -1,5 +1,7 @@
 package by.intervale.akella266.todolist.data.local;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +27,12 @@ public class TaskItemLocalRepository implements Repository<TaskItem> {
 
     @Override
     public void update(TaskItem item) {
-        int pos = Collections.binarySearch(mTaskItems, item);
+        int pos = -1;
+        for(int i = 0; i < mTaskItems.size(); i++){
+            if (mTaskItems.get(i).getId() == item.getId()){
+                pos = i;
+            }
+        }
         mTaskItems.set(pos, item);
     }
 

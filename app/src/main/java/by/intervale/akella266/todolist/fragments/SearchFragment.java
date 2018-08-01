@@ -192,9 +192,10 @@ public class SearchFragment extends Fragment {
         if (mAdapter == null){
             mListTasks = new ArrayList<>();
             mAdapter = new TasksAdapter(mListTasks);
+        }
+        if(mRecyclerView.getAdapter() == null){
             mRecyclerView.setAdapter(mAdapter);
         }
-
         mAdapter.setTasks(getRequestedTasks());
 
         if(mAdapter.getItemCount() != 0) {

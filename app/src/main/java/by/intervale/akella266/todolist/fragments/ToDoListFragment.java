@@ -11,6 +11,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,24 +22,34 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import by.intervale.akella266.todolist.GroupDetailsActivity;
 import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.adapters.GroupAdapter;
 import by.intervale.akella266.todolist.data.interfaces.Repository;
+import by.intervale.akella266.todolist.data.local.specifications.GetCompletedTaskSpecification;
+import by.intervale.akella266.todolist.data.local.specifications.GetCurrentTasksSpecification;
 import by.intervale.akella266.todolist.data.local.specifications.GetGroupsSpecification;
 import by.intervale.akella266.todolist.data.models.Group;
+import by.intervale.akella266.todolist.data.models.TaskItem;
 import by.intervale.akella266.todolist.utils.Initializer;
+import by.intervale.akella266.todolist.utils.ItemTouchActions;
+import by.intervale.akella266.todolist.utils.ItemTouchCallback;
 
 public class ToDoListFragment extends Fragment
-        implements View.OnClickListener{
+        implements View.OnClickListener, Observer{
 
     private Repository<Group> mRepo;
     private LinearLayout mDefaultGroup;
     private RecyclerView mOtherGroups;
     private GroupAdapter mAdapter;
     private List<Group> mGroupsList;
+    private ItemTouchHelper helper;
+    private boolean isEdit;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,13 +62,39 @@ public class ToDoListFragment extends Fragment
         View view = inflater.inflate(R.layout.fragment_todolist, container, false);
         setHasOptionsMenu(true);
 
+        isEdit = false;
         mDefaultGroup = view.findViewById(R.id.default_group);
         mOtherGroups = view.findViewById(R.id.todolist_recycler);
         mOtherGroups.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mRepo = Initializer.getGroupsLocal();
+        initSwipeMenu();
         updateUI();
         return view;
+    }
+
+    private void initSwipeMenu() {
+        helper = new ItemTouchHelper(new ItemTouchCallback(getContext(),
+                1,
+                new ItemTouchActions() {
+                    @Override
+                    public void onLeftClick(RecyclerView.Adapter adapter, int position) {}
+
+                    @Override
+                    public void onRightClick(RecyclerView.Adapter adapter, int position) {
+                        List<TaskItem> items = new ArrayList<>();
+                        items.addAll(Initializer.getTasksLocal().query(new GetCurrentTasksSpecification()));
+                        items.addAll(Initializer.getTasksLocal().query(new GetCompletedTaskSpecification()));
+                        Group deletingGroup = ((GroupAdapter)adapter).getList().get(position);
+                        for(TaskItem item : items){
+                            if (item.getGroupId().equals(deletingGroup.getId())){
+                                Initializer.getTasksLocal().remove(item);
+                            }
+                        }
+                        Initializer.getGroupsLocal().remove(deletingGroup);
+                        updateUI();
+                    }
+                }));
     }
 
     private void updateUI(){
@@ -65,9 +102,11 @@ public class ToDoListFragment extends Fragment
             mGroupsList = mRepo.query(new GetGroupsSpecification());
             mAdapter = new GroupAdapter(getContext());
         }
+        if(mOtherGroups.getAdapter() == null){
+            mOtherGroups.setAdapter(mAdapter);
+        }
         initDefaultGroup();
         mAdapter.setList(mGroupsList.subList(1, mGroupsList.size()));
-        mOtherGroups.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
     }
 
@@ -78,12 +117,6 @@ public class ToDoListFragment extends Fragment
         Group def = mGroupsList.get(0);
         name.setText(def.getName());
         count.setText(getString(R.string.item_group_count_tasks, def.getCountTasks()+""));
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        updateUI();
     }
 
     @Override
@@ -103,7 +136,38 @@ public class ToDoListFragment extends Fragment
     }
 
     @Override
-    public void onClick(View view) {
+    public void onPause() {
+        super.onPause();
+        changeStateEditing();
+    }
 
+    private void changeStateEditing(){
+        if(isEdit){
+            helper.attachToRecyclerView(null);
+            isEdit = false;
+        }
+        else {
+            helper.attachToRecyclerView(mOtherGroups);
+            isEdit = true;
+        }
+    }
+
+    private void resetStateEditinig(){
+        if(isEdit){
+            helper.attachToRecyclerView(null);
+            isEdit = false;
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        changeStateEditing();
+        updateUI();
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
+        resetStateEditinig();
+        updateUI();
     }
 }

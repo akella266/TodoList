@@ -20,14 +20,11 @@ public class RxSearchObservable {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Log.i("SearchView", "Submit:" + query);
-//                subject.onComplete();
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.i("SearchView", "Change:" + newText);
                 List<TaskItem> items = repo.query(new GetTasksByNameSpecification(newText));
                 subject.onNext(items);
                 return true;

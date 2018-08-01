@@ -1,11 +1,13 @@
 package by.intervale.akella266.todolist.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,30 +19,38 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 
 import by.intervale.akella266.todolist.R;
-import by.intervale.akella266.todolist.adapters.InboxAdapter;
+import by.intervale.akella266.todolist.adapters.CommonAdapter;
+import by.intervale.akella266.todolist.adapters.TasksAdapter;
 import by.intervale.akella266.todolist.data.local.specifications.GetCurrentTasksSpecification;
 import by.intervale.akella266.todolist.data.local.specifications.GetGroupNameByIdSpecification;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 import by.intervale.akella266.todolist.utils.InboxItem;
 import by.intervale.akella266.todolist.utils.Initializer;
+import by.intervale.akella266.todolist.utils.ItemTouchActions;
 
 public class InboxFragment extends Fragment
-        implements View.OnClickListener{
+        implements View.OnClickListener, Observer{
 
     private ToggleButton mBtnDate;
     private ToggleButton mBtnGroup;
     private RecyclerView mRecycler;
-    private InboxAdapter mAdapter;
+    private CommonAdapter mAdapter;
+    private boolean isEdit;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_inbox, container, false);
 
+        isEdit = false;
         mBtnDate = view.findViewById(R.id.inbox_btn_active);
         mBtnGroup = view.findViewById(R.id.inbox_btn_completed);
         mRecycler = view.findViewById(R.id.inbox_recycler);
@@ -53,10 +63,27 @@ public class InboxFragment extends Fragment
 
     private void updateUI(){
         if(mAdapter == null){
-            mAdapter = new InboxAdapter(getContext());
-            mRecycler.setAdapter(mAdapter);
+            mAdapter = new CommonAdapter(getContext(), 2, new ItemTouchActions() {
+                @Override
+                public void onLeftClick(RecyclerView.Adapter adapter, int position) {
+                    TaskItem taskItem = ((TasksAdapter)adapter).getTasks().get(position);
+                    taskItem.setComplete(true);
+                    Initializer.getTasksLocal().update(taskItem);
+                    updateUI();
+                }
+
+                @Override
+                public void onRightClick(RecyclerView.Adapter adapter, int position) {
+                    TaskItem taskItem = ((TasksAdapter)adapter).getTasks().remove(position);
+                    Initializer.getTasksLocal().remove(taskItem);
+                    updateUI();
+                }
+            });
         }
 
+        if(mRecycler.getAdapter() == null){
+            mRecycler.setAdapter(mAdapter);
+        }
         Comparator<TaskItem> comparator;
         if (mBtnDate.isChecked()) {
             comparator = new Comparator<TaskItem>() {
@@ -112,25 +139,47 @@ public class InboxFragment extends Fragment
         });
     }
 
+    private void changeStateEditing(){
+        if(isEdit){
+            mAdapter.setEdit(false);
+            isEdit = false;
+        }
+        else {
+            mAdapter.setEdit(true);
+            isEdit = true;
+        }
+    }
+
+    private void resetStateEditinig(){
+        if(isEdit){
+            mAdapter.setEdit(false);
+            isEdit = false;
+        }
+    }
+
     @Override
-    public void onClick(View view) {}
+    public void onClick(View view) {
+        changeStateEditing();
+        updateUI();
+    }
 
     public List<InboxItem> getTasksBy(Comparator<TaskItem> comparator) {
         List<InboxItem> items = new ArrayList<>();
+        Map<String, List<TaskItem>> map = new HashMap<>();
         List<TaskItem> currentTasks = Initializer.getTasksLocal().query(new GetCurrentTasksSpecification());
         Collections.sort(currentTasks);
-        List<TaskItem> innerList = new ArrayList<>();
-        for(int i = 1; i < currentTasks.size(); i++){
-            innerList.add(currentTasks.get(i-1));
-            if (comparator.compare(currentTasks.get(i-1), currentTasks.get(i)) != 0){
-                items.add(new InboxItem(getNameCategory(currentTasks.get(i-1)),
-                        innerList));
-                innerList = new ArrayList<>();
+        for(int i = 0; i < currentTasks.size(); i++){
+            if (!map.containsKey(getNameCategory(currentTasks.get(i)))){
+                map.put(getNameCategory(currentTasks.get(i)), new ArrayList<TaskItem>());
             }
+            map.get(getNameCategory(currentTasks.get(i))).add(currentTasks.get(i));
         }
-        innerList.add(currentTasks.get(currentTasks.size()-1));
-        items.add(new InboxItem(getNameCategory(currentTasks.get(currentTasks.size()-1)),
-                innerList));
+
+        for(Map.Entry<String, List<TaskItem>> entry : map.entrySet()){
+            items.add(new InboxItem(entry.getKey(), entry.getValue()));
+        }
+
+        Collections.sort(items);
         return items;
     }
 
@@ -143,5 +192,11 @@ public class InboxFragment extends Fragment
     public String dateToString(Date date){
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         return format.format(date);
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
+        resetStateEditinig();
+        updateUI();
     }
 }

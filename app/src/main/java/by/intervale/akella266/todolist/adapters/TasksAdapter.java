@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.data.models.TaskItem;
@@ -15,9 +16,11 @@ import by.intervale.akella266.todolist.data.models.TaskItem;
 public class TasksAdapter extends RecyclerView.Adapter<TaskViewHolder> {
 
     private List<TaskItem> mTasks;
+    private boolean isEdit;
 
     public TasksAdapter(List<TaskItem> mTasks) {
         this.mTasks = mTasks;
+        this.isEdit = false;
     }
 
     @NonNull
@@ -32,8 +35,14 @@ public class TasksAdapter extends RecyclerView.Adapter<TaskViewHolder> {
         TaskItem task = mTasks.get(position);
         holder.mTitle.setText(task.getTitle());
         holder.mNote.setText(task.getNotes());
-        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         holder.mDate.setText(format.format(task.getDate()));
+        if (isEdit){
+            holder.mIcon.setVisibility(View.VISIBLE);
+        }
+        else{
+            holder.mIcon.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -41,7 +50,15 @@ public class TasksAdapter extends RecyclerView.Adapter<TaskViewHolder> {
         return mTasks.size();
     }
 
+    public void setEdit(boolean edit) {
+        isEdit = edit;
+    }
+
     public void setTasks(List<TaskItem> mTasks) {
         this.mTasks = mTasks;
+    }
+
+    public List<TaskItem> getTasks() {
+        return mTasks;
     }
 }
