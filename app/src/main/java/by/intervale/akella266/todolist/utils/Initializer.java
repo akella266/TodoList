@@ -17,6 +17,7 @@ public class Initializer {
     public static void initialize(){
         repoGroups = new GroupLocalRepository();
         Group inbox = new Group("Inbox");
+        inbox.setId(UUID.fromString("1-1-1-1-1"));
         repoGroups.add(inbox);
         Group work = new Group("Work");
         repoGroups.add(work);

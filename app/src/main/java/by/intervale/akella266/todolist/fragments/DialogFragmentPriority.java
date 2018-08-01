@@ -28,9 +28,9 @@ public class DialogFragmentPriority extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builderPriority = new AlertDialog.Builder(getActivity());
-        final String[] priorities = Arrays.toString(Priority.values()).replaceAll("\\[]","").split(", ");
-        builderPriority.setTitle(getString(R.string.dialog_title_date))
+        AlertDialog.Builder builderPriority = new AlertDialog.Builder(getContext());
+        final String[] priorities = Arrays.toString(Priority.values()).replaceAll("[\\[\\]]","").split(", ");
+        builderPriority.setTitle(getString(R.string.dialog_title_priority))
                 .setItems(priorities, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

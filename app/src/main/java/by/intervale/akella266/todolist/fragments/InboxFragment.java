@@ -1,17 +1,16 @@
 package by.intervale.akella266.todolist.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import java.text.SimpleDateFormat;
@@ -35,9 +34,10 @@ import by.intervale.akella266.todolist.data.models.TaskItem;
 import by.intervale.akella266.todolist.utils.InboxItem;
 import by.intervale.akella266.todolist.utils.Initializer;
 import by.intervale.akella266.todolist.utils.ItemTouchActions;
+import by.intervale.akella266.todolist.utils.OnToolbarButtonsClickListener;
 
 public class InboxFragment extends Fragment
-        implements View.OnClickListener, Observer{
+        implements OnToolbarButtonsClickListener, Observer{
 
     private ToggleButton mBtnDate;
     private ToggleButton mBtnGroup;
@@ -139,28 +139,24 @@ public class InboxFragment extends Fragment
         });
     }
 
-    private void changeStateEditing(){
+    private void changeStateEditing(View view){
         if(isEdit){
             mAdapter.setEdit(false);
+            ((TextView)view).setText(getString(R.string.toolbar_button_edit));
             isEdit = false;
         }
         else {
             mAdapter.setEdit(true);
+            ((TextView)view).setText(getString(R.string.toolbar_button_done));
             isEdit = true;
         }
     }
 
-    private void resetStateEditinig(){
+    private void resetStateEditing(){
         if(isEdit){
             mAdapter.setEdit(false);
             isEdit = false;
         }
-    }
-
-    @Override
-    public void onClick(View view) {
-        changeStateEditing();
-        updateUI();
     }
 
     public List<InboxItem> getTasksBy(Comparator<TaskItem> comparator) {
@@ -196,7 +192,18 @@ public class InboxFragment extends Fragment
 
     @Override
     public void update(Observable observable, Object o) {
-        resetStateEditinig();
+        resetStateEditing();
         updateUI();
+    }
+
+    @Override
+    public void onLeftButtonClick(View view) {
+        changeStateEditing(view);
+        updateUI();
+    }
+
+    @Override
+    public void onRightButtonClick(View view) {
+
     }
 }

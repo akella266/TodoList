@@ -8,11 +8,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +27,10 @@ import by.intervale.akella266.todolist.utils.Initializer;
 import by.intervale.akella266.todolist.data.local.specifications.GetCompletedTaskSpecification;
 import by.intervale.akella266.todolist.data.local.specifications.GetCurrentTasksSpecification;
 import by.intervale.akella266.todolist.utils.ItemTouchActions;
+import by.intervale.akella266.todolist.utils.OnToolbarButtonsClickListener;
 
 public class TodayFragment extends Fragment
-        implements View.OnClickListener, Observer{
+        implements OnToolbarButtonsClickListener, Observer{
 
     private CommonAdapter mAdapter;
     private RecyclerView mRecycler;
@@ -46,7 +45,6 @@ public class TodayFragment extends Fragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_today, container, false);
-        setHasOptionsMenu(true);
 
         mRecycler = view.findViewById(R.id.today_recycler);
         mRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -54,6 +52,13 @@ public class TodayFragment extends Fragment
 
         updateUI();
         return view;
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
     }
 
     private void updateUI(){
@@ -92,18 +97,20 @@ public class TodayFragment extends Fragment
         return items;
     }
 
-    private void changeStateEditing(){
+    private void changeStateEditing(View view){
         if(isEdit){
             mAdapter.setEdit(false);
+            ((TextView)view).setText(getString(R.string.toolbar_button_edit));
             isEdit = false;
         }
         else {
             mAdapter.setEdit(true);
+            ((TextView)view).setText(getString(R.string.toolbar_button_done));
             isEdit = true;
         }
     }
 
-    private void resetStateEditinig(){
+    private void resetStateEditing(){
         if(isEdit){
             mAdapter.setEdit(false);
             isEdit = false;
@@ -111,31 +118,21 @@ public class TodayFragment extends Fragment
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_fragment_today, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.menu_fragment_today_add:{
-                Intent intent = TaskDetailsActivity.newIntent(getContext(), null);
-                startActivity(intent);
-                return true;
-            }
-            default: return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public void onClick(View view) {
-        changeStateEditing();
-        updateUI();
-    }
-
-    @Override
     public void update(Observable observable, Object o) {
-        resetStateEditinig();
+        resetStateEditing();
         updateUI();
+    }
+
+    @Override
+    public void onLeftButtonClick(View view) {
+        changeStateEditing(view);
+        updateUI();
+    }
+
+    @Override
+    public void onRightButtonClick(View view) {
+        resetStateEditing();
+        Intent intent = TaskDetailsActivity.newIntent(getContext(), null);
+        startActivity(intent);
     }
 }

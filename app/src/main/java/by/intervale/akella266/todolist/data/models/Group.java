@@ -36,6 +36,10 @@ public class Group implements Comparable<Group>, Serializable {
         return countTasks;
     }
 
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
     public void addTask() {
         this.countTasks++;
     }

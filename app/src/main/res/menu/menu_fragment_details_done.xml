@@ -3,6 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_fragment_details_done"
-        android:title="@string/menu_fragment_add_done"
+        android:title="@string/toolbar_button_done"
         app:showAsAction="always"/>
 </menu>

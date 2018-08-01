@@ -4,8 +4,10 @@
     <string name="title_inbox">Inbox</string>
     <string name="title_todolist">ToDoList</string>
     <string name="title_search">Search</string>
-    <string name="title_add">Add item</string>
-    <string name="title_edit">Edit item</string>
+    <string name="title_add_task">Add item</string>
+    <string name="title_edit_task">Edit item</string>
+    <string name="title_add_group">Add Project</string>
+    <string name="title_edit_group">Edit Project</string>
     <string name="completed_tasks">Completed</string>
     <string name="details_title">TASK</string>
     <string name="hint_text">Name</string>
@@ -15,11 +17,12 @@
     <string name="details_priority_description">Priority</string>
     <string name="details_notes">NOTES</string>
     <string name="details_notes_description">Description…</string>
-    <string name="dialog_title_date">Select Priority</string>
+    <string name="dialog_title_priority">Select Priority</string>
+    <string name="dialog_title_group">Select Group</string>
     <string name="menu_fargment_today_adding_task">Add task</string>
     <string name="button_cancel">Cancel</string>
-    <string name="menu_fragment_add_done">Done</string>
-    <string name="additional_button_edit">Edit</string>
+    <string name="toolbar_button_done">Done</string>
+    <string name="toolbar_button_edit">Edit</string>
     <string name="error_no_title">Please, enter name of task!</string>
     <string name="fragment_search_active">Active Tasks</string>
     <string name="fragment_search_completed">Completed</string>
@@ -30,4 +33,6 @@
     <string name="group_details_title_add_project">Add Project</string>
     <string name="inbox_date">Date</string>
     <string name="inbox_group">Group</string>
+    <string name="details_group">GROUP</string>
+    <string name="details_default_group_name">Inbox</string>
 </resources>

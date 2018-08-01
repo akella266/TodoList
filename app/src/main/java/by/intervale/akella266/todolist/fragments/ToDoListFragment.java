@@ -1,22 +1,14 @@
 package by.intervale.akella266.todolist.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -39,9 +31,10 @@ import by.intervale.akella266.todolist.data.models.TaskItem;
 import by.intervale.akella266.todolist.utils.Initializer;
 import by.intervale.akella266.todolist.utils.ItemTouchActions;
 import by.intervale.akella266.todolist.utils.ItemTouchCallback;
+import by.intervale.akella266.todolist.utils.OnToolbarButtonsClickListener;
 
 public class ToDoListFragment extends Fragment
-        implements View.OnClickListener, Observer{
+        implements OnToolbarButtonsClickListener, Observer{
 
     private Repository<Group> mRepo;
     private LinearLayout mDefaultGroup;
@@ -60,7 +53,6 @@ public class ToDoListFragment extends Fragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_todolist, container, false);
-        setHasOptionsMenu(true);
 
         isEdit = false;
         mDefaultGroup = view.findViewById(R.id.default_group);
@@ -119,40 +111,20 @@ public class ToDoListFragment extends Fragment
         count.setText(getString(R.string.item_group_count_tasks, def.getCountTasks()+""));
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_fragment_todolist, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.menu_fragment_todolist_add_group:{
-                Intent intent = GroupDetailsActivity.newIntent(getContext(), null);
-                startActivity(intent);
-            }
-            default: return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        changeStateEditing();
-    }
-
-    private void changeStateEditing(){
+    private void changeStateEditing(View view){
         if(isEdit){
             helper.attachToRecyclerView(null);
+            ((TextView)view).setText(getString(R.string.toolbar_button_edit));
             isEdit = false;
         }
         else {
             helper.attachToRecyclerView(mOtherGroups);
+            ((TextView)view).setText(getString(R.string.toolbar_button_done));
             isEdit = true;
         }
     }
 
-    private void resetStateEditinig(){
+    private void resetStateEditing(){
         if(isEdit){
             helper.attachToRecyclerView(null);
             isEdit = false;
@@ -160,14 +132,27 @@ public class ToDoListFragment extends Fragment
     }
 
     @Override
-    public void onClick(View view) {
-        changeStateEditing();
+    public void onResume() {
+        super.onResume();
         updateUI();
     }
 
     @Override
     public void update(Observable observable, Object o) {
-        resetStateEditinig();
+        resetStateEditing();
         updateUI();
+    }
+
+    @Override
+    public void onLeftButtonClick(View view) {
+        changeStateEditing(view);
+        updateUI();
+    }
+
+    @Override
+    public void onRightButtonClick(View view) {
+        resetStateEditing();
+        Intent intent = GroupDetailsActivity.newIntent(getContext(), null);
+        startActivity(intent);
     }
 }

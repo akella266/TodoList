@@ -5,6 +5,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.TextView;
 
 
 import by.intervale.akella266.todolist.adapters.ViewPagerAdapter;
@@ -12,27 +14,38 @@ import by.intervale.akella266.todolist.fragments.InboxFragment;
 import by.intervale.akella266.todolist.fragments.SearchFragment;
 import by.intervale.akella266.todolist.fragments.ToDoListFragment;
 import by.intervale.akella266.todolist.fragments.TodayFragment;
+import by.intervale.akella266.todolist.utils.OnToolbarButtonsClickListener;
 
 public class MainActivity extends AppCompatActivity {
 
     private ViewPager mPager;
     private Toolbar mToolbar;
+    private TextView mTitleToolbar;
+    private TextView mLeftToolbarButton;
+    private TextView mRightToolbarButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mToolbar = findViewById(R.id.toolbar);
-        mToolbar.setNavigationIcon(R.drawable.ic_action_edit);
-        setSupportActionBar(mToolbar);
-        setDisplayHomeUp(true);
+        initToolbar();
         initTabs();
     }
 
-    private void setDisplayHomeUp(boolean displayHomeUp){
-        getSupportActionBar().setDisplayHomeAsUpEnabled(displayHomeUp);
-        getSupportActionBar().setHomeButtonEnabled(displayHomeUp);
+    private void initToolbar(){
+        mToolbar = findViewById(R.id.toolbar);
+        mLeftToolbarButton = mToolbar.findViewById(R.id.toolbar_left_button);
+        mRightToolbarButton = mToolbar.findViewById(R.id.toolbar_right_button);
+        mRightToolbarButton.setCompoundDrawablesWithIntrinsicBounds(0,
+                0,
+                R.drawable.ic_add_blue_24dp,
+                0);
+        mTitleToolbar = mToolbar.findViewById(R.id.toolbar_title);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
     }
 
     private void initTabs(){
@@ -54,32 +67,30 @@ public class MainActivity extends AppCompatActivity {
                 mPager.setCurrentItem(tab.getPosition());
                 switch(tab.getPosition()){
                     case 0: {
-                        mToolbar.setTitle(R.string.title_today);
-                        mToolbar.setNavigationOnClickListener(
-                                (TodayFragment)viewPagerAdapter.getItem(tab.getPosition()));
-                        setDisplayHomeUp(true);
+                        configToolbar((TodayFragment)viewPagerAdapter.getItem(tab.getPosition()),
+                                getString(R.string.title_today),
+                                false);
                         viewPagerAdapter.updateFragments();
                         break;
                     }
                     case 1:{
-                        mToolbar.setTitle(R.string.title_inbox);
-                        mToolbar.setNavigationOnClickListener(
-                                (InboxFragment)viewPagerAdapter.getItem(tab.getPosition()));
-                        setDisplayHomeUp(true);
+                        configToolbar((InboxFragment)viewPagerAdapter.getItem(tab.getPosition()),
+                                getString(R.string.title_inbox),
+                                false);
                         viewPagerAdapter.updateFragments();
                         break;
                     }
                     case 2:{
-                        mToolbar.setTitle(R.string.title_todolist);
-                        mToolbar.setNavigationOnClickListener(
-                                (ToDoListFragment)viewPagerAdapter.getItem(tab.getPosition()));
-                        setDisplayHomeUp(true);
+                        configToolbar((ToDoListFragment)viewPagerAdapter.getItem(tab.getPosition()),
+                                getString(R.string.title_todolist),
+                                false);
                         viewPagerAdapter.updateFragments();
                         break;
                     }
                     case 3:{
-                        mToolbar.setTitle(R.string.title_search);
-                        setDisplayHomeUp(false);
+                        configToolbar(null,
+                                getString(R.string.title_search),
+                                true);
                         break;
                     }
                 }
@@ -98,9 +109,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpFirstTab(ViewPagerAdapter viewPagerAdapter){
-        getSupportActionBar().setTitle(R.string.title_today);
-        mToolbar.setNavigationOnClickListener(
-                (TodayFragment)viewPagerAdapter.getItem(0));
+       configToolbar((TodayFragment)viewPagerAdapter.getItem(0),
+               getString(R.string.title_today),
+               false);
+    }
+
+    private void configToolbar(final OnToolbarButtonsClickListener clickListener, String title, boolean hideButtons){
+        mTitleToolbar.setText(title);
+        mLeftToolbarButton.setText(getString(R.string.toolbar_button_edit));
+        if (hideButtons){
+            mLeftToolbarButton.setVisibility(View.GONE);
+            mRightToolbarButton.setVisibility(View.GONE);
+        }
+        else {
+            mLeftToolbarButton.setVisibility(View.VISIBLE);
+            mRightToolbarButton.setVisibility(View.VISIBLE);
+            mLeftToolbarButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickListener.onLeftButtonClick(mLeftToolbarButton);
+                }
+            });
+            mRightToolbarButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickListener.onRightButtonClick(mRightToolbarButton);
+                }
+            });
+        }
     }
 
     @Override

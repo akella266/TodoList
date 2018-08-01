@@ -89,6 +89,33 @@
             android:background="@drawable/ic_chevron_right_grey_24dp"/>
     </LinearLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/details_group"/>
+
+    <LinearLayout
+        android:id="@+id/details_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="horizontal"
+        android:focusable="true">
+
+        <TextView
+            android:id="@+id/details_group_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:text="@string/details_default_group_name"/>
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_chevron_right_grey_24dp"/>
+    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
