@@ -40,7 +40,6 @@ public class TaskDetailsFragment extends Fragment
         DialogFragmentGroup.DialogGroupListener,
         OnToolbarButtonsClickListener{
 
-    public static final String TAG = "todolist.fragments.fragmentdetails";
     public static final String ARGS_DETAILS = "bundle.details";
 
     private TaskItem mTask;

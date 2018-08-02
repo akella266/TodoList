@@ -58,6 +58,7 @@ public class TodayFragment extends Fragment
     @Override
     public void onResume() {
         super.onResume();
+        mRecycler.setAdapter(null);
         updateUI();
     }
 

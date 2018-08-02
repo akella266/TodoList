@@ -1,6 +1,7 @@
 package by.intervale.akella266.todolist.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import by.intervale.akella266.todolist.GroupDetailsActivity;
 import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.data.models.Group;
 
@@ -25,7 +27,16 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupViewHolder> {
     @Override
     public GroupViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_group, parent, false);
-        return new GroupViewHolder(view);
+        final GroupViewHolder groupViewHolder = new GroupViewHolder(view);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = GroupDetailsActivity.newIntent(context,
+                        list.get(groupViewHolder.getAdapterPosition()));
+                context.startActivity(intent);
+            }
+        });
+        return groupViewHolder;
     }
 
     @Override

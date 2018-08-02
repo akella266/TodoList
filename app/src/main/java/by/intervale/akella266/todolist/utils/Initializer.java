@@ -26,22 +26,16 @@ public class Initializer {
         repoTasks = new TaskItemLocalRepository();
         repoTasks.add(new TaskItem("This is task withour reminder",
                 Calendar.getInstance().getTime(), "This is note", inbox.getId()));
-        inbox.addTask();
         repoTasks.add(new TaskItem("This is task withour reminder",
                 Calendar.getInstance().getTime(), "This is note", inbox.getId()));
-        inbox.addTask();
         repoTasks.add(new TaskItem("This is task withour reminder",
                 Calendar.getInstance().getTime(), "This is note", inbox.getId()));
-        inbox.addTask();
         repoTasks.add(new TaskItem("This is task withour reminder",
                 new Date(Calendar.getInstance().getTime().getTime()+100000000L), "This is note", inbox.getId()));
-        inbox.addTask();
         repoTasks.add(new TaskItem("This is task withour reminder",
                 new Date(Calendar.getInstance().getTime().getTime()+100000000L), "This is note", work.getId()));
-        work.addTask();
         repoTasks.add(new TaskItem("This is task without reminder",
                 Calendar.getInstance().getTime(), "This is note", work.getId(),true));
-        work.addTask();
     }
 
     public static TaskItemLocalRepository getTasksLocal(){

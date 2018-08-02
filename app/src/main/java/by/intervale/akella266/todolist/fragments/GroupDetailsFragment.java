@@ -59,6 +59,7 @@ public class GroupDetailsFragment extends Fragment
         else isEdit = true;
 
         mName = view.findViewById(R.id.group_details_name);
+        mName.setText(mGroup.getName());
         return view;
     }
 

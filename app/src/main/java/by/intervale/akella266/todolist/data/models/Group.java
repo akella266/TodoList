@@ -12,6 +12,7 @@ public class Group implements Comparable<Group>, Serializable {
     private int countTasks;
 
     public Group() {
+        name = "";
     }
 
     public Group(String name) {
@@ -40,9 +41,11 @@ public class Group implements Comparable<Group>, Serializable {
         this.id = id;
     }
 
-    public void addTask() {
+    public void increaseCountTasks() {
         this.countTasks++;
     }
+
+    public void decreaseCountTasks(){this.countTasks--;}
 
     @Override
     public int compareTo(@NonNull Group group) {

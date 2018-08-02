@@ -1,5 +1,7 @@
 package by.intervale.akella266.todolist.adapters;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,7 +13,9 @@ import java.util.List;
 import java.util.Locale;
 
 import by.intervale.akella266.todolist.R;
+import by.intervale.akella266.todolist.TaskDetailsActivity;
 import by.intervale.akella266.todolist.data.models.TaskItem;
+import by.intervale.akella266.todolist.fragments.TaskDetailsFragment;
 
 public class TasksAdapter extends RecyclerView.Adapter<TaskViewHolder> {
 
@@ -25,9 +29,18 @@ public class TasksAdapter extends RecyclerView.Adapter<TaskViewHolder> {
 
     @NonNull
     @Override
-    public TaskViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public TaskViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_task, parent, false);
-        return new TaskViewHolder(view);
+        final TaskViewHolder taskViewHolder = new TaskViewHolder(view);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = TaskDetailsActivity.newIntent(parent.getContext(),
+                        mTasks.get(taskViewHolder.getAdapterPosition()));
+                parent.getContext().startActivity(intent);
+            }
+        });
+        return taskViewHolder;
     }
 
     @Override

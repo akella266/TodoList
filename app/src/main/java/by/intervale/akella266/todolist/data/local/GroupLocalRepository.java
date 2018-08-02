@@ -9,8 +9,10 @@ import by.intervale.akella266.todolist.data.ResponseSpecification;
 import by.intervale.akella266.todolist.data.interfaces.Repository;
 import by.intervale.akella266.todolist.data.interfaces.Specification;
 import by.intervale.akella266.todolist.data.interfaces.local.LocalSpecification;
+import by.intervale.akella266.todolist.data.local.specifications.GetGroupNameByIdSpecification;
 import by.intervale.akella266.todolist.data.models.Group;
 import by.intervale.akella266.todolist.data.models.TaskItem;
+import by.intervale.akella266.todolist.utils.Initializer;
 
 public class GroupLocalRepository implements Repository<Group> {
 
@@ -27,8 +29,12 @@ public class GroupLocalRepository implements Repository<Group> {
 
     @Override
     public void update(Group item) {
-        int pos = Collections.binarySearch(mGroups, item);
-        mGroups.set(pos, item);
+        for(int i = 0; i < mGroups.size(); i++){
+            if (mGroups.get(i).getId().equals(item.getId())){
+                mGroups.set(i, item);
+                break;
+            }
+        }
     }
 
     @Override
@@ -47,7 +53,7 @@ public class GroupLocalRepository implements Repository<Group> {
             }
             case GET_NAME_GROUP_BY_ID:{
                 UUID id = (UUID) resp.getArgs().get(0);
-                Group resultGroup = new Group("");
+                Group resultGroup = new Group();
                 for(Group group : mGroups){
                     if (group.getId().equals(id)){
                         resultGroup = group;

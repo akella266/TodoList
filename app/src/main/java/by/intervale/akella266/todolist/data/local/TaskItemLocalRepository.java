@@ -10,7 +10,10 @@ import by.intervale.akella266.todolist.data.ResponseSpecification;
 import by.intervale.akella266.todolist.data.interfaces.local.LocalSpecification;
 import by.intervale.akella266.todolist.data.interfaces.Repository;
 import by.intervale.akella266.todolist.data.interfaces.Specification;
+import by.intervale.akella266.todolist.data.local.specifications.GetGroupNameByIdSpecification;
+import by.intervale.akella266.todolist.data.models.Group;
 import by.intervale.akella266.todolist.data.models.TaskItem;
+import by.intervale.akella266.todolist.utils.Initializer;
 
 public class TaskItemLocalRepository implements Repository<TaskItem> {
 
@@ -23,17 +26,27 @@ public class TaskItemLocalRepository implements Repository<TaskItem> {
     @Override
     public void add(TaskItem item) {
         mTaskItems.add(item);
+        Initializer.getGroupsLocal()
+                .query(new GetGroupNameByIdSpecification(item.getGroupId()))
+                .get(0).increaseCountTasks();
     }
 
     @Override
     public void update(TaskItem item) {
-        int pos = -1;
         for(int i = 0; i < mTaskItems.size(); i++){
-            if (mTaskItems.get(i).getId() == item.getId()){
-                pos = i;
+            if (mTaskItems.get(i).getId().equals(item.getId())){
+                if(!mTaskItems.get(i).getGroupId().equals(item.getGroupId())) {
+                    Initializer.getGroupsLocal()
+                            .query(new GetGroupNameByIdSpecification(mTaskItems.get(i).getGroupId()))
+                            .get(0).decreaseCountTasks();
+                    Initializer.getGroupsLocal()
+                            .query(new GetGroupNameByIdSpecification(item.getGroupId()))
+                            .get(0).increaseCountTasks();
+                }
+                mTaskItems.set(i, item);
+                break;
             }
         }
-        mTaskItems.set(pos, item);
     }
 
     @Override
