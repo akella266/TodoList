@@ -8,7 +8,7 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/inbox_filter"
+        android:id="@+id/linear_layout_inbox_filter"
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:orientation="horizontal"
@@ -19,32 +19,31 @@
         android:layout_marginBottom="@dimen/default_margin">
 
         <ToggleButton
-            android:id="@+id/inbox_btn_active"
+            android:id="@+id/button_inbox_active"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="-2dp"
             android:layout_marginRight="-2dp"
             android:layout_weight="1"
-            android:background="@drawable/left_search_selector"
+            android:background="@drawable/button_left_selector"
             android:checked="true"
             android:textOff="@string/inbox_date"
             android:textOn="@string/inbox_date" />
 
         <ToggleButton
-            android:id="@+id/inbox_btn_completed"
+            android:id="@+id/button_inbox_completed"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textOn="@string/inbox_group"
             android:textOff="@string/inbox_group"
-            android:background="@drawable/right_search_selector" />
+            android:background="@drawable/button_right_selector" />
 
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/inbox_recycler"
+        android:id="@+id/_recycler_inbox"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"/>
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

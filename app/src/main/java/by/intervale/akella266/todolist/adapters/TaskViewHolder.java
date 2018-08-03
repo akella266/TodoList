@@ -17,9 +17,9 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
     public TaskViewHolder(View itemView) {
         super(itemView);
 
-        mTitle = itemView.findViewById(R.id.task_title);
-        mNote = itemView.findViewById(R.id.task_note);
-        mDate = itemView.findViewById(R.id.task_date);
-        mIcon = itemView.findViewById(R.id.task_icon_edit);
+        mTitle = itemView.findViewById(R.id.textview_task_title);
+        mNote = itemView.findViewById(R.id.textview_task_note);
+        mDate = itemView.findViewById(R.id.textview_task_date);
+        mIcon = itemView.findViewById(R.id.imageview_task_icon_edit);
     }
 }

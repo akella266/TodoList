@@ -1,5 +1,7 @@
 package by.intervale.akella266.todolist.data.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import java.io.Serializable;
@@ -18,27 +20,29 @@ public class TaskItem implements Comparable<TaskItem>, Serializable {
     private String notes;
     private Priority priority;
     private boolean isComplete;
+    private boolean isRemind;
     private UUID groupId;
 
-    public TaskItem(String title, Date date, String notes, Priority priority, UUID groupId, boolean isComplete) {
+    public TaskItem(String title, Date date, String notes, Priority priority, UUID groupId, boolean isRemind, boolean isComplete) {
         this.id = UUID.randomUUID();
         this.title = title;
         this.date = date;
         this.notes = notes;
         this.priority = priority;
         this.groupId = groupId;
+        this.isRemind = isRemind;
         this.isComplete = isComplete;
     }
 
     public TaskItem(String title, Date date, String notes,UUID groupId, boolean isComplete) {
-        this(title, date, notes,Priority.NONE, groupId, isComplete);
+        this(title, date, notes,Priority.NONE, groupId, false, isComplete);
     }
 
     public TaskItem(String title, Date date, String notes,UUID groupId) {
-        this(title, date, notes, Priority.NONE, groupId, false);
+        this(title, date, notes, Priority.NONE, groupId,false, false);
     }
     public TaskItem(){
-        this("", Calendar.getInstance(Locale.getDefault()).getTime(), "", Priority.NONE, null, false);
+        this("", Calendar.getInstance(Locale.getDefault()).getTime(), "", Priority.NONE, null,false, false);
     }
 
     public String getTitle() {
@@ -95,6 +99,14 @@ public class TaskItem implements Comparable<TaskItem>, Serializable {
 
     public void setGroupId(UUID groupId) {
         this.groupId = groupId;
+    }
+
+    public boolean isRemind() {
+        return isRemind;
+    }
+
+    public void setRemind(boolean remind) {
+        isRemind = remind;
     }
 
     @Override

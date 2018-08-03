@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:text="PROJECT"
         android:textSize="24sp"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/colorBackground"
         android:paddingLeft="@dimen/default_margin"
         android:paddingBottom="@dimen/default_margin"
         android:paddingRight="@dimen/default_margin"
@@ -19,7 +19,7 @@
         />
 
     <EditText
-        android:id="@+id/group_details_name"
+        android:id="@+id/edittext_group_details_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/default_margin"

@@ -14,8 +14,8 @@ public class GroupViewHolder extends RecyclerView.ViewHolder {
     public GroupViewHolder(View itemView) {
         super(itemView);
 
-        mNameGroup = itemView.findViewById(R.id.item_group_name_group);
-        mCountTasks = itemView.findViewById(R.id.item_group_count_tasks);
+        mNameGroup = itemView.findViewById(R.id.textview_item_group_name);
+        mCountTasks = itemView.findViewById(R.id.textview_item_group_count_tasks);
     }
 
 

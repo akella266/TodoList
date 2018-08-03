@@ -14,7 +14,7 @@ public class CommonViewHolder extends RecyclerView.ViewHolder {
     public CommonViewHolder(View itemView) {
         super(itemView);
 
-        categoryName = itemView.findViewById(R.id.inbox_name_category);
-        listItems = itemView.findViewById(R.id.inbox_inner_recycler);
+        categoryName = itemView.findViewById(R.id.textview_inbox_name_category);
+        listItems = itemView.findViewById(R.id.recycler_inbox);
     }
 }

@@ -5,18 +5,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import by.intervale.akella266.todolist.R;
-import by.intervale.akella266.todolist.data.interfaces.Repository;
 import by.intervale.akella266.todolist.data.models.Group;
 import by.intervale.akella266.todolist.utils.Initializer;
 import by.intervale.akella266.todolist.utils.OnToolbarButtonsClickListener;
@@ -24,15 +18,15 @@ import by.intervale.akella266.todolist.utils.OnToolbarButtonsClickListener;
 public class GroupDetailsFragment extends Fragment
         implements OnToolbarButtonsClickListener{
 
-    public static final String ARGS_DETAILS_GROUP = "bundle.details.group";
+    public static final String ARGUMENT_DETAILS_GROUP = "bundle.details.group";
 
     private Group mGroup;
     private EditText mName;
     private boolean isEdit;
 
-    public static GroupDetailsFragment getInstance(Group group){
+    public static GroupDetailsFragment newInstance(Group group){
         Bundle args = new Bundle();
-        args.putSerializable(ARGS_DETAILS_GROUP, group);
+        args.putSerializable(ARGUMENT_DETAILS_GROUP, group);
         GroupDetailsFragment fragment = new GroupDetailsFragment();
         fragment.setArguments(args);
         return fragment;
@@ -50,7 +44,7 @@ public class GroupDetailsFragment extends Fragment
 
 
         if (getArguments() != null)
-            mGroup = (Group) getArguments().getSerializable(ARGS_DETAILS_GROUP);
+            mGroup = (Group) getArguments().getSerializable(ARGUMENT_DETAILS_GROUP);
 
         if (mGroup == null){
             isEdit = false;
@@ -58,7 +52,7 @@ public class GroupDetailsFragment extends Fragment
         }
         else isEdit = true;
 
-        mName = view.findViewById(R.id.group_details_name);
+        mName = view.findViewById(R.id.edittext_group_details_name);
         mName.setText(mGroup.getName());
         return view;
     }

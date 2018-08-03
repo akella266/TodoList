@@ -44,91 +44,21 @@ public class ToDoListFragment extends Fragment
     private ItemTouchHelper helper;
     private boolean isEdit;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_todolist, container, false);
 
         isEdit = false;
-        mDefaultGroup = view.findViewById(R.id.default_group);
-        mOtherGroups = view.findViewById(R.id.todolist_recycler);
+        mDefaultGroup = view.findViewById(R.id.linear_layout_default_group);
+        mOtherGroups = view.findViewById(R.id.recycler_todolist);
         mOtherGroups.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mRepo = Initializer.getGroupsLocal();
         initSwipeMenu();
         updateUI();
         return view;
-    }
-
-    private void initSwipeMenu() {
-        helper = new ItemTouchHelper(new ItemTouchCallback(getContext(),
-                1,
-                new ItemTouchActions() {
-                    @Override
-                    public void onLeftClick(RecyclerView.Adapter adapter, int position) {}
-
-                    @Override
-                    public void onRightClick(RecyclerView.Adapter adapter, int position) {
-                        List<TaskItem> items = new ArrayList<>();
-                        items.addAll(Initializer.getTasksLocal().query(new GetCurrentTasksSpecification()));
-                        items.addAll(Initializer.getTasksLocal().query(new GetCompletedTaskSpecification()));
-                        Group deletingGroup = ((GroupAdapter)adapter).getList().get(position);
-                        for(TaskItem item : items){
-                            if (item.getGroupId().equals(deletingGroup.getId())){
-                                Initializer.getTasksLocal().remove(item);
-                            }
-                        }
-                        Initializer.getGroupsLocal().remove(deletingGroup);
-                        updateUI();
-                    }
-                }));
-    }
-
-    private void updateUI(){
-        if(mAdapter == null){
-            mGroupsList = mRepo.query(new GetGroupsSpecification());
-            mAdapter = new GroupAdapter(getContext());
-        }
-        if(mOtherGroups.getAdapter() == null){
-            mOtherGroups.setAdapter(mAdapter);
-        }
-        initDefaultGroup();
-        mAdapter.setList(mGroupsList.subList(1, mGroupsList.size()));
-        mAdapter.notifyDataSetChanged();
-    }
-
-    private void initDefaultGroup(){
-        TextView name = mDefaultGroup.findViewById(R.id.item_group_name_group);
-        TextView count = mDefaultGroup.findViewById(R.id.item_group_count_tasks);
-
-        Group def = mGroupsList.get(0);
-        name.setText(def.getName());
-        count.setText(getString(R.string.item_group_count_tasks, def.getCountTasks()+""));
-    }
-
-    private void changeStateEditing(View view){
-        if(isEdit){
-            helper.attachToRecyclerView(null);
-            ((TextView)view).setText(getString(R.string.toolbar_button_edit));
-            isEdit = false;
-        }
-        else {
-            helper.attachToRecyclerView(mOtherGroups);
-            ((TextView)view).setText(getString(R.string.toolbar_button_done));
-            isEdit = true;
-        }
-    }
-
-    private void resetStateEditing(){
-        if(isEdit){
-            helper.attachToRecyclerView(null);
-            isEdit = false;
-        }
     }
 
     @Override
@@ -152,7 +82,75 @@ public class ToDoListFragment extends Fragment
     @Override
     public void onRightButtonClick(View view) {
         resetStateEditing();
-        Intent intent = GroupDetailsActivity.newIntent(getContext(), null);
+        Intent intent = GroupDetailsActivity.getStartIntent(getContext(), null);
         startActivity(intent);
     }
+
+    private void initSwipeMenu() {
+        helper = new ItemTouchHelper(new ItemTouchCallback(getContext(),1,
+                new ItemTouchActions() {
+                    @Override
+                    public void onLeftClick(RecyclerView.Adapter adapter, int position) {}
+
+                    @Override
+                    public void onRightClick(RecyclerView.Adapter adapter, int position) {
+                        List<TaskItem> items = new ArrayList<>();
+                        items.addAll(Initializer.getTasksLocal()
+                                            .query(new GetCurrentTasksSpecification()));
+                        items.addAll(Initializer.getTasksLocal()
+                                            .query(new GetCompletedTaskSpecification()));
+                        Group deletingGroup = ((GroupAdapter)adapter).getList().get(position);
+                        for(TaskItem item : items){
+                            if (item.getGroupId().equals(deletingGroup.getId())){
+                                Initializer.getTasksLocal().remove(item);
+                            }
+                        }
+                        Initializer.getGroupsLocal().remove(deletingGroup);
+                        updateUI();
+                    }
+                }));
+    }
+
+    private void updateUI(){
+        if(mAdapter == null){
+            mGroupsList = mRepo.query(new GetGroupsSpecification());
+            mAdapter = new GroupAdapter(getContext());
+        }
+        if(mOtherGroups.getAdapter() == null) mOtherGroups.setAdapter(mAdapter);
+        initDefaultGroup();
+        mAdapter.setList(mGroupsList.subList(1, mGroupsList.size()));
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void initDefaultGroup(){
+        TextView name = mDefaultGroup.findViewById(R.id.textview_item_group_name);
+        TextView count = mDefaultGroup.findViewById(R.id.textview_item_group_count_tasks);
+
+        Group def = mGroupsList.get(0);
+        name.setText(def.getName());
+        count.setText(getString(R.string.item_group_count_tasks, def.getCountTasks()+""));
+    }
+
+    private void changeStateEditing(View view){
+        if(isEdit){
+            helper.attachToRecyclerView(null);
+            ((TextView)view).setText(getString(R.string.toolbar_button_edit));
+            isEdit = false;
+        }
+        else {
+            helper.attachToRecyclerView(mOtherGroups);
+            ((TextView)view).setText(getString(R.string.toolbar_button_done));
+            isEdit = true;
+        }
+    }
+
+    private void resetStateEditing(){
+        if(isEdit){
+            helper.attachToRecyclerView(null);
+            isEdit = false;
+            mOtherGroups.setAdapter(null);
+        }
+    }
+
+
 }

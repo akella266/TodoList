@@ -11,44 +11,40 @@ import by.intervale.akella266.todolist.data.models.TaskItem;
 
 public class Initializer {
 
-    private static TaskItemLocalRepository repoTasks;
-    private static GroupLocalRepository repoGroups;
+    private static TaskItemLocalRepository sRepoTasks;
+    private static GroupLocalRepository sRepoGroups;
 
     public static void initialize(){
-        repoGroups = new GroupLocalRepository();
+        sRepoGroups = new GroupLocalRepository();
         Group inbox = new Group("Inbox");
         inbox.setId(UUID.fromString("1-1-1-1-1"));
-        repoGroups.add(inbox);
+        sRepoGroups.add(inbox);
         Group work = new Group("Work");
-        repoGroups.add(work);
-        repoGroups.add(new Group("Building"));
-        repoGroups.add(new Group("My"));
-        repoTasks = new TaskItemLocalRepository();
-        repoTasks.add(new TaskItem("This is task withour reminder",
+        sRepoGroups.add(work);
+        sRepoGroups.add(new Group("Building"));
+        sRepoGroups.add(new Group("My"));
+        sRepoTasks = new TaskItemLocalRepository();
+        sRepoTasks.add(new TaskItem("This is task withour reminder",
                 Calendar.getInstance().getTime(), "This is note", inbox.getId()));
-        repoTasks.add(new TaskItem("This is task withour reminder",
+        sRepoTasks.add(new TaskItem("This is task withour reminder",
                 Calendar.getInstance().getTime(), "This is note", inbox.getId()));
-        repoTasks.add(new TaskItem("This is task withour reminder",
+        sRepoTasks.add(new TaskItem("This is task withour reminder",
                 Calendar.getInstance().getTime(), "This is note", inbox.getId()));
-        repoTasks.add(new TaskItem("This is task withour reminder",
+        sRepoTasks.add(new TaskItem("This is task withour reminder",
                 new Date(Calendar.getInstance().getTime().getTime()+100000000L), "This is note", inbox.getId()));
-        repoTasks.add(new TaskItem("This is task withour reminder",
+        sRepoTasks.add(new TaskItem("This is task withour reminder",
                 new Date(Calendar.getInstance().getTime().getTime()+100000000L), "This is note", work.getId()));
-        repoTasks.add(new TaskItem("This is task without reminder",
+        sRepoTasks.add(new TaskItem("This is task without reminder",
                 Calendar.getInstance().getTime(), "This is note", work.getId(),true));
     }
 
     public static TaskItemLocalRepository getTasksLocal(){
-        if (repoTasks == null) {
-            initialize();
-        }
-        return repoTasks;
+        if (sRepoTasks == null) initialize();
+        return sRepoTasks;
     }
 
     public static GroupLocalRepository getGroupsLocal(){
-        if(repoGroups == null){
-            initialize();
-        }
-        return repoGroups;
+        if(sRepoGroups == null) initialize();
+        return sRepoGroups;
     }
 }

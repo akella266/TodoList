@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import by.intervale.akella266.todolist.R;
@@ -15,18 +14,9 @@ import by.intervale.akella266.todolist.data.local.specifications.GetGroupsSpecif
 import by.intervale.akella266.todolist.data.models.Group;
 import by.intervale.akella266.todolist.utils.Initializer;
 
-public class DialogFragmentGroup extends DialogFragment {
+public class GroupDialogFragment extends DialogFragment {
 
-    public interface DialogGroupListener{
-        void onDialogItemClick(DialogFragment dialog, Group which);
-        void onDialogNegativeClick(DialogFragment dialog);
-    }
-
-    private DialogFragmentGroup.DialogGroupListener mListener;
-
-    public void setListener(DialogFragmentGroup.DialogGroupListener listener){
-        this.mListener = listener;
-    }
+    private GroupDialogFragment.DialogGroupListener mListener;
 
     @NonNull
     @Override
@@ -41,15 +31,24 @@ public class DialogFragmentGroup extends DialogFragment {
                 .setItems(namesGroup, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        mListener.onDialogItemClick(DialogFragmentGroup.this, groups.get(i));
+                        mListener.onDialogItemClick(GroupDialogFragment.this, groups.get(i));
                     }
                 })
                 .setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        mListener.onDialogNegativeClick(DialogFragmentGroup.this);
+                        mListener.onDialogNegativeClick(GroupDialogFragment.this);
                     }
                 });
         return builderPriority.create();
+    }
+
+    public void setListener(GroupDialogFragment.DialogGroupListener listener){
+        this.mListener = listener;
+    }
+
+    public interface DialogGroupListener{
+        void onDialogItemClick(DialogFragment dialog, Group which);
+        void onDialogNegativeClick(DialogFragment dialog);
     }
 }

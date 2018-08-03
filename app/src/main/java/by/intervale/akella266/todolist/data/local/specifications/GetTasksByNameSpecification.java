@@ -19,6 +19,6 @@ public class GetTasksByNameSpecification implements LocalSpecification {
     public ResponseSpecification getType() {
         List<Object> resp = new ArrayList<>();
         resp.add(name);
-        return new ResponseSpecification(TypeOperation.GET_BY_NAME_TASKS, resp);
+        return new ResponseSpecification(TypeOperation.GET_BY_NAME_TASK, resp);
     }
 }

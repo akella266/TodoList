@@ -16,24 +16,25 @@ import by.intervale.akella266.todolist.data.models.Group;
 
 public class GroupAdapter extends RecyclerView.Adapter<GroupViewHolder> {
 
-    private Context context;
-    private List<Group> list;
+    private Context mContext;
+    private List<Group> mList;
 
     public GroupAdapter(Context context) {
-        this.context = context;
+        this.mContext = context;
     }
 
     @NonNull
     @Override
     public GroupViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_group, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_group, parent, false);
         final GroupViewHolder groupViewHolder = new GroupViewHolder(view);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = GroupDetailsActivity.newIntent(context,
-                        list.get(groupViewHolder.getAdapterPosition()));
-                context.startActivity(intent);
+                Intent intent = GroupDetailsActivity.getStartIntent(mContext,
+                        mList.get(groupViewHolder.getAdapterPosition()));
+                mContext.startActivity(intent);
             }
         });
         return groupViewHolder;
@@ -41,21 +42,21 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull GroupViewHolder holder, int position) {
-        Group group = list.get(position);
+        Group group = mList.get(position);
         holder.mNameGroup.setText(group.getName());
-        holder.mCountTasks.setText(context.getString(R.string.item_group_count_tasks, group.getCountTasks()+""));
+        holder.mCountTasks.setText(mContext.getString(R.string.item_group_count_tasks, group.getCountTasks()+""));
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return mList.size();
     }
 
     public void setList(List<Group> list) {
-        this.list = list;
+        this.mList = list;
     }
 
     public List<Group> getList() {
-        return list;
+        return mList;
     }
 }

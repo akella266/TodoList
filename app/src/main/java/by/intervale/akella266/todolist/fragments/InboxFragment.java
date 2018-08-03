@@ -16,7 +16,6 @@ import android.widget.ToggleButton;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +30,7 @@ import by.intervale.akella266.todolist.adapters.TasksAdapter;
 import by.intervale.akella266.todolist.data.local.specifications.GetCurrentTasksSpecification;
 import by.intervale.akella266.todolist.data.local.specifications.GetGroupNameByIdSpecification;
 import by.intervale.akella266.todolist.data.models.TaskItem;
-import by.intervale.akella266.todolist.utils.InboxItem;
+import by.intervale.akella266.todolist.data.models.InboxItem;
 import by.intervale.akella266.todolist.utils.Initializer;
 import by.intervale.akella266.todolist.utils.ItemTouchActions;
 import by.intervale.akella266.todolist.utils.OnToolbarButtonsClickListener;
@@ -47,18 +46,26 @@ public class InboxFragment extends Fragment
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_inbox, container, false);
 
         isEdit = false;
-        mBtnDate = view.findViewById(R.id.inbox_btn_active);
-        mBtnGroup = view.findViewById(R.id.inbox_btn_completed);
-        mRecycler = view.findViewById(R.id.inbox_recycler);
+        mBtnDate = view.findViewById(R.id.button_inbox_active);
+        mBtnGroup = view.findViewById(R.id.button_inbox_completed);
+        mRecycler = view.findViewById(R.id._recycler_inbox);
         mRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
         setUpToggles();
         updateUI();
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        resetStateEditing();
+        updateUI();
     }
 
     private void updateUI(){
@@ -81,29 +88,28 @@ public class InboxFragment extends Fragment
             });
         }
 
-        if(mRecycler.getAdapter() == null){
-            mRecycler.setAdapter(mAdapter);
-        }
-        Comparator<TaskItem> comparator;
-        if (mBtnDate.isChecked()) {
-            comparator = new Comparator<TaskItem>() {
-                @Override
-                public int compare(TaskItem taskItem, TaskItem t1) {
-                    return dateToString(taskItem.getDate())
-                            .compareTo(dateToString(t1.getDate()));
-                }
-            };
-        }
-        else{
-            comparator = new Comparator<TaskItem>() {
-                @Override
-                public int compare(TaskItem taskItem, TaskItem t1) {
-                    return taskItem.getGroupId().compareTo(t1.getGroupId());
-                }
-            };
-        }
-        mAdapter.setList(getTasksBy(comparator));
+        if(mRecycler.getAdapter() == null) mRecycler.setAdapter(mAdapter);
+
+        mAdapter.setList(getTasksBy());
         mAdapter.notifyDataSetChanged();
+    }
+
+
+    @Override
+    public void update(Observable observable, Object o) {
+        resetStateEditing();
+        updateUI();
+    }
+
+    @Override
+    public void onLeftButtonClick(View view) {
+        changeStateEditing(view);
+        updateUI();
+    }
+
+    @Override
+    public void onRightButtonClick(View view) {
+
     }
 
     private void setUpToggles() {
@@ -156,10 +162,11 @@ public class InboxFragment extends Fragment
         if(isEdit){
             mAdapter.setEdit(false);
             isEdit = false;
+            mRecycler.setAdapter(null);
         }
     }
 
-    public List<InboxItem> getTasksBy(Comparator<TaskItem> comparator) {
+    private List<InboxItem> getTasksBy() {
         List<InboxItem> items = new ArrayList<>();
         Map<String, List<TaskItem>> map = new HashMap<>();
         List<TaskItem> currentTasks = Initializer.getTasksLocal().query(new GetCurrentTasksSpecification());
@@ -185,25 +192,9 @@ public class InboxFragment extends Fragment
                         new GetGroupNameByIdSpecification(taskItem.getGroupId())).get(0).getName();
     }
 
-    public String dateToString(Date date){
+    private String dateToString(Date date){
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         return format.format(date);
     }
 
-    @Override
-    public void update(Observable observable, Object o) {
-        resetStateEditing();
-        updateUI();
-    }
-
-    @Override
-    public void onLeftButtonClick(View view) {
-        changeStateEditing(view);
-        updateUI();
-    }
-
-    @Override
-    public void onRightButtonClick(View view) {
-
-    }
 }

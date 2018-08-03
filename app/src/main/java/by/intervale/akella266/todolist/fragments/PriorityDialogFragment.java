@@ -12,37 +12,39 @@ import java.util.Arrays;
 import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.utils.Priority;
 
-public class DialogFragmentPriority extends DialogFragment {
-
-    public interface DialogPriorityListener{
-        void onDialogItemClick(DialogFragment dialog, String which);
-        void onDialogNegativeClick(DialogFragment dialog);
-    }
+public class PriorityDialogFragment extends DialogFragment {
 
     private DialogPriorityListener mListener;
-
-    public void setListener(DialogPriorityListener listener){
-        this.mListener = listener;
-    }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builderPriority = new AlertDialog.Builder(getContext());
-        final String[] priorities = Arrays.toString(Priority.values()).replaceAll("[\\[\\]]","").split(", ");
+        final String[] priorities = Arrays.toString(Priority.values())
+                                            .replaceAll("[\\[\\]]","")
+                                            .split(", ");
         builderPriority.setTitle(getString(R.string.dialog_title_priority))
                 .setItems(priorities, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        mListener.onDialogItemClick(DialogFragmentPriority.this, priorities[i]);
+                        mListener.onDialogItemClick(PriorityDialogFragment.this, priorities[i]);
                     }
                 })
                 .setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        mListener.onDialogNegativeClick(DialogFragmentPriority.this);
+                        mListener.onDialogNegativeClick(PriorityDialogFragment.this);
                     }
                 });
         return builderPriority.create();
+    }
+
+    public void setListener(DialogPriorityListener listener){
+        this.mListener = listener;
+    }
+
+    public interface DialogPriorityListener{
+        void onDialogItemClick(DialogFragment dialog, String which);
+        void onDialogNegativeClick(DialogFragment dialog);
     }
 }

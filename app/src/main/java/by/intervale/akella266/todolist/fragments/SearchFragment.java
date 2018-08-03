@@ -10,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +21,8 @@ import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.TimeUnit;
 
 import by.intervale.akella266.todolist.R;
@@ -35,10 +36,11 @@ import io.reactivex.schedulers.Schedulers;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-public class SearchFragment extends Fragment {
+public class SearchFragment extends Fragment
+        implements Observer{
 
     private Toolbar mToolbar;
-    private Button mBtnSearch;
+    private LinearLayout mFrameSearch;
     private TextView mNoResult;
     private ToggleButton mBtnActive;
     private ToggleButton mBtnCompleted;
@@ -49,28 +51,26 @@ public class SearchFragment extends Fragment {
     private LinearLayout mSearchPanel;
     private SearchView mSearch;
     private Button mCancel;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    private boolean isSearching;
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
         mToolbar = ((AppCompatActivity)getActivity()).findViewById(R.id.toolbar);
-        mBtnSearch = view.findViewById(R.id.search_btn_search);
-        mNoResult = view.findViewById(R.id.search_no_result);
-        mBtnActive = view.findViewById(R.id.search_btn_active);
-        mBtnCompleted = view.findViewById(R.id.search_btn_completed);
-        mViewFilter = view.findViewById(R.id.search_filter);
-        mRecyclerView = view.findViewById(R.id.search_recycler);
+        mFrameSearch = view.findViewById(R.id.linear_layout_button_search);
+        mNoResult = view.findViewById(R.id.textview_no_result);
+        mBtnActive = view.findViewById(R.id.button_search_active);
+        mBtnCompleted = view.findViewById(R.id.button_search_completed);
+        mViewFilter = view.findViewById(R.id.linear_layout_search_filter);
+        mRecyclerView = view.findViewById(R.id.recycler_search);
         mRecyclerView.setLayoutManager( new LinearLayoutManager(getContext()));
-        mSearchPanel = view.findViewById(R.id.search_pannel);
-        mCancel = view.findViewById(R.id.search_btn_cancel);
+        mSearchPanel = view.findViewById(R.id.linear_layout_search_pannel);
+        mCancel = view.findViewById(R.id.button_search_cancel);
         mSearch = view.findViewById(R.id.search_view);
+        isSearching = false;
 
         mSearchPanel.setVisibility(GONE);
         mViewFilter.setVisibility(GONE);
@@ -80,6 +80,12 @@ public class SearchFragment extends Fragment {
         setUpSearch();
         updateUI();
         return view;
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
+        if (isSearching) displaySearching();
+        else hideSearching();
     }
 
     private void setUpToggles() {
@@ -119,7 +125,6 @@ public class SearchFragment extends Fragment {
     private void setUpSearch() {
         RxSearchObservable.fromView(mSearch)
                 .debounce(300, TimeUnit.MILLISECONDS)
-//                .distinctUntilChanged()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<TaskItem>>() {
@@ -140,37 +145,24 @@ public class SearchFragment extends Fragment {
     }
 
     private void setUpListeners(){
-        mBtnSearch.setOnClickListener(new View.OnClickListener() {
+        mFrameSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mToolbar.setVisibility(GONE);
-                mBtnSearch.setVisibility(GONE);
-                mSearchPanel.setVisibility(VISIBLE);
-                mViewFilter.setVisibility(VISIBLE);
-
-                mSearch.setFocusable(true);
-                mSearch.setIconified(false);
-                mSearch.requestFocusFromTouch();
+                displaySearching();
             }
         });
 
         mCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mSearchPanel.setVisibility(GONE);
-                mBtnSearch.setVisibility(VISIBLE);
-                mToolbar.setVisibility(VISIBLE);
-                mViewFilter.setVisibility(GONE);
+                hideSearching();
             }
         });
 
         mSearch.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                mSearchPanel.setVisibility(GONE);
-                mBtnSearch.setVisibility(VISIBLE);
-                mToolbar.setVisibility(VISIBLE);
-                mViewFilter.setVisibility(GONE);
+                hideSearching();
                 return true;
             }
         });
@@ -181,9 +173,8 @@ public class SearchFragment extends Fragment {
         for(int i = 0; i < mListTasks.size(); i++){
             TaskItem currItem = mListTasks.get(i);
             if ((mBtnActive.isChecked() && !currItem.isComplete()) ||
-                    (mBtnCompleted.isChecked() && currItem.isComplete())) {
+                    (mBtnCompleted.isChecked() && currItem.isComplete()))
                 filterItems.add(currItem);
-            }
         }
         return filterItems;
     }
@@ -193,9 +184,8 @@ public class SearchFragment extends Fragment {
             mListTasks = new ArrayList<>();
             mAdapter = new TasksAdapter(mListTasks);
         }
-        if(mRecyclerView.getAdapter() == null){
-            mRecyclerView.setAdapter(mAdapter);
-        }
+        if(mRecyclerView.getAdapter() == null) mRecyclerView.setAdapter(mAdapter);
+
         mAdapter.setTasks(getRequestedTasks());
 
         if(mAdapter.getItemCount() != 0) {
@@ -206,9 +196,24 @@ public class SearchFragment extends Fragment {
         mAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        mToolbar.setVisibility(VISIBLE);
+    private void displaySearching(){
+        mToolbar.setVisibility(GONE);
+        mFrameSearch.setVisibility(GONE);
+        mSearchPanel.setVisibility(VISIBLE);
+        mViewFilter.setVisibility(VISIBLE);
+
+        mSearch.setFocusable(true);
+        mSearch.setIconified(false);
+        mSearch.requestFocusFromTouch();
+        isSearching = true;
     }
+
+    private void hideSearching(){
+        mSearchPanel.setVisibility(GONE);
+        mFrameSearch.setVisibility(VISIBLE);
+        mToolbar.setVisibility(VISIBLE);
+        mViewFilter.setVisibility(GONE);
+        isSearching = false;
+    }
+
 }

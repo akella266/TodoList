@@ -33,15 +33,21 @@ public class MainActivity extends AppCompatActivity {
         initTabs();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (mPager.getCurrentItem() == 0) super.onBackPressed();
+        else mPager.setCurrentItem(0);
+    }
+
     private void initToolbar(){
         mToolbar = findViewById(R.id.toolbar);
-        mLeftToolbarButton = mToolbar.findViewById(R.id.toolbar_left_button);
-        mRightToolbarButton = mToolbar.findViewById(R.id.toolbar_right_button);
+        mLeftToolbarButton = mToolbar.findViewById(R.id.textview_toolbar_left_button);
+        mRightToolbarButton = mToolbar.findViewById(R.id.textview_toolbar_right_button);
         mRightToolbarButton.setCompoundDrawablesWithIntrinsicBounds(0,
                 0,
-                R.drawable.ic_add_blue_24dp,
+                R.drawable.ic_add,
                 0);
-        mTitleToolbar = mToolbar.findViewById(R.id.toolbar_title);
+        mTitleToolbar = mToolbar.findViewById(R.id.textview_toolbar_title);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -88,9 +94,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     }
                     case 3:{
-                        configToolbar(null,
-                                getString(R.string.title_search),
-                                true);
+                        configToolbar(null,getString(R.string.title_search),true);
+                        viewPagerAdapter.getItem(3);
+                        viewPagerAdapter.updateFragments();
                         break;
                     }
                 }
@@ -114,7 +120,10 @@ public class MainActivity extends AppCompatActivity {
                false);
     }
 
-    private void configToolbar(final OnToolbarButtonsClickListener clickListener, String title, boolean hideButtons){
+    private void configToolbar(final OnToolbarButtonsClickListener clickListener,
+                                    String title,
+                                    boolean hideButtons){
+        if (mToolbar.getVisibility() == View.GONE) mToolbar.setVisibility(View.VISIBLE);
         mTitleToolbar.setText(title);
         mLeftToolbarButton.setText(getString(R.string.toolbar_button_edit));
         if (hideButtons){
@@ -139,13 +148,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        if (mPager.getCurrentItem() == 0) {
-            super.onBackPressed();
-        } else {
-            mPager.setCurrentItem(0);
-        }
-    }
+
 
 }

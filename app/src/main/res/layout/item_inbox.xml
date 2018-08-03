@@ -4,22 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/colorBackground"
+    android:paddingTop="@dimen/top_offset"
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/inbox_name_category"
+        android:id="@+id/textview_inbox_name_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        android:paddingLeft="@dimen/default_margin"
-        android:paddingBottom="@dimen/default_margin"
-        android:paddingRight="@dimen/default_margin"
-        android:paddingTop="20dp"
+        android:padding="@dimen/default_margin"
         tools:text="Inbox"
         />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/inbox_inner_recycler"
+        android:id="@+id/recycler_inbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

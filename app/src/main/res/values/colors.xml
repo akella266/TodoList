@@ -3,6 +3,7 @@
     <color name="colorPrimary">#fafafa</color>
     <color name="colorPrimaryDark">#c7c7c7</color>
     <color name="colorAccent">#2196F3</color>
-    <color name="colorBackground">#C0C0C0</color>
+    <color name="text_color">#9e9e9e</color>
+    <color name="colorBackground">#eeeeee</color>
     <color name="color_toolbar_buttons">#2196F3</color>
 </resources>

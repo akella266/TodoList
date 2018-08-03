@@ -1,6 +1,5 @@
 package by.intervale.akella266.todolist.adapters;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +14,6 @@ import java.util.Locale;
 import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.TaskDetailsActivity;
 import by.intervale.akella266.todolist.data.models.TaskItem;
-import by.intervale.akella266.todolist.fragments.TaskDetailsFragment;
 
 public class TasksAdapter extends RecyclerView.Adapter<TaskViewHolder> {
 
@@ -35,7 +33,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TaskViewHolder> {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = TaskDetailsActivity.newIntent(parent.getContext(),
+                Intent intent = TaskDetailsActivity.getStartIntent(parent.getContext(),
                         mTasks.get(taskViewHolder.getAdapterPosition()));
                 parent.getContext().startActivity(intent);
             }
@@ -50,12 +48,8 @@ public class TasksAdapter extends RecyclerView.Adapter<TaskViewHolder> {
         holder.mNote.setText(task.getNotes());
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         holder.mDate.setText(format.format(task.getDate()));
-        if (isEdit){
-            holder.mIcon.setVisibility(View.VISIBLE);
-        }
-        else{
-            holder.mIcon.setVisibility(View.GONE);
-        }
+        if (isEdit) holder.mIcon.setVisibility(View.VISIBLE);
+        else holder.mIcon.setVisibility(View.GONE);
     }
 
     @Override

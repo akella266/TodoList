@@ -9,76 +9,114 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/details_title"/>
+        android:paddingTop="@dimen/top_offset"
+        android:paddingLeft="12dp"
+        android:text="@string/details_title"
+        android:paddingStart="12dp"
+        android:paddingBottom="4dp"/>
 
 
     <EditText
-        android:id="@+id/details_title"
+        android:id="@+id/edittext_details_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
         android:maxLines="1"
+        android:paddingLeft="20dp"
+        android:paddingStart="20dp"
         android:background="@android:color/white"
         android:hint="@string/hint_text"
-        />
+        android:textColor="@android:color/black"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/details_reminder"/>
+        android:paddingTop="@dimen/top_offset"
+        android:paddingLeft="12dp"
+        android:paddingStart="12dp"
+        android:text="@string/details_reminder"
+        android:paddingBottom="4dp"/>
 
     <Switch
-        android:id="@+id/details_remind"
+        android:id="@+id/switch_details_remind"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
-        android:text="@string/details_remind_description" />
+        android:text="@string/details_remind_description"
+        android:textStyle="bold"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:paddingLeft="20dp"
+        android:paddingStart="20dp"
+        android:paddingRight="4dp"
+        android:paddingEnd="4dp" />
 
     <LinearLayout
-        android:id="@+id/details_date"
+        android:id="@+id/linear_layout_details_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
         android:orientation="horizontal"
-        android:focusable="true">
+        android:focusable="true"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:paddingRight="4dp"
+        android:paddingEnd="4dp"
+        android:paddingLeft="20dp"
+        android:paddingStart="20dp">
 
         <TextView
-            android:id="@+id/details_date_text"
+            android:id="@+id/textview_details_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="?attr/selectableItemBackground"
+            android:textColor="@android:color/black"
             tools:text="Четверг, 08 июня 2017 г., 12:57"/>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_chevron_right_grey_24dp"/>
+            android:background="@drawable/ic_chevron_right"/>
 
     </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/details_priority"/>
+        android:paddingTop="@dimen/top_offset"
+        android:text="@string/details_priority"
+        android:paddingLeft="12dp"
+        android:paddingStart="12dp"
+        android:paddingBottom="4dp"/>
 
     <LinearLayout
-        android:id="@+id/details_priority"
+        android:id="@+id/linear_layout_details_priority"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
         android:orientation="horizontal"
-        android:focusable="true">
+        android:focusable="true"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:paddingRight="4dp"
+        android:paddingEnd="4dp"
+        android:paddingLeft="20dp"
+        android:paddingStart="20dp">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="?attr/selectableItemBackground"
-            android:text="@string/details_priority_description"/>
+            android:text="@string/details_priority_description"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"/>
 
         <TextView
-            android:id="@+id/details_priority_text"
+            android:id="@+id/textview_details_priority"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="NONE"/>
@@ -86,47 +124,70 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_chevron_right_grey_24dp"/>
+            android:background="@drawable/ic_chevron_right"/>
     </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/details_group"/>
+        android:paddingTop="@dimen/top_offset"
+        android:text="@string/details_group"
+        android:paddingLeft="12dp"
+        android:paddingStart="12dp"
+        android:paddingBottom="4dp" />
 
     <LinearLayout
-        android:id="@+id/details_group"
+        android:id="@+id/linear_layout_details_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
         android:orientation="horizontal"
-        android:focusable="true">
+        android:focusable="true"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:paddingRight="4dp"
+        android:paddingEnd="4dp"
+        android:paddingLeft="20dp"
+        android:paddingStart="20dp">
 
         <TextView
-            android:id="@+id/details_group_name"
+            android:id="@+id/textview_details_group_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="?attr/selectableItemBackground"
+            android:textColor="@android:color/black"
             android:text="@string/details_default_group_name"/>
 
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_chevron_right_grey_24dp"/>
+            android:background="@drawable/ic_chevron_right"/>
     </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/details_notes"/>
+        android:paddingTop="@dimen/top_offset"
+        android:text="@string/details_notes"
+        android:paddingLeft="12dp"
+        android:paddingStart="12dp"
+        android:paddingBottom="4dp"
+        android:paddingRight="4dp"
+        android:paddingEnd="4dp" />
 
     <EditText
-        android:id="@+id/details_notes"
+        android:id="@+id/edittext_details_notes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
-        android:lines="3"
-        android:hint="@string/details_notes_description"/>
+        android:hint="@string/details_notes_description"
+        android:textColor="@android:color/black"
+        android:paddingTop="4dp"
+        android:paddingBottom="50dp"
+        android:paddingRight="4dp"
+        android:paddingEnd="4dp"
+        android:paddingLeft="20dp"
+        android:paddingStart="20dp"/>
 </LinearLayout>

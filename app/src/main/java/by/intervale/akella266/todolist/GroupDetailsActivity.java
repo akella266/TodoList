@@ -17,7 +17,7 @@ public class GroupDetailsActivity extends AppCompatActivity {
 
     public static final String EXTRA_ADD_DATA = "akella299.intent.group_data";
 
-    public static Intent newIntent(Context context, Group item){
+    public static Intent getStartIntent(Context context, Group item){
         Intent intent = new Intent(context, GroupDetailsActivity.class);
         intent.putExtra(EXTRA_ADD_DATA, item);
         return intent;
@@ -30,21 +30,24 @@ public class GroupDetailsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         Group item = (Group) intent.getSerializableExtra(EXTRA_ADD_DATA);
-        GroupDetailsFragment fragment = GroupDetailsFragment.getInstance(item);
-        if (item == null){
-            initToolbar(fragment, false);
-        }
-        else{
-            initToolbar(fragment, true);
-        }
+        GroupDetailsFragment fragment = GroupDetailsFragment.newInstance(item);
+        if (item == null) initToolbar(fragment, false);
+        else initToolbar(fragment, true);
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction().add(R.id.fragment_container, fragment)
                 .addToBackStack(null).commit();
     }
 
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
     private void initToolbar(final OnToolbarButtonsClickListener listener, boolean isEdit){
         Toolbar mToolbar = findViewById(R.id.toolbar);
-        final TextView mLeftToolbarButton = mToolbar.findViewById(R.id.toolbar_left_button);
+        final TextView mLeftToolbarButton = mToolbar.findViewById(R.id.textview_toolbar_left_button);
         mLeftToolbarButton.setText(R.string.button_cancel);
         mLeftToolbarButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,7 +55,7 @@ public class GroupDetailsActivity extends AppCompatActivity {
                 listener.onLeftButtonClick(mLeftToolbarButton);
             }
         });
-        final TextView mRightToolbarButton = mToolbar.findViewById(R.id.toolbar_right_button);
+        final TextView mRightToolbarButton = mToolbar.findViewById(R.id.textview_toolbar_right_button);
         mRightToolbarButton.setText(R.string.toolbar_button_done);
         mRightToolbarButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,21 +63,12 @@ public class GroupDetailsActivity extends AppCompatActivity {
                 listener.onRightButtonClick(mRightToolbarButton);
             }
         });
-        TextView mTitleToolbar = mToolbar.findViewById(R.id.toolbar_title);
-        if (isEdit){
-            mTitleToolbar.setText(R.string.title_edit_group);
-        }
-        else{
-            mTitleToolbar.setText(R.string.title_add_group);
-        }
+        TextView mTitleToolbar = mToolbar.findViewById(R.id.textview_toolbar_title);
+        if (isEdit) mTitleToolbar.setText(R.string.title_edit_group);
+        else mTitleToolbar.setText(R.string.title_add_group);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
-    }
 }

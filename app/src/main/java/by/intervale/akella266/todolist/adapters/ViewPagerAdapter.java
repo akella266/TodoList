@@ -14,7 +14,7 @@ import by.intervale.akella266.todolist.utils.FragmentObserver;
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter{
 
-    private FragmentObserver observer;
+    private FragmentObserver mObserver;
     private List<Fragment> mFragments;
     private List<String> mTitles;
 
@@ -22,23 +22,14 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter{
         super(fm);
         mFragments = new ArrayList<>();
         mTitles = new ArrayList<>();
-        observer = new FragmentObserver();
-    }
-
-
-    public void addFragment(Fragment fragment, String title){
-        mFragments.add(fragment);
-        mTitles.add(title);
-
+        mObserver = new FragmentObserver();
     }
 
     @Override
     public Fragment getItem(int position) {
-        observer.deleteObservers();
+        mObserver.deleteObservers();
         Fragment fragment = mFragments.get(position);
-        if (fragment instanceof Observer){
-            observer.addObserver((Observer)fragment);
-        }
+        if (fragment instanceof Observer) mObserver.addObserver((Observer)fragment);
         return fragment;
     }
 
@@ -53,7 +44,12 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter{
         return mTitles.get(position);
     }
 
+    public void addFragment(Fragment fragment, String title){
+        mFragments.add(fragment);
+        mTitles.add(title);
+    }
+
     public void updateFragments(){
-        observer.notifyObservers();
+        mObserver.notifyObservers();
     }
 }

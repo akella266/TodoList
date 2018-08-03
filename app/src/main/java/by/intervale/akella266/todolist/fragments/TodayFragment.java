@@ -22,7 +22,7 @@ import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.adapters.CommonAdapter;
 import by.intervale.akella266.todolist.adapters.TasksAdapter;
 import by.intervale.akella266.todolist.data.models.TaskItem;
-import by.intervale.akella266.todolist.utils.InboxItem;
+import by.intervale.akella266.todolist.data.models.InboxItem;
 import by.intervale.akella266.todolist.utils.Initializer;
 import by.intervale.akella266.todolist.data.local.specifications.GetCompletedTaskSpecification;
 import by.intervale.akella266.todolist.data.local.specifications.GetCurrentTasksSpecification;
@@ -46,7 +46,7 @@ public class TodayFragment extends Fragment
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_today, container, false);
 
-        mRecycler = view.findViewById(R.id.today_recycler);
+        mRecycler = view.findViewById(R.id.recycler_today);
         mRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         isEdit = false;
 
@@ -54,16 +54,34 @@ public class TodayFragment extends Fragment
         return view;
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
-        mRecycler.setAdapter(null);
+        resetStateEditing();
         updateUI();
     }
 
+    @Override
+    public void update(Observable observable, Object o) {
+        resetStateEditing();
+        updateUI();
+    }
+
+    @Override
+    public void onLeftButtonClick(View view) {
+        changeStateEditing(view);
+        updateUI();
+    }
+
+    @Override
+    public void onRightButtonClick(View view) {
+        resetStateEditing();
+        Intent intent = TaskDetailsActivity.getStartIntent(getContext(), null);
+        startActivity(intent);
+    }
+
     private void updateUI(){
-        if(mAdapter == null){
+        if(mAdapter == null)
             mAdapter = new CommonAdapter(getContext(),2,
                     new ItemTouchActions() {
                         @Override
@@ -81,10 +99,8 @@ public class TodayFragment extends Fragment
                             updateUI();
                         }
                     });
-        }
-        if (mRecycler.getAdapter() == null){
-            mRecycler.setAdapter(mAdapter);
-        }
+
+        if (mRecycler.getAdapter() == null) mRecycler.setAdapter(mAdapter);
         mAdapter.setList(getItems());
         mAdapter.notifyDataSetChanged();
     }
@@ -115,25 +131,7 @@ public class TodayFragment extends Fragment
         if(isEdit){
             mAdapter.setEdit(false);
             isEdit = false;
+            mRecycler.setAdapter(null);
         }
-    }
-
-    @Override
-    public void update(Observable observable, Object o) {
-        resetStateEditing();
-        updateUI();
-    }
-
-    @Override
-    public void onLeftButtonClick(View view) {
-        changeStateEditing(view);
-        updateUI();
-    }
-
-    @Override
-    public void onRightButtonClick(View view) {
-        resetStateEditing();
-        Intent intent = TaskDetailsActivity.newIntent(getContext(), null);
-        startActivity(intent);
     }
 }

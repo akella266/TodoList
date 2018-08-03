@@ -1,10 +1,8 @@
-package by.intervale.akella266.todolist.utils;
+package by.intervale.akella266.todolist.data.models;
 
 import android.support.annotation.NonNull;
 
 import java.util.List;
-
-import by.intervale.akella266.todolist.data.models.TaskItem;
 
 public class InboxItem implements Comparable<InboxItem>{
 

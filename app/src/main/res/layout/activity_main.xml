@@ -29,8 +29,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:tabSelectedTextColor="@color/colorPrimaryDark"
-        app:tabTextColor="@color/colorPrimaryDark">
+        app:tabSelectedTextColor="@color/text_color"
+        app:tabTextColor="@color/text_color">
 
         <android.support.design.widget.TabItem
             android:layout_width="match_parent"

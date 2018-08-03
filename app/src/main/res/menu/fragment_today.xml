@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menu_fragment_todolist_add_group"
-        android:title="@string/menu_fragment_todolist_add_group"
+        android:id="@+id/menu_fragment_today_add"
+        android:title="@string/menu_fargment_today_adding_task"
+        android:icon="@drawable/ic_add"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_add_blue_24dp"
         />
 </menu>
