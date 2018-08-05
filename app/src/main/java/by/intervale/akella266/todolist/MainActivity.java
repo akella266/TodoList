@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTitleToolbar;
     private TextView mLeftToolbarButton;
     private TextView mRightToolbarButton;
+    private TabLayout mTabs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initTabs(){
-        TabLayout tabs = findViewById(R.id.tabLayout);
+        mTabs = findViewById(R.id.tabLayout);
+
         mPager = findViewById(R.id.viewPager);
         final ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         viewPagerAdapter.addFragment(new TodayFragment(), getString(R.string.title_today));
@@ -64,10 +66,10 @@ public class MainActivity extends AppCompatActivity {
         viewPagerAdapter.addFragment(new SearchFragment(), getString(R.string.title_search));
 
         mPager.setAdapter(viewPagerAdapter);
-        mPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
-        tabs.setupWithViewPager(mPager);
+        mPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabs));
+        mTabs.setupWithViewPager(mPager);
         setUpFirstTab(viewPagerAdapter);
-        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mPager.setCurrentItem(tab.getPosition());
@@ -112,12 +114,20 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        setUpIcons();
     }
 
     private void setUpFirstTab(ViewPagerAdapter viewPagerAdapter){
        configToolbar((TodayFragment)viewPagerAdapter.getItem(0),
                getString(R.string.title_today),
                false);
+    }
+
+    private void setUpIcons(){
+        mTabs.getTabAt(0).setIcon(getResources().getDrawable(R.drawable.ic_tab_today));
+        mTabs.getTabAt(1).setIcon(getResources().getDrawable(R.drawable.ic_tab_inbox));
+        mTabs.getTabAt(2).setIcon(getResources().getDrawable(R.drawable.ic_tab_todolist));
+        mTabs.getTabAt(3).setIcon(getResources().getDrawable(R.drawable.ic_tab_search));
     }
 
     private void configToolbar(final OnToolbarButtonsClickListener clickListener,
