@@ -24,7 +24,7 @@
     <string name="toolbar_button_done">Done</string>
     <string name="toolbar_button_edit">Edit</string>
     <string name="error_no_title">Please, enter name of task!</string>
-    <string name="fragment_search_active">Active Tasks</string>
+    <string name="tab_search_active">Active Tasks</string>
     <string name="fragment_search_completed">Completed</string>
     <string name="search_no_results">No Results</string>
     <string name="item_group_count_tasks">(%1$s)</string>
@@ -35,4 +35,7 @@
     <string name="inbox_group">Group</string>
     <string name="details_group">GROUP</string>
     <string name="details_default_group_name">Inbox</string>
+    <string name="done">Done</string>
+    <string name="menu_item_complete">Complete</string>
+    <string name="item_remove">Remove</string>
 </resources>

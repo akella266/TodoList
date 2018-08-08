@@ -9,31 +9,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.data.models.InboxItem;
-import by.intervale.akella266.todolist.utils.ItemTouchActions;
 import by.intervale.akella266.todolist.utils.ItemTouchCallback;
+import by.intervale.akella266.todolist.utils.OnPopupMenuItemClickListener;
 
 public class CommonAdapter extends RecyclerView.Adapter {
 
     private Context context;
     private List<InboxItem> mList;
-    private List<ItemTouchHelper> mHelpers;
     private RecyclerView.RecycledViewPool mViewPool;
-    private ItemTouchActions mItemTouchActions;
-    private int mCountButtons;
-    private boolean isEdit;
+    private OnPopupMenuItemClickListener mListener;
 
-    public CommonAdapter(Context context, int countButtons, ItemTouchActions itemTouchActions) {
+    public CommonAdapter(Context context, OnPopupMenuItemClickListener listener){
         this.context = context;
-        this.mItemTouchActions = itemTouchActions;
-        this.mCountButtons = countButtons;
         mViewPool = new RecyclerView.RecycledViewPool();
-        mHelpers = new ArrayList<>();
-        isEdit = false;
+        this.mListener = listener;
+    }
+
+    public CommonAdapter(Context context) {
+        this(context, null);
     }
 
     @NonNull
@@ -50,42 +47,19 @@ public class CommonAdapter extends RecyclerView.Adapter {
         inboxHolder.categoryName.setText(mList.get(position).getName());
         if(inboxHolder.categoryName.getText().length() == 0) inboxHolder.categoryName
                 .setVisibility(View.GONE);
-        TasksAdapter adapter = new TasksAdapter(mList.get(position).getTaskItems());
+        final TasksAdapter adapter = new TasksAdapter(context,
+                mList.get(position).getTaskItems(), mListener);
         inboxHolder.listItems.setAdapter(adapter);
         inboxHolder.listItems.setLayoutManager(new LinearLayoutManager(context));
         inboxHolder.listItems.setRecycledViewPool(mViewPool);
-        adapter.setEdit(isEdit);
-        if (isEdit) attachHelper(inboxHolder);
-        else detachHelper();
-        adapter.notifyDataSetChanged();
+
+        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchCallback(adapter));
+        helper.attachToRecyclerView(inboxHolder.listItems);
     }
 
     @Override
     public int getItemCount() {
         return mList.size();
-    }
-
-    private void attachHelper(final CommonViewHolder holder) {
-        ItemTouchHelper itemTouchhelper;
-        if(holder.categoryName.getText().equals(context.getString(R.string.completed_tasks)))
-                itemTouchhelper = new ItemTouchHelper(new ItemTouchCallback(context,1,
-                        mItemTouchActions));
-        else itemTouchhelper = new ItemTouchHelper(new ItemTouchCallback(context,
-                    mCountButtons,
-                    mItemTouchActions));
-
-        itemTouchhelper.attachToRecyclerView(holder.listItems);
-        mHelpers.add(itemTouchhelper);
-    }
-
-    private void detachHelper(){
-        for(ItemTouchHelper helper: mHelpers)
-            helper.attachToRecyclerView(null);
-        mHelpers.clear();
-    }
-
-    public void setEdit(boolean edit) {
-        isEdit = edit;
     }
 
     public void setList(List<InboxItem> mList) {

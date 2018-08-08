@@ -3,15 +3,13 @@ package by.intervale.akella266.todolist.fragments;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,68 +19,69 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.adapters.CommonAdapter;
-import by.intervale.akella266.todolist.adapters.TasksAdapter;
 import by.intervale.akella266.todolist.data.local.specifications.GetCurrentTasksSpecification;
 import by.intervale.akella266.todolist.data.local.specifications.GetGroupNameByIdSpecification;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 import by.intervale.akella266.todolist.data.models.InboxItem;
 import by.intervale.akella266.todolist.utils.Initializer;
-import by.intervale.akella266.todolist.utils.ItemTouchActions;
-import by.intervale.akella266.todolist.utils.OnToolbarButtonsClickListener;
+import by.intervale.akella266.todolist.utils.OnPopupMenuItemClickListener;
 
-public class InboxFragment extends Fragment
-        implements OnToolbarButtonsClickListener, Observer{
+public class InboxFragment extends Fragment{
 
-    private ToggleButton mBtnDate;
-    private ToggleButton mBtnGroup;
-    private RecyclerView mRecycler;
+    private Unbinder unbinder;
+
+    @BindView(R.id.tablayout_inbox)
+    TabLayout mTabLayout;
+    @BindView(R.id.recycler_inbox)
+    RecyclerView mRecycler;
     private CommonAdapter mAdapter;
-    private boolean isEdit;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_inbox, container, false);
-
-        isEdit = false;
-        mBtnDate = view.findViewById(R.id.button_inbox_active);
-        mBtnGroup = view.findViewById(R.id.button_inbox_completed);
-        mRecycler = view.findViewById(R.id._recycler_inbox);
+        unbinder = ButterKnife.bind(this, view);
         mRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                updateUI();
+            }
 
-        setUpToggles();
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
         updateUI();
         return view;
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        resetStateEditing();
-        updateUI();
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     private void updateUI(){
         if(mAdapter == null){
-            mAdapter = new CommonAdapter(getContext(), 2, new ItemTouchActions() {
+            mAdapter = new CommonAdapter(getContext(), new OnPopupMenuItemClickListener() {
                 @Override
-                public void onLeftClick(RecyclerView.Adapter adapter, int position) {
-                    TaskItem taskItem = ((TasksAdapter)adapter).getTasks().get(position);
-                    taskItem.setComplete(true);
-                    Initializer.getTasksLocal().update(taskItem);
-                    updateUI();
-                }
-
-                @Override
-                public void onRightClick(RecyclerView.Adapter adapter, int position) {
-                    TaskItem taskItem = ((TasksAdapter)adapter).getTasks().remove(position);
-                    Initializer.getTasksLocal().remove(taskItem);
+                public void onItemClick(TaskItem item) {
+                    item.setComplete(true);
+                    Initializer.getTasksLocal().update(item);
                     updateUI();
                 }
             });
@@ -92,78 +91,6 @@ public class InboxFragment extends Fragment
 
         mAdapter.setList(getTasksBy());
         mAdapter.notifyDataSetChanged();
-    }
-
-
-    @Override
-    public void update(Observable observable, Object o) {
-        resetStateEditing();
-        updateUI();
-    }
-
-    @Override
-    public void onLeftButtonClick(View view) {
-        changeStateEditing(view);
-        updateUI();
-    }
-
-    @Override
-    public void onRightButtonClick(View view) {
-
-    }
-
-    private void setUpToggles() {
-        mBtnDate.setTextColor(getResources().getColor(R.color.colorPrimary));
-        mBtnGroup.setTextColor(getResources().getColor(R.color.colorAccent));
-        mBtnDate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (!b && !mBtnGroup.isChecked())
-                    mBtnDate.setChecked(true);
-                else if (b) {
-                    mBtnDate.setTextColor(getResources().getColor(R.color.colorPrimary));
-                    mBtnGroup.setChecked(false);
-                    updateUI();
-                }
-                else
-                    mBtnDate.setTextColor(getResources().getColor(R.color.colorAccent));
-            }
-        });
-        mBtnGroup.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (!b && !mBtnDate.isChecked())
-                    mBtnGroup.setChecked(true);
-                else if (b) {
-                    mBtnGroup.setTextColor(getResources().getColor(R.color.colorPrimary));
-                    mBtnDate.setChecked(false);
-                    updateUI();
-                }
-                else
-                    mBtnGroup.setTextColor(getResources().getColor(R.color.colorAccent));
-            }
-        });
-    }
-
-    private void changeStateEditing(View view){
-        if(isEdit){
-            mAdapter.setEdit(false);
-            ((TextView)view).setText(getString(R.string.toolbar_button_edit));
-            isEdit = false;
-        }
-        else {
-            mAdapter.setEdit(true);
-            ((TextView)view).setText(getString(R.string.toolbar_button_done));
-            isEdit = true;
-        }
-    }
-
-    private void resetStateEditing(){
-        if(isEdit){
-            mAdapter.setEdit(false);
-            isEdit = false;
-            mRecycler.setAdapter(null);
-        }
     }
 
     private List<InboxItem> getTasksBy() {
@@ -187,9 +114,17 @@ public class InboxFragment extends Fragment
     }
 
     private String getNameCategory(TaskItem taskItem){
-        return mBtnDate.isChecked() ? dateToString(taskItem.getDate())
-                : Initializer.getGroupsLocal().query(
+        switch (mTabLayout.getSelectedTabPosition()){
+            case 0:{
+                return dateToString(taskItem.getDate());
+            }
+            case 1:{
+                return Initializer.getGroupsLocal().query(
                         new GetGroupNameByIdSpecification(taskItem.getGroupId())).get(0).getName();
+            }
+            default:
+                return "";
+        }
     }
 
     private String dateToString(Date date){

@@ -9,6 +9,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -25,35 +28,44 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.data.local.specifications.GetGroupNameByIdSpecification;
+import by.intervale.akella266.todolist.data.local.specifications.GetTaskByIdSpecification;
 import by.intervale.akella266.todolist.data.models.Group;
 import by.intervale.akella266.todolist.utils.Initializer;
 import by.intervale.akella266.todolist.utils.NotificationSheduler;
-import by.intervale.akella266.todolist.utils.OnToolbarButtonsClickListener;
 import by.intervale.akella266.todolist.utils.Priority;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 
 public class TaskDetailsFragment extends Fragment
         implements PriorityDialogFragment.DialogPriorityListener,
-        GroupDialogFragment.DialogGroupListener,
-        OnToolbarButtonsClickListener{
+        GroupDialogFragment.DialogGroupListener{
 
     public static final String ARGUMENT_DETAILS = "bundle.details";
 
+    private Unbinder unbinder;
     private TaskItem mTask;
-    private EditText mTitle;
-    private Switch mReminder;
-    private TextView mPriority;
-    private EditText mNotes;
-    private TextView mDateText;
+    @BindView(R.id.edittext_details_title)
+    EditText mTitle;
+    @BindView(R.id.switch_details_remind)
+    Switch mReminder;
+    @BindView(R.id.textview_details_priority)
+    TextView mPriority;
+    @BindView(R.id.edittext_details_notes)
+    EditText mNotes;
+    @BindView(R.id.textview_details_date)
+    TextView mDateText;
+    @BindView(R.id.textview_details_group_name)
+    TextView mGroupName;
     private SimpleDateFormat mDateFormatter;
-    private TextView mGroupName;
     private boolean isEdit;
 
-    public static TaskDetailsFragment newInstance(TaskItem item){
+    public static TaskDetailsFragment newInstance(UUID itemId){
         Bundle args = new Bundle();
-        args.putSerializable(ARGUMENT_DETAILS, item);
+        args.putSerializable(ARGUMENT_DETAILS, itemId);
         TaskDetailsFragment fragment = new TaskDetailsFragment();
         fragment.setArguments(args);
         return fragment;
@@ -64,17 +76,23 @@ public class TaskDetailsFragment extends Fragment
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_task_details, container, false);
+        unbinder = ButterKnife.bind(this, view);
+        setHasOptionsMenu(true);
+        UUID itemId = null;
+        if (getArguments() != null) itemId = (UUID) getArguments().getSerializable(ARGUMENT_DETAILS);
 
-        if (getArguments() != null) mTask = (TaskItem) getArguments().getSerializable(ARGUMENT_DETAILS);
-
-        if (mTask == null){
+        if (itemId == null){
             isEdit = false;
             mTask = new TaskItem();
             mTask.setGroupId(UUID.fromString("1-1-1-1-1"));
         }
-        else isEdit = true;
+        else {
+            mTask = new TaskItem(Initializer.getTasksLocal()
+                    .query(new GetTaskByIdSpecification(itemId)).get(0));
+            isEdit = true;
+        }
 
-        setFields(view);
+        setFields();
 
         LinearLayout date = view.findViewById(R.id.linear_layout_details_date);
         date.setOnClickListener(new View.OnClickListener() {
@@ -103,6 +121,44 @@ public class TaskDetailsFragment extends Fragment
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_details, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_fragment_details_done:{
+                String title;
+                if ((title = mTitle.getText().toString()).isEmpty()){
+                    Snackbar.make(mTitle, getString(R.string.error_no_title), Snackbar.LENGTH_SHORT)
+                            .show();
+                    return false;
+                }
+                mTask.setTitle(title.trim());
+                mTask.setNotes(mNotes.getText().toString());
+                if (isEdit) Initializer.getTasksLocal().update(mTask);
+                else Initializer.getTasksLocal().add(mTask);
+                getActivity().finish();
+                return true;
+            }
+            case R.id.menu_fragment_details_remove:{
+                Initializer.getTasksLocal().remove(mTask);
+                getActivity().finish();
+                return true;
+            }
+            default: return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public void onDialogItemClick(DialogFragment dialog, String which) {
         mTask.setPriority(Priority.valueOf(which));
         mPriority.setText(which);
@@ -121,35 +177,7 @@ public class TaskDetailsFragment extends Fragment
         dialog.dismiss();
     }
 
-
-    @Override
-    public void onLeftButtonClick(View view) {
-        getActivity().finish();
-    }
-
-    @Override
-    public void onRightButtonClick(View view) {
-        String title;
-        if ((title = mTitle.getText().toString()).isEmpty()){
-            Snackbar.make(mTitle, getString(R.string.error_no_title), Snackbar.LENGTH_SHORT)
-                    .show();
-            return;
-        }
-        mTask.setTitle(title.trim());
-        mTask.setNotes(mNotes.getText().toString());
-        if (isEdit) Initializer.getTasksLocal().update(mTask);
-        else Initializer.getTasksLocal().add(mTask);
-        getActivity().finish();
-    }
-
-    private void setFields(View view){
-        mDateText = view.findViewById(R.id.textview_details_date);
-        mTitle =  view.findViewById(R.id.edittext_details_title);
-        mReminder =  view.findViewById(R.id.switch_details_remind);
-        mNotes = view.findViewById(R.id.edittext_details_notes);
-        mPriority =  view.findViewById(R.id.textview_details_priority);
-        mGroupName = view.findViewById(R.id.textview_details_group_name);
-
+    private void setFields(){
         mTitle.setText(mTask.getTitle());
         mPriority.setText(mTask.getPriority().toString());
         mReminder.setChecked(mTask.isRemind());

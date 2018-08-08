@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,12 @@ import java.util.List;
 import by.intervale.akella266.todolist.GroupDetailsActivity;
 import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.data.models.Group;
+import by.intervale.akella266.todolist.data.models.TaskItem;
+import by.intervale.akella266.todolist.utils.Initializer;
+import by.intervale.akella266.todolist.utils.ItemTouchAdapter;
 
-public class GroupAdapter extends RecyclerView.Adapter<GroupViewHolder> {
+public class GroupAdapter extends RecyclerView.Adapter<GroupViewHolder>
+        implements ItemTouchAdapter{
 
     private Context mContext;
     private List<Group> mList;
@@ -58,5 +63,13 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupViewHolder> {
 
     public List<Group> getList() {
         return mList;
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+        Group group = mList.get(position);
+        mList.remove(position);
+        Initializer.getGroupsLocal().remove(group);
+        notifyItemRemoved(position);
     }
 }

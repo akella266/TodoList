@@ -12,7 +12,7 @@ public class Group implements Comparable<Group>, Serializable {
     private int countTasks;
 
     public Group() {
-        name = "";
+        this("");
     }
 
     public Group(String name) {

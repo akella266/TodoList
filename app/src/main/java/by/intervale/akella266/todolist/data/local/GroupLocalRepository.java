@@ -10,6 +10,7 @@ import by.intervale.akella266.todolist.data.interfaces.Repository;
 import by.intervale.akella266.todolist.data.interfaces.Specification;
 import by.intervale.akella266.todolist.data.interfaces.local.LocalSpecification;
 import by.intervale.akella266.todolist.data.local.specifications.GetGroupNameByIdSpecification;
+import by.intervale.akella266.todolist.data.local.specifications.RemoveTaskByGroupIdSpecification;
 import by.intervale.akella266.todolist.data.models.Group;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 import by.intervale.akella266.todolist.utils.Initializer;
@@ -40,6 +41,7 @@ public class GroupLocalRepository implements Repository<Group> {
     @Override
     public void remove(Group item) {
         mGroups.remove(item);
+        Initializer.getTasksLocal().query(new RemoveTaskByGroupIdSpecification(item.getId()));
     }
 
     @Override

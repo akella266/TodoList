@@ -1,7 +1,10 @@
 package by.intervale.akella266.todolist.data.local;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import by.intervale.akella266.todolist.data.ResponseSpecification;
 import by.intervale.akella266.todolist.data.interfaces.local.LocalSpecification;
@@ -47,7 +50,10 @@ public class TaskItemLocalRepository implements Repository<TaskItem> {
 
     @Override
     public void remove(TaskItem item) {
-        mTaskItems.remove(item);
+        boolean tmp = mTaskItems.remove(item);
+        Initializer.getGroupsLocal()
+                .query(new GetGroupNameByIdSpecification(item.getGroupId()))
+                .get(0).decreaseCountTasks();
     }
 
     @Override
@@ -75,6 +81,26 @@ public class TaskItemLocalRepository implements Repository<TaskItem> {
                     for (TaskItem item : mTaskItems)
                         if (item.getTitle().toLowerCase().contains(name.toLowerCase())) tasks.add(item);
                 return tasks;
+            }
+            case GET_BY_ID_TASK:{
+                List<TaskItem> tasks = new ArrayList<>();
+                UUID itemId = (UUID)resp.getArgs().get(0);
+                for(TaskItem item : mTaskItems){
+                    if(item.getId().equals(itemId)){
+                        tasks.add(item);
+                        return tasks;
+                    }
+                }
+            }
+            case REMOVE_BY_GROUP_ID:{
+                UUID groupId = (UUID)resp.getArgs().get(0);
+                for(int i = 0; i < mTaskItems.size(); i++){
+                    if (mTaskItems.get(i).getGroupId().equals(groupId)){
+                        mTaskItems.remove(i);
+                        i--;
+                    }
+                }
+                return null;
             }
             default:
                 return null;

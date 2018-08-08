@@ -6,16 +6,18 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import by.intervale.akella266.todolist.data.models.Group;
 import by.intervale.akella266.todolist.fragments.GroupDetailsFragment;
-import by.intervale.akella266.todolist.utils.OnToolbarButtonsClickListener;
 
 public class GroupDetailsActivity extends AppCompatActivity {
 
     public static final String EXTRA_ADD_DATA = "akella299.intent.group_data";
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+
 
     public static Intent getStartIntent(Context context, Group item){
         Intent intent = new Intent(context, GroupDetailsActivity.class);
@@ -27,12 +29,16 @@ public class GroupDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_details);
+        ButterKnife.bind(this);
+
 
         Intent intent = getIntent();
         Group item = (Group) intent.getSerializableExtra(EXTRA_ADD_DATA);
         GroupDetailsFragment fragment = GroupDetailsFragment.newInstance(item);
-        if (item == null) initToolbar(fragment, false);
-        else initToolbar(fragment, true);
+        if (item != null) mToolbar.setTitle(R.string.title_edit_group);
+        else mToolbar.setTitle(R.string.title_add_group);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction().add(R.id.fragment_container, fragment)
                 .addToBackStack(null).commit();
@@ -43,32 +49,6 @@ public class GroupDetailsActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
-    }
-
-    private void initToolbar(final OnToolbarButtonsClickListener listener, boolean isEdit){
-        Toolbar mToolbar = findViewById(R.id.toolbar);
-        final TextView mLeftToolbarButton = mToolbar.findViewById(R.id.textview_toolbar_left_button);
-        mLeftToolbarButton.setText(R.string.button_cancel);
-        mLeftToolbarButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listener.onLeftButtonClick(mLeftToolbarButton);
-            }
-        });
-        final TextView mRightToolbarButton = mToolbar.findViewById(R.id.textview_toolbar_right_button);
-        mRightToolbarButton.setText(R.string.toolbar_button_done);
-        mRightToolbarButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listener.onRightButtonClick(mRightToolbarButton);
-            }
-        });
-        TextView mTitleToolbar = mToolbar.findViewById(R.id.textview_toolbar_title);
-        if (isEdit) mTitleToolbar.setText(R.string.title_edit_group);
-        else mTitleToolbar.setText(R.string.title_add_group);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
 }

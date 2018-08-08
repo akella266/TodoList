@@ -6,22 +6,28 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.data.models.Group;
 import by.intervale.akella266.todolist.utils.Initializer;
-import by.intervale.akella266.todolist.utils.OnToolbarButtonsClickListener;
 
-public class GroupDetailsFragment extends Fragment
-        implements OnToolbarButtonsClickListener{
+public class GroupDetailsFragment extends Fragment {
 
     public static final String ARGUMENT_DETAILS_GROUP = "bundle.details.group";
 
+    private Unbinder unbinder;
     private Group mGroup;
-    private EditText mName;
+    @BindView(R.id.edittext_group_details_name)
+    EditText mName;
     private boolean isEdit;
 
     public static GroupDetailsFragment newInstance(Group group){
@@ -41,7 +47,8 @@ public class GroupDetailsFragment extends Fragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_group_details, container, false);
-
+        unbinder = ButterKnife.bind(this, view);
+        setHasOptionsMenu(true);
 
         if (getArguments() != null)
             mGroup = (Group) getArguments().getSerializable(ARGUMENT_DETAILS_GROUP);
@@ -52,27 +59,38 @@ public class GroupDetailsFragment extends Fragment
         }
         else isEdit = true;
 
-        mName = view.findViewById(R.id.edittext_group_details_name);
         mName.setText(mGroup.getName());
         return view;
     }
 
     @Override
-    public void onLeftButtonClick(View view) {
-        getActivity().finish();
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     @Override
-    public void onRightButtonClick(View view) {
-        String title;
-        if ((title = mName.getText().toString()).isEmpty()){
-            Snackbar.make(mName, getString(R.string.error_no_title), Snackbar.LENGTH_SHORT)
-                    .show();
-            return;
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_details, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_fragment_details_done:{
+                String title;
+                if ((title = mName.getText().toString()).isEmpty()){
+                    Snackbar.make(mName, getString(R.string.error_no_title), Snackbar.LENGTH_SHORT)
+                            .show();
+                    return false;
+                }
+                mGroup.setName(title);
+                if(isEdit) Initializer.getGroupsLocal().update(mGroup);
+                else Initializer.getGroupsLocal().add(mGroup);
+                getActivity().finish();
+            }
         }
-        mGroup.setName(title);
-        if(isEdit) Initializer.getGroupsLocal().update(mGroup);
-        else Initializer.getGroupsLocal().add(mGroup);
-        getActivity().finish();
+        return super.onOptionsItemSelected(item);
     }
 }

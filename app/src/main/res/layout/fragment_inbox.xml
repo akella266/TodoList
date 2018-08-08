@@ -7,43 +7,38 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/linear_layout_inbox_filter"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tablayout_inbox"
         android:layout_width="match_parent"
         android:layout_height="36dp"
-        android:orientation="horizontal"
-        android:layout_gravity="center"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="@dimen/default_margin"
         android:layout_marginLeft="36dp"
         android:layout_marginRight="36dp"
-        android:layout_marginBottom="@dimen/default_margin">
+        app:tabGravity="fill"
+        app:tabMode="fixed"
+        app:tabBackground="@drawable/tab_selector"
+        app:tabTextColor="@color/text_color"
+        app:tabSelectedTextColor="@android:color/white">
 
-        <ToggleButton
-            android:id="@+id/button_inbox_active"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="-2dp"
-            android:layout_marginRight="-2dp"
-            android:layout_weight="1"
-            android:background="@drawable/button_left_selector"
-            android:checked="true"
-            android:textOff="@string/inbox_date"
-            android:textOn="@string/inbox_date" />
+        <android.support.design.widget.TabItem
+            android:id="@+id/tab_date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/inbox_date"
+            />
 
-        <ToggleButton
-            android:id="@+id/button_inbox_completed"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textOn="@string/inbox_group"
-            android:textOff="@string/inbox_group"
-            android:background="@drawable/button_right_selector" />
+        <android.support.design.widget.TabItem
+            android:id="@+id/tab_group"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/inbox_group"
+            />
 
-    </LinearLayout>
+    </android.support.design.widget.TabLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/_recycler_inbox"
+        android:id="@+id/recycler_inbox"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

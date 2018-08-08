@@ -6,20 +6,24 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.TextView;
 
+import java.util.UUID;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import by.intervale.akella266.todolist.fragments.TaskDetailsFragment;
 import by.intervale.akella266.todolist.data.models.TaskItem;
-import by.intervale.akella266.todolist.utils.OnToolbarButtonsClickListener;
 
 public class TaskDetailsActivity extends AppCompatActivity {
 
     public static final String EXTRA_ADD_DATA = "akella299.intent.task_data";
 
-    public static Intent getStartIntent(Context context, TaskItem item){
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+
+    public static Intent getStartIntent(Context context, UUID itemId){
         Intent intent = new Intent(context, TaskDetailsActivity.class);
-        intent.putExtra(EXTRA_ADD_DATA, item);
+        intent.putExtra(EXTRA_ADD_DATA, itemId);
         return intent;
     }
 
@@ -27,13 +31,14 @@ public class TaskDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_details);
-
+        ButterKnife.bind(this);
         Intent intent = getIntent();
-        TaskItem item = (TaskItem) intent.getSerializableExtra(EXTRA_ADD_DATA);
-        final TaskDetailsFragment fragment = TaskDetailsFragment.newInstance(item);
-        if (item == null) initToolbar(fragment, false);
-        else initToolbar(fragment, true);
-
+        UUID itemId = (UUID) intent.getSerializableExtra(EXTRA_ADD_DATA);
+        final TaskDetailsFragment fragment = TaskDetailsFragment.newInstance(itemId);
+        if (itemId == null) mToolbar.setTitle(R.string.title_add_task);
+        else mToolbar.setTitle(R.string.title_edit_task);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction().add(R.id.fragment_container, fragment)
                 .addToBackStack(null).commit();
@@ -44,32 +49,5 @@ public class TaskDetailsActivity extends AppCompatActivity {
         super.onBackPressed();
         finish();
     }
-
-    private void initToolbar(final OnToolbarButtonsClickListener listener, boolean isEdit){
-        Toolbar mToolbar = findViewById(R.id.toolbar);
-        final TextView mLeftToolbarButton = mToolbar.findViewById(R.id.textview_toolbar_left_button);
-        mLeftToolbarButton.setText(R.string.button_cancel);
-        mLeftToolbarButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listener.onLeftButtonClick(mLeftToolbarButton);
-            }
-        });
-        final TextView mRightToolbarButton = mToolbar.findViewById(R.id.textview_toolbar_right_button);
-        mRightToolbarButton.setText(R.string.toolbar_button_done);
-        mRightToolbarButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listener.onRightButtonClick(mRightToolbarButton);
-            }
-        });
-        TextView mTitleToolbar = mToolbar.findViewById(R.id.textview_toolbar_title);
-        if (isEdit) mTitleToolbar.setText(R.string.title_edit_task);
-        else mTitleToolbar.setText(R.string.title_add_task);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-    }
-
 
 }

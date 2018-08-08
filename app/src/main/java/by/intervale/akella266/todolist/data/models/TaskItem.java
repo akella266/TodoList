@@ -23,8 +23,8 @@ public class TaskItem implements Comparable<TaskItem>, Serializable {
     private boolean isRemind;
     private UUID groupId;
 
-    public TaskItem(String title, Date date, String notes, Priority priority, UUID groupId, boolean isRemind, boolean isComplete) {
-        this.id = UUID.randomUUID();
+    public TaskItem(UUID id, String title, Date date, String notes, Priority priority, UUID groupId, boolean isRemind, boolean isComplete) {
+        this.id = id;
         this.title = title;
         this.date = date;
         this.notes = notes;
@@ -34,6 +34,9 @@ public class TaskItem implements Comparable<TaskItem>, Serializable {
         this.isComplete = isComplete;
     }
 
+    public TaskItem(String title, Date date, String notes, Priority priority, UUID groupId, boolean isRemind, boolean isComplete){
+        this(UUID.randomUUID(), title, date, notes, priority, groupId, isRemind, isComplete);
+    }
     public TaskItem(String title, Date date, String notes,UUID groupId, boolean isComplete) {
         this(title, date, notes,Priority.NONE, groupId, false, isComplete);
     }
@@ -43,6 +46,11 @@ public class TaskItem implements Comparable<TaskItem>, Serializable {
     }
     public TaskItem(){
         this("", Calendar.getInstance(Locale.getDefault()).getTime(), "", Priority.NONE, null,false, false);
+    }
+
+    public TaskItem(TaskItem another){
+        this(another.getId(), another.getTitle(),another.getDate(), another.getNotes(), another.getPriority(),
+                another.getGroupId(), another.isRemind(), another.isComplete());
     }
 
     public String getTitle() {
@@ -107,6 +115,13 @@ public class TaskItem implements Comparable<TaskItem>, Serializable {
 
     public void setRemind(boolean remind) {
         isRemind = remind;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        else if(!(obj instanceof TaskItem)) return false;
+        else return id.compareTo(((TaskItem) obj).getId()) == 0;
     }
 
     @Override

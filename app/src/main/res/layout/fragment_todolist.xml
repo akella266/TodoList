@@ -1,47 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
-    android:orientation="vertical">
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorBackground">
 
     <LinearLayout
-        android:id="@+id/linear_layout_default_group"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="48dp"
-        android:padding="@dimen/default_margin"
-        android:background="@color/colorPrimary"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/textview_item_group_name"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            tools:text="Inbox"/>
-
-        <TextView
-            android:id="@+id/textview_item_group_count_tasks"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            tools:text="(3)"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/linear_layout_default_group"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_chevron_right"/>
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="48dp"
+            android:padding="@dimen/default_margin"
+            android:background="@color/colorPrimary"
+            android:orientation="horizontal">
 
+            <TextView
+                android:id="@+id/textview_item_group_name"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textColor="@android:color/black"
+                tools:text="Inbox"/>
+
+            <TextView
+                android:id="@+id/textview_item_group_count_tasks"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                tools:text="(3)"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_chevron_right"/>
+
+        </LinearLayout>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_todolist"
+            android:background="@color/colorPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_todolist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/default_margin"
+        app:layout_anchor="@id/recycler_todolist"
+        app:layout_anchorGravity="bottom|right|end"
+        app:layout_behavior=".utils.ScrollAwareFABBehavior"
+        android:src="@drawable/ic_add"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_todolist"
-        android:background="@color/colorPrimary"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>
