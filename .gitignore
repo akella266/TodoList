@@ -11,7 +11,22 @@ local.properties
 *.log
 .navigation/
 
-.idea/
+.idea/libraries/
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/gradle.xml
+.idea/.name
+.idea/assetWizardSettings.xml
+.idea/compiler.xml
+.idea/dictionaries
+.idea/copyright/profiles_settings.xml
+.idea/libraries
+.idea/encodings.xml
+.idea/caches
+.idea/misc.xml
+.idea/modules.xml
+.idea/scopes/scope_settings.xml
+.idea/vcs.xml
 *.iml
 
 .externalNativeBuild
