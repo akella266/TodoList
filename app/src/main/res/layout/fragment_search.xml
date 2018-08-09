@@ -16,9 +16,7 @@
         android:layout_marginRight="36dp"
         app:tabGravity="fill"
         app:tabMode="fixed"
-        app:tabBackground="@drawable/tab_selector"
-        app:tabTextColor="@color/text_color"
-        app:tabSelectedTextColor="@android:color/white">
+        app:tabIndicatorColor="@color/colorAccent">
 
         <android.support.design.widget.TabItem
             android:id="@+id/tab_active"

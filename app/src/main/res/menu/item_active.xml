@@ -6,4 +6,7 @@
     <item
         android:id="@+id/item_complete"
         android:title="@string/menu_item_complete"/>
+    <item
+        android:id="@+id/item_delete"
+        android:title="@string/item_remove"/>
 </menu>

@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@color/colorBackground"
     android:paddingTop="@dimen/top_offset"
+    android:paddingBottom="@dimen/bottom_offset"
     android:orientation="vertical">
 
     <TextView
@@ -13,7 +14,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        android:padding="@dimen/default_margin"
+        android:paddingTop="8dp"
+        android:paddingLeft="@dimen/default_margin"
+        android:paddingStart="@dimen/default_margin"
+        android:paddingRight="@dimen/default_margin"
+        android:paddingEnd="@dimen/default_margin"
+        android:paddingBottom="8dp"
         tools:text="Inbox"
         />
 

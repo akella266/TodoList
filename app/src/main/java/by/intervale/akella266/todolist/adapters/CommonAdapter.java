@@ -52,9 +52,6 @@ public class CommonAdapter extends RecyclerView.Adapter {
         inboxHolder.listItems.setAdapter(adapter);
         inboxHolder.listItems.setLayoutManager(new LinearLayoutManager(context));
         inboxHolder.listItems.setRecycledViewPool(mViewPool);
-
-        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchCallback(adapter));
-        helper.attachToRecyclerView(inboxHolder.listItems);
     }
 
     @Override
@@ -64,5 +61,6 @@ public class CommonAdapter extends RecyclerView.Adapter {
 
     public void setList(List<InboxItem> mList) {
         this.mList = mList;
+        notifyDataSetChanged();
     }
 }

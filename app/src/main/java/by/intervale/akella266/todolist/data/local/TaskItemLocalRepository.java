@@ -56,6 +56,10 @@ public class TaskItemLocalRepository implements Repository<TaskItem> {
                 .get(0).decreaseCountTasks();
     }
 
+    public List<TaskItem> getAllTasks(){
+        return mTaskItems;
+    }
+
     @Override
     public List<TaskItem> query(Specification specification) {
         LocalSpecification spec = (LocalSpecification)specification;

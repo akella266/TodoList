@@ -168,15 +168,16 @@ public class SearchFragment extends Fragment{
         if (mAdapter == null){
             mListTasks = new ArrayList<>();
             mAdapter = new TasksAdapter(getContext(),
-                    new ArrayList<TaskItem>(),
-                    new OnPopupMenuItemClickListener() {
-                        @Override
-                        public void onItemClick(TaskItem item) {
-                            item.setComplete(true);
-                            Initializer.getTasksLocal().update(item);
-                            mAdapter.update(getRequestedTasks());
-                        }
-                    });
+                    new ArrayList<TaskItem>(), null
+//                    new OnPopupMenuItemClickListener() {
+//                        @Override
+//                        public void onItemClick(TaskItem item) {
+//                            item.setComplete(true);
+//                            Initializer.getTasksLocal().update(item);
+//                            mAdapter.update(getRequestedTasks());
+//                        }
+//                    }
+                    );
         }
         if(mRecyclerView.getAdapter() == null) mRecyclerView.setAdapter(mAdapter);
 

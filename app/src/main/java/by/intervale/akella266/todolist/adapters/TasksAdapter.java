@@ -23,8 +23,7 @@ import by.intervale.akella266.todolist.utils.ItemTouchAdapter;
 import by.intervale.akella266.todolist.utils.OnPopupMenuItemClickListener;
 import by.intervale.akella266.todolist.utils.TasksDiffUtilsCallback;
 
-public class TasksAdapter extends RecyclerView.Adapter<TaskViewHolder>
-        implements ItemTouchAdapter{
+public class TasksAdapter extends RecyclerView.Adapter<TaskViewHolder>{
 
     private Context context;
     private List<TaskItem> mTasks;
@@ -42,16 +41,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TaskViewHolder>
     @Override
     public TaskViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_task, parent, false);
-        final TaskViewHolder taskViewHolder = new TaskViewHolder(view);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = TaskDetailsActivity.getStartIntent(parent.getContext(),
-                        mTasks.get(taskViewHolder.getAdapterPosition()).getId());
-                parent.getContext().startActivity(intent);
-            }
-        });
-        return taskViewHolder;
+        return new TaskViewHolder(view);
     }
 
     @Override
@@ -87,12 +77,15 @@ public class TasksAdapter extends RecyclerView.Adapter<TaskViewHolder>
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.item_edit:{
-                        Intent intent = TaskDetailsActivity.getStartIntent(context, task.getId());
-                        context.startActivity(intent);
+                        mClickListener.onEditClick(task);
                         return true;
                     }
                     case R.id.item_complete:{
-                        mClickListener.onItemClick(task);
+                        mClickListener.onCompleteClick(task);
+                        return true;
+                    }
+                    case R.id.item_delete:{
+                        mClickListener.onDeleteClick(task);
                         return true;
                     }
                     default:return false;
@@ -113,17 +106,6 @@ public class TasksAdapter extends RecyclerView.Adapter<TaskViewHolder>
 
     public void setTasks(List<TaskItem> mTasks) {
         this.mTasks = mTasks;
-    }
-
-    public List<TaskItem> getTasks() {
-        return mTasks;
-    }
-
-    @Override
-    public void onItemDismiss(int position) {
-        Initializer.getTasksLocal().remove(mTasks.get(position));
-        mTasks.remove(position);
-        notifyItemRemoved(position);
-        notifyItemRangeRemoved(position, mTasks.size());
+        notifyDataSetChanged();
     }
 }

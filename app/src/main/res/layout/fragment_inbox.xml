@@ -2,7 +2,6 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -10,32 +9,17 @@
     <android.support.design.widget.TabLayout
         android:id="@+id/tablayout_inbox"
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_margin"
-        android:layout_marginLeft="36dp"
-        android:layout_marginRight="36dp"
         app:tabGravity="fill"
         app:tabMode="fixed"
-        app:tabBackground="@drawable/tab_selector"
-        app:tabTextColor="@color/text_color"
-        app:tabSelectedTextColor="@android:color/white">
+        app:tabIndicatorColor="@color/colorAccent"/>
 
-        <android.support.design.widget.TabItem
-            android:id="@+id/tab_date"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/inbox_date"
-            />
-
-        <android.support.design.widget.TabItem
-            android:id="@+id/tab_group"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/inbox_group"
-            />
-
-    </android.support.design.widget.TabLayout>
-
+    <FrameLayout
+        android:id="@+id/frag_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_inbox"
         android:layout_width="match_parent"

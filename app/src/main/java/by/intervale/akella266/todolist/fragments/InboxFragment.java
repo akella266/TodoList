@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,16 +26,20 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import by.intervale.akella266.todolist.R;
+import by.intervale.akella266.todolist.RecyclerFragment;
+import by.intervale.akella266.todolist.TypeData;
 import by.intervale.akella266.todolist.adapters.CommonAdapter;
 import by.intervale.akella266.todolist.data.local.specifications.GetCurrentTasksSpecification;
 import by.intervale.akella266.todolist.data.local.specifications.GetGroupNameByIdSpecification;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 import by.intervale.akella266.todolist.data.models.InboxItem;
+import by.intervale.akella266.todolist.inbox.InboxContract;
 import by.intervale.akella266.todolist.utils.Initializer;
 import by.intervale.akella266.todolist.utils.OnPopupMenuItemClickListener;
 
-public class InboxFragment extends Fragment{
+public class InboxFragment extends Fragment implements InboxContract.View{
 
+    private InboxContract.Presenter presenter;
     private Unbinder unbinder;
 
     @BindView(R.id.tablayout_inbox)
@@ -41,6 +47,10 @@ public class InboxFragment extends Fragment{
     @BindView(R.id.recycler_inbox)
     RecyclerView mRecycler;
     private CommonAdapter mAdapter;
+
+    public InboxFragment() {}
+
+    public static InboxFragment newInstance(){return new InboxFragment();}
 
     @Nullable
     @Override
@@ -52,7 +62,7 @@ public class InboxFragment extends Fragment{
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                updateUI();
+                setCurrentFragment(tab.getPosition());
             }
 
             @Override
@@ -65,6 +75,8 @@ public class InboxFragment extends Fragment{
 
             }
         });
+        mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.tab_search_active)), true);
+        mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.completed_tasks)));
         updateUI();
         return view;
     }
@@ -77,14 +89,16 @@ public class InboxFragment extends Fragment{
 
     private void updateUI(){
         if(mAdapter == null){
-            mAdapter = new CommonAdapter(getContext(), new OnPopupMenuItemClickListener() {
-                @Override
-                public void onItemClick(TaskItem item) {
-                    item.setComplete(true);
-                    Initializer.getTasksLocal().update(item);
-                    updateUI();
-                }
-            });
+            mAdapter = new CommonAdapter(getContext(), null
+//                    new OnPopupMenuItemClickListener() {
+//                @Override
+//                public void onItemClick(TaskItem item) {
+//                    item.setComplete(true);
+//                    Initializer.getTasksLocal().update(item);
+//                    updateUI();
+//                }
+//            }
+            );
         }
 
         if(mRecycler.getAdapter() == null) mRecycler.setAdapter(mAdapter);
@@ -130,6 +144,36 @@ public class InboxFragment extends Fragment{
     private String dateToString(Date date){
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         return format.format(date);
+    }
+
+    @Override
+    public void showTasks(List<InboxItem> tasks) {
+        mAdapter.setList(tasks);
+    }
+
+    @Override
+    public void setPresenter(InboxContract.Presenter presenter) {
+        this.presenter = presenter;
+    }
+
+    private void setCurrentFragment(int position){
+        switch (position)
+        {
+            case 0 :
+                replaceFragment(RecyclerFragment.newInstance(TypeData.ACTIVE), true);
+                break;
+            case 1 :
+                replaceFragment(RecyclerFragment.newInstance(TypeData.COMPLETED), false);
+                break;
+        }
+    }
+
+    private void replaceFragment(Fragment fragment, boolean direction){
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        ft.replace(R.id.frag_container, fragment)
+                .commit();
     }
 
 }
