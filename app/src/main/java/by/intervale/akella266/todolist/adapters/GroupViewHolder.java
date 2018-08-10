@@ -2,6 +2,7 @@ package by.intervale.akella266.todolist.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -14,6 +15,8 @@ public class GroupViewHolder extends RecyclerView.ViewHolder {
     TextView mNameGroup;
     @BindView(R.id.textview_item_group_count_tasks)
     TextView mCountTasks;
+    @BindView(R.id.image_more)
+    ImageView mImageMore;
 
     public GroupViewHolder(View itemView) {
         super(itemView);

@@ -21,7 +21,7 @@ import by.intervale.akella266.todolist.TaskDetailsActivity;
 import by.intervale.akella266.todolist.adapters.CommonAdapter;
 import by.intervale.akella266.todolist.data.models.InboxItem;
 import by.intervale.akella266.todolist.data.models.TaskItem;
-import by.intervale.akella266.todolist.utils.OnPopupMenuItemClickListener;
+import by.intervale.akella266.todolist.utils.OnPopupMenuItemTaskClickListener;
 
 public class InboxRecyclerFragment extends Fragment implements InboxRecyclerContract.View{
 
@@ -82,7 +82,7 @@ public class InboxRecyclerFragment extends Fragment implements InboxRecyclerCont
         mPresenter = presenter;
     }
 
-    OnPopupMenuItemClickListener mOnPopupMenuItemClickListener = new OnPopupMenuItemClickListener() {
+    OnPopupMenuItemTaskClickListener mOnPopupMenuItemClickListener = new OnPopupMenuItemTaskClickListener() {
         @Override
         public void onEditClick(TaskItem item) {
             mPresenter.openTaskDetails(item);

@@ -6,8 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,26 +17,15 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import by.intervale.akella266.todolist.R;
-import by.intervale.akella266.todolist.adapters.TasksAdapter;
 import by.intervale.akella266.todolist.adapters.ViewPagerAdapter;
-import by.intervale.akella266.todolist.rx.RxSearchObservable;
 import by.intervale.akella266.todolist.data.models.TaskItem;
-import by.intervale.akella266.todolist.utils.Initializer;
-import by.intervale.akella266.todolist.utils.OnPopupMenuItemClickListener;
 import by.intervale.akella266.todolist.views.TypeData;
-import by.intervale.akella266.todolist.views.inbox.InboxRecyclerFragment;
-import by.intervale.akella266.todolist.views.inbox.InboxRecyclerPresenter;
 import by.intervale.akella266.todolist.views.inbox.OnItemChangedListener;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;

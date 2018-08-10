@@ -21,9 +21,8 @@ import butterknife.Unbinder;
 import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.TaskDetailsActivity;
 import by.intervale.akella266.todolist.adapters.TasksAdapter;
-import by.intervale.akella266.todolist.data.models.InboxItem;
 import by.intervale.akella266.todolist.data.models.TaskItem;
-import by.intervale.akella266.todolist.utils.OnPopupMenuItemClickListener;
+import by.intervale.akella266.todolist.utils.OnPopupMenuItemTaskClickListener;
 
 public class SearchRecyclerFragment extends Fragment implements SearchRecyclerContract.View {
 
@@ -81,7 +80,7 @@ public class SearchRecyclerFragment extends Fragment implements SearchRecyclerCo
     }
 
 
-    OnPopupMenuItemClickListener mOnPopupMenuItemClickListener = new OnPopupMenuItemClickListener() {
+    OnPopupMenuItemTaskClickListener mOnPopupMenuItemClickListener = new OnPopupMenuItemTaskClickListener() {
         @Override
         public void onEditClick(TaskItem item) {
             mPresenter.openTaskDetails(item);

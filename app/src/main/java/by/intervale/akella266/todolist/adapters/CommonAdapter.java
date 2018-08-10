@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,17 +12,16 @@ import java.util.List;
 
 import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.data.models.InboxItem;
-import by.intervale.akella266.todolist.utils.ItemTouchCallback;
-import by.intervale.akella266.todolist.utils.OnPopupMenuItemClickListener;
+import by.intervale.akella266.todolist.utils.OnPopupMenuItemTaskClickListener;
 
 public class CommonAdapter extends RecyclerView.Adapter {
 
     private Context context;
     private List<InboxItem> mList;
     private RecyclerView.RecycledViewPool mViewPool;
-    private OnPopupMenuItemClickListener mListener;
+    private OnPopupMenuItemTaskClickListener mListener;
 
-    public CommonAdapter(Context context, OnPopupMenuItemClickListener listener){
+    public CommonAdapter(Context context, OnPopupMenuItemTaskClickListener listener){
         this.context = context;
         mViewPool = new RecyclerView.RecycledViewPool();
         this.mListener = listener;

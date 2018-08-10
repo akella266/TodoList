@@ -1,7 +1,6 @@
 package by.intervale.akella266.todolist.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.PopupMenu;
@@ -16,23 +15,20 @@ import java.util.List;
 import java.util.Locale;
 
 import by.intervale.akella266.todolist.R;
-import by.intervale.akella266.todolist.TaskDetailsActivity;
 import by.intervale.akella266.todolist.data.models.TaskItem;
-import by.intervale.akella266.todolist.utils.Initializer;
-import by.intervale.akella266.todolist.utils.ItemTouchAdapter;
-import by.intervale.akella266.todolist.utils.OnPopupMenuItemClickListener;
+import by.intervale.akella266.todolist.utils.OnPopupMenuItemTaskClickListener;
 import by.intervale.akella266.todolist.utils.TasksDiffUtilsCallback;
 
 public class TasksAdapter extends RecyclerView.Adapter<TaskViewHolder>{
 
-    private Context context;
+    private Context mContext;
     private List<TaskItem> mTasks;
-    private OnPopupMenuItemClickListener mClickListener;
+    private OnPopupMenuItemTaskClickListener mClickListener;
 
     public TasksAdapter(Context context,
                         List<TaskItem> mTasks,
-                        OnPopupMenuItemClickListener listener) {
-        this.context = context;
+                        OnPopupMenuItemTaskClickListener listener) {
+        this.mContext = context;
         this.mTasks = mTasks;
         this.mClickListener = listener;
     }
@@ -65,9 +61,9 @@ public class TasksAdapter extends RecyclerView.Adapter<TaskViewHolder>{
     }
 
     private void showPopupMenu(View view,final TaskItem task){
-        PopupMenu popupMenu = new PopupMenu(context, view);
+        PopupMenu popupMenu = new PopupMenu(mContext, view);
         if (task.isComplete())
-            popupMenu.getMenuInflater().inflate(R.menu.item_completed, popupMenu.getMenu());
+            popupMenu.getMenuInflater().inflate(R.menu.item_completed_or_group, popupMenu.getMenu());
         else{
             popupMenu.getMenuInflater().inflate(R.menu.item_active, popupMenu.getMenu());
         }

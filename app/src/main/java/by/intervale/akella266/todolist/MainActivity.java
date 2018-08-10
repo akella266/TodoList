@@ -14,10 +14,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import by.intervale.akella266.todolist.views.inbox.InboxFragment;
 import by.intervale.akella266.todolist.views.search.SearchFragment;
-import by.intervale.akella266.todolist.fragments.ToDoListFragment;
+import by.intervale.akella266.todolist.views.todo.ToDoListFragment;
 import by.intervale.akella266.todolist.views.search.SearchPresenter;
 import by.intervale.akella266.todolist.views.today.TodayFragment;
 import by.intervale.akella266.todolist.views.today.TodayPresenter;
+import by.intervale.akella266.todolist.views.todo.TodoListPresenter;
 
 public class MainActivity extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener{
@@ -43,33 +44,28 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        Fragment currentFragment = null;
-        String title = "";
         switch (item.getItemId()){
             case R.id.menu_today: {
-                title = getString(R.string.title_today);
                 TodayFragment todayFragment = new TodayFragment();
                 todayFragment.setPresenter(new TodayPresenter(todayFragment));
-                getSupportActionBar().setTitle(title);
+                getSupportActionBar().setTitle( getString(R.string.title_today));
                 return loadFragment(todayFragment);
             }
             case R.id.menu_inbox:{
-                title = getString(R.string.title_inbox);
-                currentFragment = InboxFragment.newInstance();
-                getSupportActionBar().setTitle(title);
-                return loadFragment(currentFragment);
+                InboxFragment inboxFragment = InboxFragment.newInstance();
+                getSupportActionBar().setTitle(getString(R.string.title_inbox));
+                return loadFragment(inboxFragment);
             }
             case R.id.menu_todolist:{
-                title = getString(R.string.title_todolist);
-                currentFragment = new ToDoListFragment();
-                getSupportActionBar().setTitle(title);
-                return loadFragment(currentFragment);
+                ToDoListFragment toDoListFragment = new ToDoListFragment();
+                toDoListFragment.setPresenter(new TodoListPresenter(toDoListFragment));
+                getSupportActionBar().setTitle(getString(R.string.title_todolist));
+                return loadFragment(toDoListFragment);
             }
             case R.id.menu_search:{
-                title = getString(R.string.title_search);
                 SearchFragment searchFragment = SearchFragment.newInstance();
                 searchFragment.setPresenter(new SearchPresenter(searchFragment));
-                getSupportActionBar().setTitle(title);
+                getSupportActionBar().setTitle(getString(R.string.title_search));
                 return loadFragment(searchFragment);
             }
             default:return false;
