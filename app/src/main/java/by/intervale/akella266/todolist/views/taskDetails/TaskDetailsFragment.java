@@ -1,4 +1,4 @@
-package by.intervale.akella266.todolist.fragments;
+package by.intervale.akella266.todolist.views.taskDetails;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -35,19 +35,21 @@ import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.data.local.specifications.GetGroupNameByIdSpecification;
 import by.intervale.akella266.todolist.data.local.specifications.GetTaskByIdSpecification;
 import by.intervale.akella266.todolist.data.models.Group;
+import by.intervale.akella266.todolist.fragments.GroupDialogFragment;
+import by.intervale.akella266.todolist.fragments.PriorityDialogFragment;
 import by.intervale.akella266.todolist.utils.Initializer;
 import by.intervale.akella266.todolist.utils.NotificationSheduler;
 import by.intervale.akella266.todolist.utils.Priority;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 
 public class TaskDetailsFragment extends Fragment
-        implements PriorityDialogFragment.DialogPriorityListener,
-        GroupDialogFragment.DialogGroupListener{
-
-    public static final String ARGUMENT_DETAILS = "bundle.details";
+        implements TaskDetailsContract.View,
+        PriorityDialogFragment.DialogPriorityListener,
+        GroupDialogFragment.DialogGroupListener {
 
     private Unbinder unbinder;
-    private TaskItem mTask;
+    private TaskDetailsContract.Presenter mPresenter;
+
     @BindView(R.id.edittext_details_title)
     EditText mTitle;
     @BindView(R.id.switch_details_remind)
@@ -61,14 +63,9 @@ public class TaskDetailsFragment extends Fragment
     @BindView(R.id.textview_details_group_name)
     TextView mGroupName;
     private SimpleDateFormat mDateFormatter;
-    private boolean isEdit;
 
-    public static TaskDetailsFragment newInstance(UUID itemId){
-        Bundle args = new Bundle();
-        args.putSerializable(ARGUMENT_DETAILS, itemId);
-        TaskDetailsFragment fragment = new TaskDetailsFragment();
-        fragment.setArguments(args);
-        return fragment;
+    public static TaskDetailsFragment newInstance(){
+        return new TaskDetailsFragment();
     }
 
     @Nullable
@@ -78,34 +75,19 @@ public class TaskDetailsFragment extends Fragment
         View view = inflater.inflate(R.layout.fragment_task_details, container, false);
         unbinder = ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
-        UUID itemId = null;
-        if (getArguments() != null) itemId = (UUID) getArguments().getSerializable(ARGUMENT_DETAILS);
-
-        if (itemId == null){
-            isEdit = false;
-            mTask = new TaskItem();
-            mTask.setGroupId(UUID.fromString("1-1-1-1-1"));
-        }
-        else {
-            mTask = new TaskItem(Initializer.getTasksLocal()
-                    .query(new GetTaskByIdSpecification(itemId)).get(0));
-            isEdit = true;
-        }
-
-        setFields();
 
         LinearLayout date = view.findViewById(R.id.linear_layout_details_date);
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openDateTimePicker();
+                mPresenter.openDateTimePicker();
             }
         });
         LinearLayout priority = view.findViewById(R.id.linear_layout_details_priority);
         priority.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openChoosingPriority();
+                mPresenter.openChoosingPriority();
             }
         });
 
@@ -113,11 +95,17 @@ public class TaskDetailsFragment extends Fragment
         group.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openChoosingGroup();
+                mPresenter.openChoosingGroup();
             }
         });
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.start();
     }
 
     @Override
@@ -136,21 +124,16 @@ public class TaskDetailsFragment extends Fragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_fragment_details_done:{
-                String title;
-                if ((title = mTitle.getText().toString()).isEmpty()){
-                    Snackbar.make(mTitle, getString(R.string.error_no_title), Snackbar.LENGTH_SHORT)
-                            .show();
+                if (mTitle.getText().toString().isEmpty()){
+                    showError(getString(R.string.error_no_title));
                     return false;
                 }
-                mTask.setTitle(title.trim());
-                mTask.setNotes(mNotes.getText().toString());
-                if (isEdit) Initializer.getTasksLocal().update(mTask);
-                else Initializer.getTasksLocal().add(mTask);
+                mPresenter.saveTask(mTitle.getText().toString(), mNotes.getText().toString());
                 getActivity().finish();
                 return true;
             }
             case R.id.menu_fragment_details_remove:{
-                Initializer.getTasksLocal().remove(mTask);
+                mPresenter.removeTask();
                 getActivity().finish();
                 return true;
             }
@@ -159,50 +142,25 @@ public class TaskDetailsFragment extends Fragment
     }
 
     @Override
-    public void onDialogItemClick(DialogFragment dialog, String which) {
-        mTask.setPriority(Priority.valueOf(which));
-        mPriority.setText(which);
-        dialog.dismiss();
-    }
-
-    @Override
-    public void onDialogItemClick(DialogFragment dialog, Group which) {
-        mTask.setGroupId(which.getId());
-        mGroupName.setText(which.getName());
-        dialog.dismiss();
-    }
-
-    @Override
-    public void onDialogNegativeClick(DialogFragment dialog) {
-        dialog.dismiss();
-    }
-
-    private void setFields(){
-        mTitle.setText(mTask.getTitle());
-        mPriority.setText(mTask.getPriority().toString());
-        mReminder.setChecked(mTask.isRemind());
+    public void showTask(final TaskItem item) {
+        mTitle.setText(item.getTitle());
+        mPriority.setText(item.getPriority().toString());
+        mReminder.setChecked(item.isRemind());
         mDateFormatter = new SimpleDateFormat("EEEE, d MMMM y, kk:mm", Locale.getDefault());
-        mDateText.setText(mDateFormatter.format(mTask.getDate()));
-        mNotes.setText(mTask.getNotes());
+        mDateText.setText(mDateFormatter.format(item.getDate()));
+        mNotes.setText(item.getNotes());
         mGroupName.setText(Initializer.getGroupsLocal()
-                .query(new GetGroupNameByIdSpecification(mTask.getGroupId())).get(0).getName());
-
+                .query(new GetGroupNameByIdSpecification(item.getGroupId())).get(0).getName());
         mReminder.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    mTask.setRemind(true);
-                    NotificationSheduler.setReminder(getContext(), mTask);
-                }
-                else {
-                    mTask.setRemind(false);
-                    NotificationSheduler.cancelReminder(getContext(), mTask);
-                }
+                mPresenter.setReminder(getContext(), b);
             }
         });
     }
 
-    private void openDateTimePicker(){
+    @Override
+    public void showDateTimePicker(final Date defaultDate) {
         new SingleDateAndTimePickerDialog.Builder(getActivity())
                 .title("Date and Time")
                 .bottomSheet()
@@ -212,21 +170,20 @@ public class TaskDetailsFragment extends Fragment
                 .displayListener(new SingleDateAndTimePickerDialog.DisplayListener() {
                     @Override
                     public void onDisplayed(SingleDateAndTimePicker picker) {
-                        picker.setDefaultDate(mTask.getDate());
+                        picker.setDefaultDate(defaultDate);
                     }
                 })
                 .listener(new SingleDateAndTimePickerDialog.Listener() {
                     @Override
                     public void onDateSelected(Date date) {
-                        Log.i("fragmentadd picker", "onDateSelected");
-                        mTask.setDate(date);
-                        mDateText.setText(mDateFormatter.format(date));
+                        mPresenter.setDate(date);
                     }
                 })
                 .display();
     }
 
-    private void openChoosingPriority(){
+    @Override
+    public void showChoosingPriority() {
         PriorityDialogFragment dialog = new PriorityDialogFragment();
         dialog.setListener(this);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
@@ -234,11 +191,55 @@ public class TaskDetailsFragment extends Fragment
             dialog.show(activity.getSupportFragmentManager(), "Priority");
     }
 
-    private void openChoosingGroup(){
+    @Override
+    public void showChoosingGroup() {
         GroupDialogFragment dialog = new GroupDialogFragment();
         dialog.setListener(this);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         if (activity != null)
             dialog.show(activity.getSupportFragmentManager(), "Group");
+    }
+
+    @Override
+    public void showError(String message) {
+        Snackbar.make(mTitle, message, Snackbar.LENGTH_SHORT)
+                .show();
+    }
+
+    @Override
+    public void setPresenter(TaskDetailsContract.Presenter presenter) {
+        this.mPresenter = presenter;
+    }
+
+    @Override
+    public void showPriority(Priority priority) {
+        mPriority.setText(priority.toString());
+    }
+
+    @Override
+    public void showDate(Date date) {
+        mDateText.setText(mDateFormatter.format(date));
+    }
+
+    @Override
+    public void showGroup(String name) {
+        mGroupName.setText(name);
+    }
+
+    @Override
+    public void onDialogItemClick(DialogFragment dialog, String which) {
+        mPresenter.setPriority(Priority.valueOf(which));
+        dialog.dismiss();
+    }
+
+    @Override
+    public void onDialogItemClick(DialogFragment dialog, Group which) {
+        mPresenter.setGroup(which);
+        dialog.dismiss();
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        dialog.dismiss();
     }
 }

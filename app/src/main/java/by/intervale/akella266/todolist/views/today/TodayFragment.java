@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import by.intervale.akella266.todolist.R;
-import by.intervale.akella266.todolist.TaskDetailsActivity;
+import by.intervale.akella266.todolist.views.taskDetails.TaskDetailsActivity;
 import by.intervale.akella266.todolist.adapters.CommonAdapter;
 import by.intervale.akella266.todolist.data.models.InboxItem;
 import by.intervale.akella266.todolist.data.models.TaskItem;

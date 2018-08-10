@@ -1,4 +1,4 @@
-package by.intervale.akella266.todolist;
+package by.intervale.akella266.todolist.views.taskDetails;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,8 +11,7 @@ import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import by.intervale.akella266.todolist.fragments.TaskDetailsFragment;
-import by.intervale.akella266.todolist.data.models.TaskItem;
+import by.intervale.akella266.todolist.R;
 
 public class TaskDetailsActivity extends AppCompatActivity {
 
@@ -34,7 +33,8 @@ public class TaskDetailsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         Intent intent = getIntent();
         UUID itemId = (UUID) intent.getSerializableExtra(EXTRA_ADD_DATA);
-        final TaskDetailsFragment fragment = TaskDetailsFragment.newInstance(itemId);
+        final TaskDetailsFragment fragment = TaskDetailsFragment.newInstance();
+        fragment.setPresenter(new TaskDetailsPresenter(fragment, itemId));
         if (itemId == null) mToolbar.setTitle(R.string.title_add_task);
         else mToolbar.setTitle(R.string.title_edit_task);
         setSupportActionBar(mToolbar);
