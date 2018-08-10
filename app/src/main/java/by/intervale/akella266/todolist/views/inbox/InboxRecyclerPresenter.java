@@ -18,19 +18,19 @@ import by.intervale.akella266.todolist.data.models.TaskItem;
 import by.intervale.akella266.todolist.utils.Initializer;
 import by.intervale.akella266.todolist.views.TypeData;
 
-public class RecyclerPresenter implements RecyclerContract.Presenter {
+public class InboxRecyclerPresenter implements InboxRecyclerContract.Presenter {
 
     private TaskItemLocalRepository mTasksRepo;
     private GroupLocalRepository mGroupRepo;
-    private RecyclerContract.View mRecyclerView;
-    private OnItemChangedListener onItemChangedListener;
+    private InboxRecyclerContract.View mRecyclerView;
+    private OnItemChangedListener mOnItemChangedListener;
     private TypeData mType;
 
-    public RecyclerPresenter(RecyclerContract.View mRecyclerView, TypeData mType,
-                             OnItemChangedListener listener) {
+    public InboxRecyclerPresenter(InboxRecyclerContract.View mRecyclerView, TypeData mType,
+                                  OnItemChangedListener listener) {
         mTasksRepo = Initializer.getTasksLocal();
         mGroupRepo = Initializer.getGroupsLocal();
-        this.onItemChangedListener = listener;
+        this.mOnItemChangedListener = listener;
         this.mRecyclerView = mRecyclerView;
         this.mType = mType;
     }
@@ -55,13 +55,13 @@ public class RecyclerPresenter implements RecyclerContract.Presenter {
     public void completeTask(TaskItem item) {
         item.setComplete(true);
         mTasksRepo.update(item);
-        onItemChangedListener.onItemChanged();
+        mOnItemChangedListener.onItemChanged();
     }
 
     @Override
     public void removeTask(TaskItem item) {
         mTasksRepo.remove(item);
-        onItemChangedListener.onItemChanged();
+        mOnItemChangedListener.onItemChanged();
     }
 
     private List<InboxItem> getTasksBy() {

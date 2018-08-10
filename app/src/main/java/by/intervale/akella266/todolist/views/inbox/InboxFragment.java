@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +28,7 @@ public class InboxFragment extends Fragment{
     TabLayout mTabLayout;
     @BindView(R.id.view_pager_inbox)
     ViewPager mPager;
-    private List<RecyclerPresenter> mRecyclerPresenters;
+    private List<InboxRecyclerPresenter> mRecyclerPresenters;
 
     public InboxFragment() {}
 
@@ -45,16 +44,16 @@ public class InboxFragment extends Fragment{
         mRecyclerPresenters = new ArrayList<>();
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
 
-        RecyclerFragment fragmentFirst = RecyclerFragment.newInstance();
-        RecyclerPresenter presenterFirst =
-                new RecyclerPresenter(fragmentFirst, TypeData.DATE, onItemChangedListener);
+        InboxRecyclerFragment fragmentFirst = InboxRecyclerFragment.newInstance();
+        InboxRecyclerPresenter presenterFirst =
+                new InboxRecyclerPresenter(fragmentFirst, TypeData.DATE, onItemChangedListener);
         mRecyclerPresenters.add(presenterFirst);
         fragmentFirst.setPresenter(presenterFirst);
         viewPagerAdapter.addFragment(fragmentFirst, getContext().getString(R.string.inbox_date));
 
-        RecyclerFragment fragmentSecond = RecyclerFragment.newInstance();
-        RecyclerPresenter presenterSecond =
-                new RecyclerPresenter(fragmentSecond, TypeData.GROUP, onItemChangedListener);
+        InboxRecyclerFragment fragmentSecond = InboxRecyclerFragment.newInstance();
+        InboxRecyclerPresenter presenterSecond =
+                new InboxRecyclerPresenter(fragmentSecond, TypeData.GROUP, onItemChangedListener);
         mRecyclerPresenters.add(presenterSecond);
         fragmentSecond.setPresenter(presenterSecond);
         viewPagerAdapter.addFragment(fragmentSecond, getContext().getString(R.string.inbox_group));
@@ -74,7 +73,7 @@ public class InboxFragment extends Fragment{
     private OnItemChangedListener onItemChangedListener = new OnItemChangedListener() {
         @Override
         public void onItemChanged() {
-            for(RecyclerPresenter presenter : mRecyclerPresenters)
+            for(InboxRecyclerPresenter presenter : mRecyclerPresenters)
                 presenter.loadTasks();
         }
     };

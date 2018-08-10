@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textview_no_result"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="36sp"
+        android:text="@string/search_no_results"/>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tablayout_search"
@@ -16,37 +23,13 @@
         android:layout_marginRight="36dp"
         app:tabGravity="fill"
         app:tabMode="fixed"
-        app:tabIndicatorColor="@color/colorAccent">
+        app:tabIndicatorColor="@color/colorAccent"/>
 
-        <android.support.design.widget.TabItem
-            android:id="@+id/tab_active"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/tab_search_active"
-            />
-
-        <android.support.design.widget.TabItem
-            android:id="@+id/tab_completed"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/completed_tasks"
-            />
-
-    </android.support.design.widget.TabLayout>
-
-    <TextView
-        android:id="@+id/textview_no_result"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager_search"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="36sp"
-        android:text="@string/search_no_results"/>
+        android:layout_height="match_parent"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_search"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/default_margin"/>
+
 
 </LinearLayout>

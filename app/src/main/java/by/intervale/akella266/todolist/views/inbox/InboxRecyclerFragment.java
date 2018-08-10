@@ -22,20 +22,19 @@ import by.intervale.akella266.todolist.adapters.CommonAdapter;
 import by.intervale.akella266.todolist.data.models.InboxItem;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 import by.intervale.akella266.todolist.utils.OnPopupMenuItemClickListener;
-import by.intervale.akella266.todolist.views.TypeData;
 
-public class RecyclerFragment extends Fragment implements RecyclerContract.View{
+public class InboxRecyclerFragment extends Fragment implements InboxRecyclerContract.View{
 
     private Unbinder unbinder;
-    private RecyclerContract.Presenter mPresenter;
+    private InboxRecyclerContract.Presenter mPresenter;
 
     @BindView(R.id.fragment_recycler)
     RecyclerView mRecycler;
     private CommonAdapter mAdapter;
-    public RecyclerFragment() {}
+    public InboxRecyclerFragment() {}
 
-    public static RecyclerFragment newInstance(){
-        return new RecyclerFragment();
+    public static InboxRecyclerFragment newInstance(){
+        return new InboxRecyclerFragment();
     }
 
     @Override
@@ -79,7 +78,7 @@ public class RecyclerFragment extends Fragment implements RecyclerContract.View{
     }
 
     @Override
-    public void setPresenter(RecyclerContract.Presenter presenter) {
+    public void setPresenter(InboxRecyclerContract.Presenter presenter) {
         mPresenter = presenter;
     }
 

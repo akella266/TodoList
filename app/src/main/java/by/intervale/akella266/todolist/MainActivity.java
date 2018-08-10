@@ -3,6 +3,7 @@ package by.intervale.akella266.todolist;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -12,8 +13,9 @@ import android.view.MenuItem;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import by.intervale.akella266.todolist.views.inbox.InboxFragment;
-import by.intervale.akella266.todolist.fragments.SearchFragment;
+import by.intervale.akella266.todolist.views.search.SearchFragment;
 import by.intervale.akella266.todolist.fragments.ToDoListFragment;
+import by.intervale.akella266.todolist.views.search.SearchPresenter;
 import by.intervale.akella266.todolist.views.today.TodayFragment;
 import by.intervale.akella266.todolist.views.today.TodayPresenter;
 
@@ -65,9 +67,10 @@ public class MainActivity extends AppCompatActivity
             }
             case R.id.menu_search:{
                 title = getString(R.string.title_search);
-                currentFragment = new SearchFragment();
+                SearchFragment searchFragment = SearchFragment.newInstance();
+                searchFragment.setPresenter(new SearchPresenter(searchFragment));
                 getSupportActionBar().setTitle(title);
-                return loadFragment(currentFragment);
+                return loadFragment(searchFragment);
             }
             default:return false;
         }
@@ -77,6 +80,7 @@ public class MainActivity extends AppCompatActivity
         if (fragment != null){
             getSupportFragmentManager()
                     .beginTransaction()
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .replace(R.id.frame_container, fragment)
                     .commit();
             return true;
