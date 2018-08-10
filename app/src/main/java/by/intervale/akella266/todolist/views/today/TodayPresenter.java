@@ -1,18 +1,13 @@
-package by.intervale.akella266.todolist.today;
-
-import android.content.Intent;
+package by.intervale.akella266.todolist.views.today;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import by.intervale.akella266.todolist.TaskDetailsActivity;
-import by.intervale.akella266.todolist.data.local.GroupLocalRepository;
 import by.intervale.akella266.todolist.data.local.TaskItemLocalRepository;
 import by.intervale.akella266.todolist.data.local.specifications.GetCompletedTaskSpecification;
 import by.intervale.akella266.todolist.data.local.specifications.GetCurrentTasksSpecification;
 import by.intervale.akella266.todolist.data.models.InboxItem;
 import by.intervale.akella266.todolist.data.models.TaskItem;
-import by.intervale.akella266.todolist.inbox.InboxContract;
 import by.intervale.akella266.todolist.utils.Initializer;
 
 public class TodayPresenter implements TodayContract.Presenter {

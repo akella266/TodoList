@@ -1,4 +1,4 @@
-package by.intervale.akella266.todolist;
+package by.intervale.akella266.todolist.views;
 
 public interface BaseView<T> {
 

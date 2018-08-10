@@ -1,8 +1,7 @@
-package by.intervale.akella266.todolist.fragments;
+package by.intervale.akella266.todolist.views.inbox;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,33 +10,33 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.TaskDetailsActivity;
 import by.intervale.akella266.todolist.adapters.CommonAdapter;
 import by.intervale.akella266.todolist.data.models.InboxItem;
 import by.intervale.akella266.todolist.data.models.TaskItem;
-import by.intervale.akella266.todolist.today.TodayContract;
-import by.intervale.akella266.todolist.utils.Initializer;
-import by.intervale.akella266.todolist.data.local.specifications.GetCompletedTaskSpecification;
-import by.intervale.akella266.todolist.data.local.specifications.GetCurrentTasksSpecification;
 import by.intervale.akella266.todolist.utils.OnPopupMenuItemClickListener;
+import by.intervale.akella266.todolist.views.TypeData;
 
-public class TodayFragment extends Fragment implements TodayContract.View{
+public class RecyclerFragment extends Fragment implements RecyclerContract.View{
 
     private Unbinder unbinder;
-    private TodayContract.Presenter mPresenter;
+    private RecyclerContract.Presenter mPresenter;
 
-    @BindView(R.id.recycler_today)
+    @BindView(R.id.fragment_recycler)
     RecyclerView mRecycler;
     private CommonAdapter mAdapter;
+    public RecyclerFragment() {}
+
+    public static RecyclerFragment newInstance(){
+        return new RecyclerFragment();
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,10 +46,11 @@ public class TodayFragment extends Fragment implements TodayContract.View{
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_today, container, false);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_recycler, container, false);
         unbinder = ButterKnife.bind(this, view);
-        mRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        mRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecycler.setAdapter(mAdapter);
         return view;
     }
@@ -70,7 +70,6 @@ public class TodayFragment extends Fragment implements TodayContract.View{
     @Override
     public void showTasks(List<InboxItem> items) {
         mAdapter.setList(items);
-        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -80,19 +79,8 @@ public class TodayFragment extends Fragment implements TodayContract.View{
     }
 
     @Override
-    public void showNewTask() {
-        Intent intent = TaskDetailsActivity.getStartIntent(getContext(), null);
-        startActivity(intent);
-    }
-
-    @Override
-    public void setPresenter(TodayContract.Presenter presenter) {
-        this.mPresenter = presenter;
-    }
-
-    @OnClick(R.id.fab_today)
-    public void onFabClick(){
-        mPresenter.addNewTask();
+    public void setPresenter(RecyclerContract.Presenter presenter) {
+        mPresenter = presenter;
     }
 
     OnPopupMenuItemClickListener mOnPopupMenuItemClickListener = new OnPopupMenuItemClickListener() {

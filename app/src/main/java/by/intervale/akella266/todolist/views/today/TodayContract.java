@@ -1,12 +1,10 @@
-package by.intervale.akella266.todolist.today;
-
-import android.support.v7.view.ViewPropertyAnimatorCompatSet;
+package by.intervale.akella266.todolist.views.today;
 
 import java.util.List;
 import java.util.UUID;
 
-import by.intervale.akella266.todolist.BasePresenter;
-import by.intervale.akella266.todolist.BaseView;
+import by.intervale.akella266.todolist.views.BasePresenter;
+import by.intervale.akella266.todolist.views.BaseView;
 import by.intervale.akella266.todolist.data.models.InboxItem;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 

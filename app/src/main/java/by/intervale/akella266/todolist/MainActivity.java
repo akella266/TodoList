@@ -11,11 +11,11 @@ import android.view.MenuItem;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import by.intervale.akella266.todolist.fragments.InboxFragment;
+import by.intervale.akella266.todolist.views.inbox.InboxFragment;
 import by.intervale.akella266.todolist.fragments.SearchFragment;
 import by.intervale.akella266.todolist.fragments.ToDoListFragment;
-import by.intervale.akella266.todolist.fragments.TodayFragment;
-import by.intervale.akella266.todolist.today.TodayPresenter;
+import by.intervale.akella266.todolist.views.today.TodayFragment;
+import by.intervale.akella266.todolist.views.today.TodayPresenter;
 
 public class MainActivity extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener{
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity
             }
             case R.id.menu_inbox:{
                 title = getString(R.string.title_inbox);
-                currentFragment = new InboxFragment();
+                currentFragment = InboxFragment.newInstance();
                 getSupportActionBar().setTitle(title);
                 return loadFragment(currentFragment);
             }
