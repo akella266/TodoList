@@ -12,7 +12,7 @@ import java.util.Map;
 import by.intervale.akella266.todolist.data.local.GroupLocalRepository;
 import by.intervale.akella266.todolist.data.local.TaskItemLocalRepository;
 import by.intervale.akella266.todolist.data.local.specifications.GetCurrentTasksSpecification;
-import by.intervale.akella266.todolist.data.local.specifications.GetGroupNameByIdSpecification;
+import by.intervale.akella266.todolist.data.local.specifications.GetGroupByIdSpecification;
 import by.intervale.akella266.todolist.data.models.InboxItem;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 import by.intervale.akella266.todolist.utils.Initializer;
@@ -91,7 +91,7 @@ public class InboxRecyclerPresenter implements InboxRecyclerContract.Presenter {
             }
             case GROUP:{
                 return mGroupRepo.query(
-                        new GetGroupNameByIdSpecification(taskItem.getGroupId())).get(0).getName();
+                        new GetGroupByIdSpecification(taskItem.getGroupId())).get(0).getName();
             }
             default:
                 return "";

@@ -8,11 +8,11 @@ import by.intervale.akella266.todolist.data.ResponseSpecification;
 import by.intervale.akella266.todolist.data.TypeOperation;
 import by.intervale.akella266.todolist.data.interfaces.local.LocalSpecification;
 
-public class GetGroupNameByIdSpecification implements LocalSpecification {
+public class GetGroupByIdSpecification implements LocalSpecification {
 
     private UUID id;
 
-    public GetGroupNameByIdSpecification(UUID id) {
+    public GetGroupByIdSpecification(UUID id) {
         this.id = id;
     }
 
@@ -20,6 +20,6 @@ public class GetGroupNameByIdSpecification implements LocalSpecification {
     public ResponseSpecification getType() {
         List<Object> resp = new ArrayList<>();
         resp.add(id);
-        return new ResponseSpecification(TypeOperation.GET_NAME_GROUP_BY_ID, resp);
+        return new ResponseSpecification(TypeOperation.GET_GROUP_BY_ID, resp);
     }
 }

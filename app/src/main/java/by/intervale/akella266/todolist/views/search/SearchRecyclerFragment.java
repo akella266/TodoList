@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.UUID;
 
 import butterknife.BindView;
@@ -24,7 +26,8 @@ import by.intervale.akella266.todolist.adapters.TasksAdapter;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 import by.intervale.akella266.todolist.utils.OnPopupMenuItemTaskClickListener;
 
-public class SearchRecyclerFragment extends Fragment implements SearchRecyclerContract.View {
+public class SearchRecyclerFragment extends Fragment
+        implements SearchRecyclerContract.View, Observer{
 
     private Unbinder unbinder;
     private SearchRecyclerContract.Presenter mPresenter;
@@ -50,10 +53,8 @@ public class SearchRecyclerFragment extends Fragment implements SearchRecyclerCo
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recycler, container, false);
         unbinder = ButterKnife.bind(this, view);
-
         mRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecycler.setAdapter(mAdapter);
-
         return view;
     }
 
@@ -96,4 +97,9 @@ public class SearchRecyclerFragment extends Fragment implements SearchRecyclerCo
             mPresenter.removeTask(item);
         }
     };
+
+    @Override
+    public void update(Observable observable, Object o) {
+        mPresenter.loadTasks((List<TaskItem>)o);
+    }
 }

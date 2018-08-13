@@ -1,4 +1,4 @@
-package by.intervale.akella266.todolist.fragments;
+package by.intervale.akella266.todolist.views.taskDetails;
 
 import android.app.Dialog;
 import android.content.DialogInterface;

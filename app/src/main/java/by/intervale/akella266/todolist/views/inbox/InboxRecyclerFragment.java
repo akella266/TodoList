@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.UUID;
 
 import butterknife.BindView;
@@ -23,7 +25,8 @@ import by.intervale.akella266.todolist.data.models.InboxItem;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 import by.intervale.akella266.todolist.utils.OnPopupMenuItemTaskClickListener;
 
-public class InboxRecyclerFragment extends Fragment implements InboxRecyclerContract.View{
+public class InboxRecyclerFragment extends Fragment
+        implements InboxRecyclerContract.View, Observer{
 
     private Unbinder unbinder;
     private InboxRecyclerContract.Presenter mPresenter;
@@ -80,6 +83,11 @@ public class InboxRecyclerFragment extends Fragment implements InboxRecyclerCont
     @Override
     public void setPresenter(InboxRecyclerContract.Presenter presenter) {
         mPresenter = presenter;
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
+        mPresenter.loadTasks();
     }
 
     OnPopupMenuItemTaskClickListener mOnPopupMenuItemClickListener = new OnPopupMenuItemTaskClickListener() {

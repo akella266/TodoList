@@ -1,4 +1,4 @@
-package by.intervale.akella266.todolist;
+package by.intervale.akella266.todolist.views;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -12,6 +12,7 @@ import android.view.MenuItem;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.views.inbox.InboxFragment;
 import by.intervale.akella266.todolist.views.search.SearchFragment;
 import by.intervale.akella266.todolist.views.todo.ToDoListFragment;

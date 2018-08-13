@@ -1,4 +1,4 @@
-package by.intervale.akella266.todolist;
+package by.intervale.akella266.todolist.views.groupDetails;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,10 +7,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import java.util.UUID;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.data.models.Group;
-import by.intervale.akella266.todolist.fragments.GroupDetailsFragment;
 
 public class GroupDetailsActivity extends AppCompatActivity {
 
@@ -19,9 +21,9 @@ public class GroupDetailsActivity extends AppCompatActivity {
     Toolbar mToolbar;
 
 
-    public static Intent getStartIntent(Context context, Group item){
+    public static Intent getStartIntent(Context context, UUID itemId){
         Intent intent = new Intent(context, GroupDetailsActivity.class);
-        intent.putExtra(EXTRA_ADD_DATA, item);
+        intent.putExtra(EXTRA_ADD_DATA, itemId);
         return intent;
     }
 
@@ -33,9 +35,10 @@ public class GroupDetailsActivity extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        Group item = (Group) intent.getSerializableExtra(EXTRA_ADD_DATA);
-        GroupDetailsFragment fragment = GroupDetailsFragment.newInstance(item);
-        if (item != null) mToolbar.setTitle(R.string.title_edit_group);
+        UUID itemId = (UUID) intent.getSerializableExtra(EXTRA_ADD_DATA);
+        GroupDetailsFragment fragment = GroupDetailsFragment.newInstance();
+        fragment.setPresenter(new GroupDetailsPresenter(fragment, itemId));
+        if (itemId != null) mToolbar.setTitle(R.string.title_edit_group);
         else mToolbar.setTitle(R.string.title_add_group);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

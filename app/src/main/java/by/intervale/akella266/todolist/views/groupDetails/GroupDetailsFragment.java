@@ -1,4 +1,4 @@
-package by.intervale.akella266.todolist.fragments;
+package by.intervale.akella266.todolist.views.groupDetails;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,22 +20,16 @@ import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.data.models.Group;
 import by.intervale.akella266.todolist.utils.Initializer;
 
-public class GroupDetailsFragment extends Fragment {
+public class GroupDetailsFragment extends Fragment
+        implements GroupDetailsContract.View{
 
-    public static final String ARGUMENT_DETAILS_GROUP = "bundle.details.group";
-
+    private GroupDetailsContract.Presenter mPresenter;
     private Unbinder unbinder;
-    private Group mGroup;
     @BindView(R.id.edittext_group_details_name)
     EditText mName;
-    private boolean isEdit;
 
-    public static GroupDetailsFragment newInstance(Group group){
-        Bundle args = new Bundle();
-        args.putSerializable(ARGUMENT_DETAILS_GROUP, group);
-        GroupDetailsFragment fragment = new GroupDetailsFragment();
-        fragment.setArguments(args);
-        return fragment;
+    public static GroupDetailsFragment newInstance(){
+        return new GroupDetailsFragment();
     }
 
     @Override
@@ -49,18 +43,13 @@ public class GroupDetailsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_group_details, container, false);
         unbinder = ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
-
-        if (getArguments() != null)
-            mGroup = (Group) getArguments().getSerializable(ARGUMENT_DETAILS_GROUP);
-
-        if (mGroup == null){
-            isEdit = false;
-            mGroup = new Group();
-        }
-        else isEdit = true;
-
-        mName.setText(mGroup.getName());
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.start();
     }
 
     @Override
@@ -79,18 +68,30 @@ public class GroupDetailsFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_fragment_details_done:{
-                String title;
-                if ((title = mName.getText().toString()).isEmpty()){
-                    Snackbar.make(mName, getString(R.string.error_no_title), Snackbar.LENGTH_SHORT)
-                            .show();
-                    return false;
-                }
-                mGroup.setName(title);
-                if(isEdit) Initializer.getGroupsLocal().update(mGroup);
-                else Initializer.getGroupsLocal().add(mGroup);
+                mPresenter.saveGroup(mName.getText().toString());
+                getActivity().finish();
+            }
+            case R.id.menu_fragment_details_remove:{
+                mPresenter.removeGroup();
                 getActivity().finish();
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void showGroup(Group group) {
+        mName.setText(group.getName());
+    }
+
+    @Override
+    public void showError(int message) {
+        Snackbar.make(mName, message, Snackbar.LENGTH_SHORT)
+                .show();
+    }
+
+    @Override
+    public void setPresenter(GroupDetailsContract.Presenter presenter) {
+        this.mPresenter = presenter;
     }
 }

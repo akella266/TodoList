@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import by.intervale.akella266.todolist.GroupDetailsActivity;
+import by.intervale.akella266.todolist.views.groupDetails.GroupDetailsActivity;
 import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.adapters.GroupAdapter;
 import by.intervale.akella266.todolist.data.models.Group;
@@ -99,7 +98,7 @@ public class ToDoListFragment extends Fragment implements TodoListContract.View 
 
     @Override
     public void showGroupDetails(Group group) {
-        Intent intent = GroupDetailsActivity.getStartIntent(getContext(), group);
+        Intent intent = GroupDetailsActivity.getStartIntent(getContext(), group.getId());
         startActivity(intent);
     }
 

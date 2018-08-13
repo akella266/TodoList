@@ -8,7 +8,7 @@ import by.intervale.akella266.todolist.views.BasePresenter;
 import by.intervale.akella266.todolist.views.BaseView;
 
 public interface SearchRecyclerContract {
-    interface View extends BaseView<Presenter>{
+    interface View extends BaseView<Presenter> {
         void showTasks(List<TaskItem> items);
         void showTaskDetails(UUID itemId);
     }

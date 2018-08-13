@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -42,7 +41,6 @@ public class SearchFragment extends Fragment implements SearchContract.View{
     @BindView(R.id.view_pager_search)
     ViewPager mPager;
     private SearchView mSearchView;
-    private List<SearchRecyclerPresenter> mRecyclerPresenters;
 
     public SearchFragment() {}
 
@@ -57,26 +55,18 @@ public class SearchFragment extends Fragment implements SearchContract.View{
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         unbinder = ButterKnife.bind(this, view);
-        mRecyclerPresenters = new ArrayList<>();
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
 
         SearchRecyclerFragment fragmentFirst = SearchRecyclerFragment.newInstance();
-        SearchRecyclerPresenter presenterFirst =
-                new SearchRecyclerPresenter(fragmentFirst, TypeData.ACTIVE, onItemChangedListener);
-        mRecyclerPresenters.add(presenterFirst);
-        fragmentFirst.setPresenter(presenterFirst);
+        fragmentFirst.setPresenter(new SearchRecyclerPresenter(fragmentFirst, TypeData.ACTIVE, onItemChangedListener));
         viewPagerAdapter.addFragment(fragmentFirst, getContext().getString(R.string.tab_search_active));
 
         SearchRecyclerFragment fragmentSecond = SearchRecyclerFragment.newInstance();
-        SearchRecyclerPresenter presenterSecond =
-                new SearchRecyclerPresenter(fragmentSecond, TypeData.COMPLETED, onItemChangedListener);
-        mRecyclerPresenters.add(presenterSecond);
-        fragmentSecond.setPresenter(presenterSecond);
+        fragmentSecond.setPresenter( new SearchRecyclerPresenter(fragmentSecond, TypeData.COMPLETED, onItemChangedListener));
         viewPagerAdapter.addFragment(fragmentSecond, getContext().getString(R.string.completed_tasks));
 
         mPager.setAdapter(viewPagerAdapter);
         mTabLayout.setupWithViewPager(mPager);
-
         return view;
     }
 
@@ -142,8 +132,7 @@ public class SearchFragment extends Fragment implements SearchContract.View{
     private OnItemChangedListener onItemChangedListener = new OnItemChangedListener() {
         @Override
         public void onItemChanged() {
-            for(SearchRecyclerPresenter presenter : mRecyclerPresenters)
-                presenter.loadTasks(mPresenter.getRequestedTasks());
+            ((ViewPagerAdapter)mPager.getAdapter()).updateFragments(mPresenter.getRequestedTasks());
         }
     };
 }

@@ -1,7 +1,5 @@
 package by.intervale.akella266.todolist.data.local;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -10,7 +8,7 @@ import by.intervale.akella266.todolist.data.ResponseSpecification;
 import by.intervale.akella266.todolist.data.interfaces.local.LocalSpecification;
 import by.intervale.akella266.todolist.data.interfaces.Repository;
 import by.intervale.akella266.todolist.data.interfaces.Specification;
-import by.intervale.akella266.todolist.data.local.specifications.GetGroupNameByIdSpecification;
+import by.intervale.akella266.todolist.data.local.specifications.GetGroupByIdSpecification;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 import by.intervale.akella266.todolist.utils.Initializer;
 
@@ -26,7 +24,7 @@ public class TaskItemLocalRepository implements Repository<TaskItem> {
     public void add(TaskItem item) {
         mTaskItems.add(item);
         Initializer.getGroupsLocal()
-                .query(new GetGroupNameByIdSpecification(item.getGroupId()))
+                .query(new GetGroupByIdSpecification(item.getGroupId()))
                 .get(0).increaseCountTasks();
     }
 
@@ -36,10 +34,10 @@ public class TaskItemLocalRepository implements Repository<TaskItem> {
             if (mTaskItems.get(i).getId().equals(item.getId())){
                 if(!mTaskItems.get(i).getGroupId().equals(item.getGroupId())) {
                     Initializer.getGroupsLocal()
-                            .query(new GetGroupNameByIdSpecification(mTaskItems.get(i).getGroupId()))
+                            .query(new GetGroupByIdSpecification(mTaskItems.get(i).getGroupId()))
                             .get(0).decreaseCountTasks();
                     Initializer.getGroupsLocal()
-                            .query(new GetGroupNameByIdSpecification(item.getGroupId()))
+                            .query(new GetGroupByIdSpecification(item.getGroupId()))
                             .get(0).increaseCountTasks();
                 }
                 mTaskItems.set(i, item);
@@ -52,7 +50,7 @@ public class TaskItemLocalRepository implements Repository<TaskItem> {
     public void remove(TaskItem item) {
         boolean tmp = mTaskItems.remove(item);
         Initializer.getGroupsLocal()
-                .query(new GetGroupNameByIdSpecification(item.getGroupId()))
+                .query(new GetGroupByIdSpecification(item.getGroupId()))
                 .get(0).decreaseCountTasks();
     }
 

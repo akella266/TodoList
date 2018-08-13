@@ -7,7 +7,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,19 +25,14 @@ import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePick
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import by.intervale.akella266.todolist.R;
-import by.intervale.akella266.todolist.data.local.specifications.GetGroupNameByIdSpecification;
-import by.intervale.akella266.todolist.data.local.specifications.GetTaskByIdSpecification;
+import by.intervale.akella266.todolist.data.local.specifications.GetGroupByIdSpecification;
 import by.intervale.akella266.todolist.data.models.Group;
-import by.intervale.akella266.todolist.fragments.GroupDialogFragment;
-import by.intervale.akella266.todolist.fragments.PriorityDialogFragment;
 import by.intervale.akella266.todolist.utils.Initializer;
-import by.intervale.akella266.todolist.utils.NotificationSheduler;
 import by.intervale.akella266.todolist.utils.Priority;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 
@@ -150,7 +144,7 @@ public class TaskDetailsFragment extends Fragment
         mDateText.setText(mDateFormatter.format(item.getDate()));
         mNotes.setText(item.getNotes());
         mGroupName.setText(Initializer.getGroupsLocal()
-                .query(new GetGroupNameByIdSpecification(item.getGroupId())).get(0).getName());
+                .query(new GetGroupByIdSpecification(item.getGroupId())).get(0).getName());
         mReminder.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {

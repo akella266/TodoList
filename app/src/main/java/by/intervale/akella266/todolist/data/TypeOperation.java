@@ -7,5 +7,5 @@ public enum TypeOperation {
     GET_BY_ID_TASK,
     REMOVE_BY_GROUP_ID,
     GET_GROUPS,
-    GET_NAME_GROUP_BY_ID
+    GET_GROUP_BY_ID
 }
