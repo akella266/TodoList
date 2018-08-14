@@ -28,7 +28,6 @@ public class SectionItemDecoration extends RecyclerView.ItemDecoration {
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
-
         int pos = parent.getChildAdapterPosition(view);
         if (sectionCallback.isSection(pos)) {
             outRect.top = headerOffset;

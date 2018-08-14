@@ -50,6 +50,6 @@ public class TodoListPresenter implements TodoListContract.Presenter {
 
     @Override
     public void openTasks(Group group) {
-
+        mTodoListView.showTasks(group);
     }
 }

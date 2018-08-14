@@ -28,6 +28,7 @@ import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.adapters.GroupAdapter;
 import by.intervale.akella266.todolist.data.models.Group;
 import by.intervale.akella266.todolist.utils.OnPopupMenuItemGroupClickListener;
+import by.intervale.akella266.todolist.views.tasksGroup.TasksGroupActivity;
 
 public class ToDoListFragment extends Fragment implements TodoListContract.View {
 
@@ -109,7 +110,10 @@ public class ToDoListFragment extends Fragment implements TodoListContract.View 
     }
 
     @Override
-    public void showTasks(Group group) {}
+    public void showTasks(Group group) {
+        Intent intent = TasksGroupActivity.getStartIntent(getContext(), group);
+        startActivity(intent);
+    }
 
     @Override
     public void showError(String message) {
@@ -145,7 +149,7 @@ public class ToDoListFragment extends Fragment implements TodoListContract.View 
         mDefaultGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnGroupItemClickListener.onGroupItemClick(mAdapter.getList().get(0));
+                mOnGroupItemClickListener.onGroupItemClick(group);
             }
         });
         mImageMore.setOnClickListener(new View.OnClickListener() {

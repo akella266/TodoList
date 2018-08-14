@@ -40,11 +40,13 @@ public class InboxFragment extends Fragment{
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
 
         InboxRecyclerFragment fragmentFirst = InboxRecyclerFragment.newInstance();
-        fragmentFirst.setPresenter(new InboxRecyclerPresenter(fragmentFirst, TypeData.DATE, onItemChangedListener));
+        fragmentFirst.setPresenter(new InboxRecyclerPresenter(fragmentFirst, TypeData.DATE,
+                true, onItemChangedListener));
         viewPagerAdapter.addFragment(fragmentFirst, getContext().getString(R.string.inbox_date));
 
         InboxRecyclerFragment fragmentSecond = InboxRecyclerFragment.newInstance();
-        fragmentSecond.setPresenter(new InboxRecyclerPresenter(fragmentSecond, TypeData.GROUP, onItemChangedListener));
+        fragmentSecond.setPresenter(new InboxRecyclerPresenter(fragmentSecond, TypeData.GROUP,
+                true, onItemChangedListener));
         viewPagerAdapter.addFragment(fragmentSecond, getContext().getString(R.string.inbox_group));
 
         mPager.setAdapter(viewPagerAdapter);

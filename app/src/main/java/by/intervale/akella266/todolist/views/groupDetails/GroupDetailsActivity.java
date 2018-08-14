@@ -16,10 +16,10 @@ import by.intervale.akella266.todolist.data.models.Group;
 
 public class GroupDetailsActivity extends AppCompatActivity {
 
-    public static final String EXTRA_ADD_DATA = "akella299.intent.group_data";
+    public static final String EXTRA_ADD_DATA = "akella266.intent.group_data";
+
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-
 
     public static Intent getStartIntent(Context context, UUID itemId){
         Intent intent = new Intent(context, GroupDetailsActivity.class);
@@ -32,7 +32,6 @@ public class GroupDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_details);
         ButterKnife.bind(this);
-
 
         Intent intent = getIntent();
         UUID itemId = (UUID) intent.getSerializableExtra(EXTRA_ADD_DATA);

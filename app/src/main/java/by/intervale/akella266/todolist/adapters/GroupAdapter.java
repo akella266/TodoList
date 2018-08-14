@@ -1,6 +1,7 @@
 package by.intervale.akella266.todolist.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import java.util.List;
 
 import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.data.models.Group;
+import by.intervale.akella266.todolist.views.tasksGroup.TasksGroupActivity;
 import by.intervale.akella266.todolist.views.todo.OnGroupItemClickListener;
 import by.intervale.akella266.todolist.utils.OnPopupMenuItemGroupClickListener;
 

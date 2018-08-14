@@ -94,6 +94,16 @@ public class TaskItemLocalRepository implements Repository<TaskItem> {
                     }
                 }
             }
+            case GET_BY_GROUP_ID_TASKS:{
+                List<TaskItem> tasks = new ArrayList<>();
+                UUID groupId = (UUID)resp.getArgs().get(0);
+                for(TaskItem item : mTaskItems){
+                    if(item.getGroupId().equals(groupId)){
+                        tasks.add(item);
+                    }
+                }
+                return tasks;
+            }
             case REMOVE_BY_GROUP_ID:{
                 UUID groupId = (UUID)resp.getArgs().get(0);
                 for(int i = 0; i < mTaskItems.size(); i++){

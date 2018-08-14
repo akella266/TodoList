@@ -70,9 +70,9 @@ public class InboxRecyclerFragment extends Fragment
     }
 
     @Override
-    public void showTasks(List<TaskItem> items) {
+    public void showTasks(List<TaskItem> items, boolean withHeaders) {
         mAdapter.setTasks(items);
-        if (mRecycler.getItemDecorationCount() == 0)
+        if (mRecycler.getItemDecorationCount() == 0 && withHeaders)
             mRecycler.addItemDecoration(new SectionItemDecoration(
                     getResources().getDimensionPixelSize(R.dimen.header_height),
                     getResources().getColor(R.color.colorBackground),

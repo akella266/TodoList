@@ -38,4 +38,6 @@
     <string name="done">Done</string>
     <string name="menu_item_complete">Complete</string>
     <string name="item_remove">Remove</string>
+    <string name="no_tasks">No Tasks</string>
+    <string name="item_show_tasks">Show Tasks</string>
 </resources>

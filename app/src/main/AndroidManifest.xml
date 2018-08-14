@@ -33,7 +33,14 @@
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".views.tasksGroup.TasksGroupActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".views.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+            </intent-filter>
+        </activity>
+        
         <receiver android:name=".utils.AlarmReceiver"
             android:enabled="false">
             <intent-filter>

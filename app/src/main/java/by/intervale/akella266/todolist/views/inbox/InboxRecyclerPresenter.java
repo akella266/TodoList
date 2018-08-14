@@ -25,14 +25,16 @@ public class InboxRecyclerPresenter implements InboxRecyclerContract.Presenter {
     private InboxRecyclerContract.View mRecyclerView;
     private OnItemChangedListener mOnItemChangedListener;
     private TypeData mType;
+    private boolean mWithHeaders;
 
     public InboxRecyclerPresenter(InboxRecyclerContract.View mRecyclerView, TypeData mType,
-                                  OnItemChangedListener listener) {
+                                  boolean withHeaders, OnItemChangedListener listener) {
         mTasksRepo = Initializer.getTasksLocal();
         mGroupRepo = Initializer.getGroupsLocal();
         this.mOnItemChangedListener = listener;
         this.mRecyclerView = mRecyclerView;
         this.mType = mType;
+        this.mWithHeaders = withHeaders;
     }
 
     @Override
@@ -48,7 +50,7 @@ public class InboxRecyclerPresenter implements InboxRecyclerContract.Presenter {
     @Override
     public void loadTasks() {
         List<TaskItem> items = getTasks();
-        mRecyclerView.showTasks(items);
+        mRecyclerView.showTasks(items, mWithHeaders);
     }
 
     @Override

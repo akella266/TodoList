@@ -12,7 +12,7 @@ import by.intervale.akella266.todolist.views.TypeData;
 public interface InboxRecyclerContract {
 
     interface View extends BaseView<Presenter>{
-        void showTasks(List<TaskItem> items);
+        void showTasks(List<TaskItem> items, boolean withHeaders);
         void showTaskDetails(UUID itemId);
     }
     interface Presenter extends BasePresenter{
