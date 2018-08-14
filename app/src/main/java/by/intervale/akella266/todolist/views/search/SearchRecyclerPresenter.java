@@ -5,7 +5,7 @@ import java.util.List;
 
 import by.intervale.akella266.todolist.data.local.TaskItemLocalRepository;
 import by.intervale.akella266.todolist.data.models.TaskItem;
-import by.intervale.akella266.todolist.utils.Initializer;
+import by.intervale.akella266.todolist.data.Initializer;
 import by.intervale.akella266.todolist.views.TypeData;
 import by.intervale.akella266.todolist.views.inbox.OnItemChangedListener;
 

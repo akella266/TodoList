@@ -19,9 +19,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import by.intervale.akella266.todolist.R;
+import by.intervale.akella266.todolist.adapters.TasksAdapter;
+import by.intervale.akella266.todolist.utils.SectionItemDecoration;
 import by.intervale.akella266.todolist.views.taskDetails.TaskDetailsActivity;
-import by.intervale.akella266.todolist.adapters.CommonAdapter;
-import by.intervale.akella266.todolist.data.models.InboxItem;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 import by.intervale.akella266.todolist.utils.OnPopupMenuItemTaskClickListener;
 
@@ -32,12 +32,12 @@ public class TodayFragment extends Fragment implements TodayContract.View{
 
     @BindView(R.id.recycler_today)
     RecyclerView mRecycler;
-    private CommonAdapter mAdapter;
+    private TasksAdapter mAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAdapter = new CommonAdapter(getContext(), mOnPopupMenuItemClickListener);
+        mAdapter = new TasksAdapter(getContext(), mOnPopupMenuItemClickListener);
     }
 
     @Nullable
@@ -47,6 +47,7 @@ public class TodayFragment extends Fragment implements TodayContract.View{
         unbinder = ButterKnife.bind(this, view);
         mRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecycler.setAdapter(mAdapter);
+
         return view;
     }
 
@@ -63,9 +64,13 @@ public class TodayFragment extends Fragment implements TodayContract.View{
     }
 
     @Override
-    public void showTasks(List<InboxItem> items) {
-        mAdapter.setList(items);
-        mAdapter.notifyDataSetChanged();
+    public void showTasks(List<TaskItem> items) {
+        mAdapter.setTasks(items);
+        if(mRecycler.getItemDecorationCount() == 0)
+            mRecycler.addItemDecoration(new SectionItemDecoration(
+                getResources().getDimensionPixelSize(R.dimen.header_height),
+                getResources().getColor(R.color.colorBackground),
+                    sectionCallback));
     }
 
     @Override
@@ -89,6 +94,21 @@ public class TodayFragment extends Fragment implements TodayContract.View{
     public void onFabClick(){
         mPresenter.addNewTask();
     }
+
+    SectionItemDecoration.SectionCallback sectionCallback = new SectionItemDecoration.SectionCallback() {
+            @Override
+            public boolean isSection(int position) {
+                return position == 0 ||
+                        mPresenter.getTasks().get(position).isComplete()
+                                != mPresenter.getTasks().get(position - 1).isComplete();
+            }
+
+            @Override
+            public CharSequence getSectionHeader(int position) {
+                return mPresenter.getTasks().get(position).isComplete() ?
+                        getString(R.string.completed_tasks) : "";
+            }
+        };
 
     OnPopupMenuItemTaskClickListener mOnPopupMenuItemClickListener = new OnPopupMenuItemTaskClickListener() {
         @Override

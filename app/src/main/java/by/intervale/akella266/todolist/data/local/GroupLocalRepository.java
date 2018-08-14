@@ -10,7 +10,7 @@ import by.intervale.akella266.todolist.data.interfaces.Specification;
 import by.intervale.akella266.todolist.data.interfaces.local.LocalSpecification;
 import by.intervale.akella266.todolist.data.local.specifications.RemoveTaskByGroupIdSpecification;
 import by.intervale.akella266.todolist.data.models.Group;
-import by.intervale.akella266.todolist.utils.Initializer;
+import by.intervale.akella266.todolist.data.Initializer;
 
 public class GroupLocalRepository implements Repository<Group> {
 

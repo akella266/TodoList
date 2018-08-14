@@ -5,7 +5,7 @@ import java.util.UUID;
 import by.intervale.akella266.todolist.data.local.GroupLocalRepository;
 import by.intervale.akella266.todolist.data.local.specifications.GetGroupsSpecification;
 import by.intervale.akella266.todolist.data.models.Group;
-import by.intervale.akella266.todolist.utils.Initializer;
+import by.intervale.akella266.todolist.data.Initializer;
 
 public class TodoListPresenter implements TodoListContract.Presenter {
 

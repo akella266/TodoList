@@ -1,14 +1,12 @@
 package by.intervale.akella266.todolist.views.groupDetails;
 
-import android.support.design.widget.Snackbar;
-
 import java.util.UUID;
 
 import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.data.local.GroupLocalRepository;
 import by.intervale.akella266.todolist.data.local.specifications.GetGroupByIdSpecification;
 import by.intervale.akella266.todolist.data.models.Group;
-import by.intervale.akella266.todolist.utils.Initializer;
+import by.intervale.akella266.todolist.data.Initializer;
 
 public class GroupDetailsPresenter implements GroupDetailsContract.Presenter{
 

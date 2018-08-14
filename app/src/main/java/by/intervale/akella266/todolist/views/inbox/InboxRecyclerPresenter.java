@@ -15,7 +15,7 @@ import by.intervale.akella266.todolist.data.local.specifications.GetCurrentTasks
 import by.intervale.akella266.todolist.data.local.specifications.GetGroupByIdSpecification;
 import by.intervale.akella266.todolist.data.models.InboxItem;
 import by.intervale.akella266.todolist.data.models.TaskItem;
-import by.intervale.akella266.todolist.utils.Initializer;
+import by.intervale.akella266.todolist.data.Initializer;
 import by.intervale.akella266.todolist.views.TypeData;
 
 public class InboxRecyclerPresenter implements InboxRecyclerContract.Presenter {
@@ -47,7 +47,7 @@ public class InboxRecyclerPresenter implements InboxRecyclerContract.Presenter {
 
     @Override
     public void loadTasks() {
-        List<InboxItem> items = getTasksBy();
+        List<TaskItem> items = getTasks();
         mRecyclerView.showTasks(items);
     }
 
@@ -64,27 +64,8 @@ public class InboxRecyclerPresenter implements InboxRecyclerContract.Presenter {
         mOnItemChangedListener.onItemChanged();
     }
 
-    private List<InboxItem> getTasksBy() {
-        List<InboxItem> items = new ArrayList<>();
-        Map<String, List<TaskItem>> map = new HashMap<>();
-        List<TaskItem> currentTasks = Initializer.getTasksLocal().query(new GetCurrentTasksSpecification());
-        Collections.sort(currentTasks);
-        for(int i = 0; i < currentTasks.size(); i++){
-            if (!map.containsKey(getNameCategory(currentTasks.get(i)))){
-                map.put(getNameCategory(currentTasks.get(i)), new ArrayList<TaskItem>());
-            }
-            map.get(getNameCategory(currentTasks.get(i))).add(currentTasks.get(i));
-        }
-
-        for(Map.Entry<String, List<TaskItem>> entry : map.entrySet()){
-            items.add(new InboxItem(entry.getKey(), entry.getValue()));
-        }
-
-        Collections.sort(items);
-        return items;
-    }
-
-    private String getNameCategory(TaskItem taskItem){
+    @Override
+    public String getNameCategory(TaskItem taskItem){
         switch (mType){
             case DATE:{
                 return dateToString(taskItem.getDate());
@@ -98,7 +79,13 @@ public class InboxRecyclerPresenter implements InboxRecyclerContract.Presenter {
         }
     }
 
-    private String dateToString(Date date){
+
+    @Override
+    public List<TaskItem> getTasks() {
+        return mTasksRepo.query(new GetCurrentTasksSpecification());
+    }
+
+    public String dateToString(Date date){
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         return format.format(date);
     }

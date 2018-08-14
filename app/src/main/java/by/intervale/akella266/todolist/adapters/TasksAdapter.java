@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -26,10 +27,9 @@ public class TasksAdapter extends RecyclerView.Adapter<TaskViewHolder>{
     private OnPopupMenuItemTaskClickListener mClickListener;
 
     public TasksAdapter(Context context,
-                        List<TaskItem> mTasks,
                         OnPopupMenuItemTaskClickListener listener) {
         this.mContext = context;
-        this.mTasks = mTasks;
+        this.mTasks = new ArrayList<>();
         this.mClickListener = listener;
     }
 

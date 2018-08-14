@@ -12,7 +12,7 @@ import java.util.List;
 import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.data.local.specifications.GetGroupsSpecification;
 import by.intervale.akella266.todolist.data.models.Group;
-import by.intervale.akella266.todolist.utils.Initializer;
+import by.intervale.akella266.todolist.data.Initializer;
 
 public class GroupDialogFragment extends DialogFragment {
 

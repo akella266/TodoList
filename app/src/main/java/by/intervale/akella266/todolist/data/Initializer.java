@@ -1,4 +1,4 @@
-package by.intervale.akella266.todolist.utils;
+package by.intervale.akella266.todolist.data;
 
 import java.util.Calendar;
 import java.util.Date;

@@ -1,6 +1,8 @@
 package by.intervale.akella266.todolist.views.today;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import by.intervale.akella266.todolist.data.local.TaskItemLocalRepository;
@@ -8,7 +10,7 @@ import by.intervale.akella266.todolist.data.local.specifications.GetCompletedTas
 import by.intervale.akella266.todolist.data.local.specifications.GetCurrentTasksSpecification;
 import by.intervale.akella266.todolist.data.models.InboxItem;
 import by.intervale.akella266.todolist.data.models.TaskItem;
-import by.intervale.akella266.todolist.utils.Initializer;
+import by.intervale.akella266.todolist.data.Initializer;
 
 public class TodayPresenter implements TodayContract.Presenter {
 
@@ -32,12 +34,7 @@ public class TodayPresenter implements TodayContract.Presenter {
 
     @Override
     public void loadTasks() {
-        List<InboxItem> items = new ArrayList<>();
-        items.add(new InboxItem("",
-                mTasksRepo.query(new GetCurrentTasksSpecification())));
-        items.add(new InboxItem("Completed",
-                mTasksRepo.query(new GetCompletedTaskSpecification())));
-        mTodayView.showTasks(items);
+        mTodayView.showTasks(getTasks());
     }
 
     @Override
@@ -58,5 +55,11 @@ public class TodayPresenter implements TodayContract.Presenter {
         loadTasks();
     }
 
-
+    @Override
+    public List<TaskItem> getTasks() {
+        List<TaskItem> items = new ArrayList<>();
+        items.addAll(mTasksRepo.query(new GetCurrentTasksSpecification()));
+        items.addAll(mTasksRepo.query(new GetCompletedTaskSpecification()));
+        return items;
+    }
 }

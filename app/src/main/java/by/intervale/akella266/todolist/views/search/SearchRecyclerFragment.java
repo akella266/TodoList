@@ -45,7 +45,7 @@ public class SearchRecyclerFragment extends Fragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAdapter = new TasksAdapter(getContext(), new ArrayList<TaskItem>(), mOnPopupMenuItemClickListener);
+        mAdapter = new TasksAdapter(getContext(), mOnPopupMenuItemClickListener);
     }
 
     @Nullable

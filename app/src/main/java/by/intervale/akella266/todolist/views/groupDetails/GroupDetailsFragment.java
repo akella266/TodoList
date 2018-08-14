@@ -18,7 +18,6 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.data.models.Group;
-import by.intervale.akella266.todolist.utils.Initializer;
 
 public class GroupDetailsFragment extends Fragment
         implements GroupDetailsContract.View{

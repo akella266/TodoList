@@ -32,7 +32,7 @@ import butterknife.Unbinder;
 import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.data.local.specifications.GetGroupByIdSpecification;
 import by.intervale.akella266.todolist.data.models.Group;
-import by.intervale.akella266.todolist.utils.Initializer;
+import by.intervale.akella266.todolist.data.Initializer;
 import by.intervale.akella266.todolist.utils.Priority;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 

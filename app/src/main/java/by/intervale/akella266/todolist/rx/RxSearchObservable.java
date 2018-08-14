@@ -1,13 +1,12 @@
 package by.intervale.akella266.todolist.rx;
 
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 
 import java.util.List;
 
 import by.intervale.akella266.todolist.data.local.specifications.GetTasksByNameSpecification;
 import by.intervale.akella266.todolist.data.local.TaskItemLocalRepository;
-import by.intervale.akella266.todolist.utils.Initializer;
+import by.intervale.akella266.todolist.data.Initializer;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;

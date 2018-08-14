@@ -1,7 +1,6 @@
 package by.intervale.akella266.todolist.views.taskDetails;
 
 import android.content.Context;
-import android.support.design.widget.Snackbar;
 
 import java.util.Date;
 import java.util.UUID;
@@ -10,7 +9,7 @@ import by.intervale.akella266.todolist.data.local.TaskItemLocalRepository;
 import by.intervale.akella266.todolist.data.local.specifications.GetTaskByIdSpecification;
 import by.intervale.akella266.todolist.data.models.Group;
 import by.intervale.akella266.todolist.data.models.TaskItem;
-import by.intervale.akella266.todolist.utils.Initializer;
+import by.intervale.akella266.todolist.data.Initializer;
 import by.intervale.akella266.todolist.utils.NotificationSheduler;
 import by.intervale.akella266.todolist.utils.Priority;
 

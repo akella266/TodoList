@@ -11,7 +11,7 @@ import by.intervale.akella266.todolist.data.models.TaskItem;
 public interface TodayContract {
 
     interface View extends BaseView<Presenter>{
-        void showTasks(List<InboxItem> items);
+        void showTasks(List<TaskItem> items);
         void showTaskDetails(UUID itemId);
         void showNewTask();
     }
@@ -21,5 +21,6 @@ public interface TodayContract {
         void loadTasks();
         void completeTask(TaskItem item);
         void removeTask(TaskItem item);
+        List<TaskItem> getTasks();
     }
 }
