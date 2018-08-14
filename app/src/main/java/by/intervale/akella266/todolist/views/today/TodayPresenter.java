@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import by.intervale.akella266.todolist.data.interfaces.Repository;
 import by.intervale.akella266.todolist.data.local.TaskItemLocalRepository;
 import by.intervale.akella266.todolist.data.local.specifications.GetCompletedTaskSpecification;
 import by.intervale.akella266.todolist.data.local.specifications.GetCurrentTasksSpecification;
@@ -14,11 +15,11 @@ import by.intervale.akella266.todolist.data.Initializer;
 
 public class TodayPresenter implements TodayContract.Presenter {
 
-    private TaskItemLocalRepository mTasksRepo;
+    private Repository<TaskItem> mTasksRepo;
     private TodayContract.View mTodayView;
 
     public TodayPresenter(TodayContract.View view) {
-        mTasksRepo = Initializer.getTasksLocal();
+        mTasksRepo = Initializer.getTasksRepo();
         mTodayView = view;
     }
 
