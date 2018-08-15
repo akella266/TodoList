@@ -1,24 +1,25 @@
 package by.intervale.akella266.todolist.views.tasksGroup;
 
+import android.content.Context;
+
 import java.util.List;
 import java.util.UUID;
 
 import by.intervale.akella266.todolist.data.Initializer;
-import by.intervale.akella266.todolist.data.local.GroupLocalRepository;
-import by.intervale.akella266.todolist.data.local.TaskItemLocalRepository;
-import by.intervale.akella266.todolist.data.local.specifications.GetTasksByGroupIdSpecification;
+import by.intervale.akella266.todolist.data.interfaces.Repository;
+import by.intervale.akella266.todolist.data.specifications.GetTasksByGroupIdSpecification;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 
 public class TasksGroupPresenter implements TasksGroupContract.Presenter {
 
-    private TaskItemLocalRepository mTasksRepo;
-    private GroupLocalRepository mGroupRepo;
+    private Context mContext;
+    private Repository<TaskItem> mTasksRepo;
     private TasksGroupContract.View mView;
     private UUID groupId;
 
-    public TasksGroupPresenter(TasksGroupContract.View mView, UUID groupId) {
-        mTasksRepo = Initializer.getTasksLocal();
-        mGroupRepo = Initializer.getGroupsLocal();
+    public TasksGroupPresenter(Context context, TasksGroupContract.View mView, UUID groupId) {
+        this.mContext = context;
+        mTasksRepo = Initializer.getTasksRepo(mContext);
         this.mView = mView;
         this.groupId = groupId;
     }

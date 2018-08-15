@@ -1,20 +1,24 @@
 package by.intervale.akella266.todolist.views.todo;
 
+import android.content.Context;
+
 import java.util.UUID;
 
-import by.intervale.akella266.todolist.data.local.GroupLocalRepository;
-import by.intervale.akella266.todolist.data.local.specifications.GetGroupsSpecification;
+import by.intervale.akella266.todolist.data.interfaces.Repository;
+import by.intervale.akella266.todolist.data.specifications.GetGroupsSpecification;
 import by.intervale.akella266.todolist.data.models.Group;
 import by.intervale.akella266.todolist.data.Initializer;
 
 public class TodoListPresenter implements TodoListContract.Presenter {
 
-    private GroupLocalRepository mGroupRepo;
+    private Context mContext;
+    private Repository<Group> mGroupRepo;
     private TodoListContract.View mTodoListView;
 
-    public TodoListPresenter(TodoListContract.View mTodoListView) {
+    public TodoListPresenter(Context context, TodoListContract.View mTodoListView) {
+        this.mContext = context;
         this.mTodoListView = mTodoListView;
-        mGroupRepo = Initializer.getGroupsLocal();
+        mGroupRepo = Initializer.getGroupsRepo(mContext);
     }
 
     @Override

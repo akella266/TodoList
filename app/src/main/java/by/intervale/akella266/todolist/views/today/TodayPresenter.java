@@ -1,25 +1,25 @@
 package by.intervale.akella266.todolist.views.today;
 
+import android.content.Context;
+
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import by.intervale.akella266.todolist.data.interfaces.Repository;
-import by.intervale.akella266.todolist.data.local.TaskItemLocalRepository;
-import by.intervale.akella266.todolist.data.local.specifications.GetCompletedTaskSpecification;
-import by.intervale.akella266.todolist.data.local.specifications.GetCurrentTasksSpecification;
-import by.intervale.akella266.todolist.data.models.InboxItem;
+import by.intervale.akella266.todolist.data.specifications.GetCompletedTaskSpecification;
+import by.intervale.akella266.todolist.data.specifications.GetCurrentTasksSpecification;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 import by.intervale.akella266.todolist.data.Initializer;
 
 public class TodayPresenter implements TodayContract.Presenter {
 
+    private Context mContext;
     private Repository<TaskItem> mTasksRepo;
     private TodayContract.View mTodayView;
 
-    public TodayPresenter(TodayContract.View view) {
-        mTasksRepo = Initializer.getTasksRepo();
+    public TodayPresenter(Context context, TodayContract.View view) {
+        this.mContext = context;
+        mTasksRepo = Initializer.getTasksRepo(mContext);
         mTodayView = view;
     }
 

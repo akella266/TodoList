@@ -5,8 +5,8 @@ import android.content.Context;
 import java.util.Date;
 import java.util.UUID;
 
-import by.intervale.akella266.todolist.data.local.TaskItemLocalRepository;
-import by.intervale.akella266.todolist.data.local.specifications.GetTaskByIdSpecification;
+import by.intervale.akella266.todolist.data.interfaces.Repository;
+import by.intervale.akella266.todolist.data.specifications.GetTaskByIdSpecification;
 import by.intervale.akella266.todolist.data.models.Group;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 import by.intervale.akella266.todolist.data.Initializer;
@@ -15,15 +15,17 @@ import by.intervale.akella266.todolist.utils.Priority;
 
 public class TaskDetailsPresenter implements TaskDetailsContract.Presenter {
 
-    private TaskItemLocalRepository mTaskRepo;
+    private Context mContext;
+    private Repository<TaskItem> mTaskRepo;
     private TaskDetailsContract.View mDetailsView;
     private TaskItem mTask;
     private boolean isEdit;
 
 
-    public TaskDetailsPresenter(TaskDetailsContract.View mDetailsView, UUID itemId) {
+    public TaskDetailsPresenter(Context context, TaskDetailsContract.View mDetailsView, UUID itemId) {
+        this.mContext = context;
         this.mDetailsView = mDetailsView;
-        mTaskRepo = Initializer.getTasksLocal();
+        mTaskRepo = Initializer.getTasksRepo(mContext);
 
         if (itemId == null){
             isEdit = false;
@@ -65,8 +67,8 @@ public class TaskDetailsPresenter implements TaskDetailsContract.Presenter {
     public void saveTask(String title, String notes) {
         mTask.setTitle(title.trim());
         mTask.setNotes(notes.trim());
-        if (isEdit) Initializer.getTasksLocal().update(mTask);
-        else Initializer.getTasksLocal().add(mTask);
+        if (isEdit) mTaskRepo.update(mTask);
+        else mTaskRepo.add(mTask);
     }
 
     @Override

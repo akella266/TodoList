@@ -1,10 +1,14 @@
 package by.intervale.akella266.todolist.data;
 
+import android.content.Context;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
 import by.intervale.akella266.todolist.data.interfaces.Repository;
+import by.intervale.akella266.todolist.data.json.GroupJsonRepository;
+import by.intervale.akella266.todolist.data.json.TaskItemJsonRepository;
 import by.intervale.akella266.todolist.data.local.GroupLocalRepository;
 import by.intervale.akella266.todolist.data.local.TaskItemLocalRepository;
 import by.intervale.akella266.todolist.data.models.Group;
@@ -14,18 +18,19 @@ public class Initializer {
 
     private static TaskItemLocalRepository sRepoTasks;
     private static Repository<TaskItem> sTasks;
+    private static Repository<Group> sGroups;
     private static GroupLocalRepository sRepoGroups;
 
-    public static void initialize(){
-        sRepoGroups = new GroupLocalRepository();
+    public static void initialize(Context context){
+        sGroups = new GroupJsonRepository(context);
+        sTasks = new TaskItemJsonRepository(context);
         Group inbox = new Group("Inbox");
         inbox.setId(UUID.fromString("1-1-1-1-1"));
-        sRepoGroups.add(inbox);
+        sGroups.add(inbox);
         Group work = new Group("Work");
-        sRepoGroups.add(work);
-        sRepoGroups.add(new Group("Building"));
-        sRepoGroups.add(new Group("My"));
-        sTasks = new TaskItemLocalRepository();
+        sGroups.add(work);
+        sGroups.add(new Group("Building"));
+        sGroups.add(new Group("My"));
         sTasks.add(new TaskItem("This is task withour reminder",
                 Calendar.getInstance().getTime(), "This is note", inbox.getId()));
         sTasks.add(new TaskItem("This is task withour reminder",
@@ -42,18 +47,14 @@ public class Initializer {
                 Calendar.getInstance().getTime(), "This is note", work.getId(),true));
     }
 
-    public static TaskItemLocalRepository getTasksLocal(){
-        if (sRepoTasks == null) initialize();
-        return sRepoTasks;
-    }
-
-    public static Repository<TaskItem> getTasksRepo(){
-        if (sTasks == null) initialize();
+    public static Repository<TaskItem> getTasksRepo(Context context){
+        if (sTasks == null) sTasks = new TaskItemJsonRepository(context);
         return sTasks;
     }
 
-    public static GroupLocalRepository getGroupsLocal(){
-        if(sRepoGroups == null) initialize();
-        return sRepoGroups;
+    public static Repository<Group> getGroupsRepo(Context context){
+        if(sGroups == null) sGroups = new GroupJsonRepository(context);
+        return sGroups;
     }
+
 }

@@ -1,24 +1,28 @@
 package by.intervale.akella266.todolist.views.groupDetails;
 
+import android.content.Context;
+
 import java.util.UUID;
 
 import by.intervale.akella266.todolist.R;
-import by.intervale.akella266.todolist.data.local.GroupLocalRepository;
-import by.intervale.akella266.todolist.data.local.specifications.GetGroupByIdSpecification;
+import by.intervale.akella266.todolist.data.interfaces.Repository;
+import by.intervale.akella266.todolist.data.specifications.GetGroupByIdSpecification;
 import by.intervale.akella266.todolist.data.models.Group;
 import by.intervale.akella266.todolist.data.Initializer;
 
 public class GroupDetailsPresenter implements GroupDetailsContract.Presenter{
 
-    private GroupLocalRepository mGroupRepo;
+    private Context mContext;
+    private Repository<Group> mGroupRepo;
     private GroupDetailsContract.View mDetailsView;
     private Group mGroup;
     private boolean isEdit;
 
 
-    public GroupDetailsPresenter(GroupDetailsContract.View mDetailsView, UUID groupId) {
+    public GroupDetailsPresenter(Context context, GroupDetailsContract.View mDetailsView, UUID groupId) {
         this.mDetailsView = mDetailsView;
-        mGroupRepo = Initializer.getGroupsLocal();
+        this.mContext = context;
+        mGroupRepo = Initializer.getGroupsRepo(mContext);
 
         if (groupId == null){
             mGroup = new Group();

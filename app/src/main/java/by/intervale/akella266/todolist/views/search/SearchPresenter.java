@@ -1,11 +1,13 @@
 package by.intervale.akella266.todolist.views.search;
 
+import android.content.Context;
 import android.support.v7.widget.SearchView;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import by.intervale.akella266.todolist.data.interfaces.Repository;
 import by.intervale.akella266.todolist.data.local.TaskItemLocalRepository;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 import by.intervale.akella266.todolist.rx.RxSearchObservable;
@@ -17,14 +19,16 @@ import io.reactivex.schedulers.Schedulers;
 
 public class SearchPresenter implements SearchContract.Presenter {
 
-    private TaskItemLocalRepository mTasksRepo;
+    private Context mContext;
+    private Repository<TaskItem> mTasksRepo;
     private SearchContract.View mSearchView;
     private Disposable mDisposable;
     private List<TaskItem> mListTasks;
 
-    public SearchPresenter(SearchContract.View mSearchView) {
+    public SearchPresenter(Context context, SearchContract.View mSearchView) {
+        this.mContext = context;
         this.mSearchView = mSearchView;
-        mTasksRepo = Initializer.getTasksLocal();
+        mTasksRepo = Initializer.getTasksRepo(context);
         mListTasks = new ArrayList<>();
     }
 

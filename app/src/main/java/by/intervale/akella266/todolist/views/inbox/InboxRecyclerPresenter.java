@@ -1,36 +1,35 @@
 package by.intervale.akella266.todolist.views.inbox;
 
+import android.content.Context;
+
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
-import by.intervale.akella266.todolist.data.local.GroupLocalRepository;
-import by.intervale.akella266.todolist.data.local.TaskItemLocalRepository;
-import by.intervale.akella266.todolist.data.local.specifications.GetCurrentTasksSpecification;
-import by.intervale.akella266.todolist.data.local.specifications.GetGroupByIdSpecification;
-import by.intervale.akella266.todolist.data.models.InboxItem;
+import by.intervale.akella266.todolist.data.interfaces.Repository;
+import by.intervale.akella266.todolist.data.specifications.GetCurrentTasksSpecification;
+import by.intervale.akella266.todolist.data.specifications.GetGroupByIdSpecification;
+import by.intervale.akella266.todolist.data.models.Group;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 import by.intervale.akella266.todolist.data.Initializer;
 import by.intervale.akella266.todolist.views.TypeData;
 
 public class InboxRecyclerPresenter implements InboxRecyclerContract.Presenter {
 
-    private TaskItemLocalRepository mTasksRepo;
-    private GroupLocalRepository mGroupRepo;
+    private Context mContext;
+    private Repository<TaskItem> mTasksRepo;
+    private Repository<Group> mGroupRepo;
     private InboxRecyclerContract.View mRecyclerView;
     private OnItemChangedListener mOnItemChangedListener;
     private TypeData mType;
     private boolean mWithHeaders;
 
-    public InboxRecyclerPresenter(InboxRecyclerContract.View mRecyclerView, TypeData mType,
+    public InboxRecyclerPresenter(Context context, InboxRecyclerContract.View mRecyclerView, TypeData mType,
                                   boolean withHeaders, OnItemChangedListener listener) {
-        mTasksRepo = Initializer.getTasksLocal();
-        mGroupRepo = Initializer.getGroupsLocal();
+        this.mContext = context;
+        mTasksRepo = Initializer.getTasksRepo(mContext);
+        mGroupRepo = Initializer.getGroupsRepo(mContext);
         this.mOnItemChangedListener = listener;
         this.mRecyclerView = mRecyclerView;
         this.mType = mType;

@@ -4,8 +4,8 @@ import android.support.v7.widget.SearchView;
 
 import java.util.List;
 
-import by.intervale.akella266.todolist.data.local.specifications.GetTasksByNameSpecification;
-import by.intervale.akella266.todolist.data.local.TaskItemLocalRepository;
+import by.intervale.akella266.todolist.data.interfaces.Repository;
+import by.intervale.akella266.todolist.data.specifications.GetTasksByNameSpecification;
 import by.intervale.akella266.todolist.data.Initializer;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 import io.reactivex.Observable;
@@ -15,7 +15,7 @@ public class RxSearchObservable {
 
     public static Observable<List<TaskItem>> fromView(SearchView searchView){
         final PublishSubject<List<TaskItem>> subject = PublishSubject.create();
-        final TaskItemLocalRepository repo = Initializer.getTasksLocal();
+        final Repository<TaskItem> repo = Initializer.getTasksRepo(searchView.getContext());
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

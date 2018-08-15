@@ -58,11 +58,13 @@ public class SearchFragment extends Fragment implements SearchContract.View{
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
 
         SearchRecyclerFragment fragmentFirst = SearchRecyclerFragment.newInstance();
-        fragmentFirst.setPresenter(new SearchRecyclerPresenter(fragmentFirst, TypeData.ACTIVE, onItemChangedListener));
+        fragmentFirst.setPresenter(new SearchRecyclerPresenter(getContext(),
+                fragmentFirst, TypeData.ACTIVE, onItemChangedListener));
         viewPagerAdapter.addFragment(fragmentFirst, getContext().getString(R.string.tab_search_active));
 
         SearchRecyclerFragment fragmentSecond = SearchRecyclerFragment.newInstance();
-        fragmentSecond.setPresenter( new SearchRecyclerPresenter(fragmentSecond, TypeData.COMPLETED, onItemChangedListener));
+        fragmentSecond.setPresenter( new SearchRecyclerPresenter(getContext(),
+                fragmentSecond, TypeData.COMPLETED, onItemChangedListener));
         viewPagerAdapter.addFragment(fragmentSecond, getContext().getString(R.string.completed_tasks));
 
         mPager.setAdapter(viewPagerAdapter);

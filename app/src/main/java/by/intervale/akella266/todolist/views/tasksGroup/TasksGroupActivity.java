@@ -36,7 +36,7 @@ public class TasksGroupActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         TasksGroupFragment fragment = TasksGroupFragment.newInstance();
-        fragment.setPresenter(new TasksGroupPresenter(fragment, group.getId()));
+        fragment.setPresenter(new TasksGroupPresenter(this, fragment, group.getId()));
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction().add(R.id.fragment_container, fragment)
                 .addToBackStack(null).commit();

@@ -1,8 +1,11 @@
 package by.intervale.akella266.todolist.views.search;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import by.intervale.akella266.todolist.data.interfaces.Repository;
 import by.intervale.akella266.todolist.data.local.TaskItemLocalRepository;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 import by.intervale.akella266.todolist.data.Initializer;
@@ -11,17 +14,19 @@ import by.intervale.akella266.todolist.views.inbox.OnItemChangedListener;
 
 public class SearchRecyclerPresenter implements SearchRecyclerContract.Presenter {
 
-    private TaskItemLocalRepository mTasksRepo;
+    private Context mContext;
+    private Repository<TaskItem> mTasksRepo;
     private SearchRecyclerContract.View mRecyclerView;
     private OnItemChangedListener mOnItemChangedListener;
     private TypeData mType;
 
-    public SearchRecyclerPresenter(SearchRecyclerContract.View mRecyclerView, TypeData mType,
+    public SearchRecyclerPresenter(Context context, SearchRecyclerContract.View mRecyclerView, TypeData mType,
                                    OnItemChangedListener listener) {
+        this.mContext = context;
         this.mRecyclerView = mRecyclerView;
         this.mType = mType;
         this.mOnItemChangedListener = listener;
-        mTasksRepo = Initializer.getTasksLocal();
+        mTasksRepo = Initializer.getTasksRepo(mContext);
     }
 
     @Override

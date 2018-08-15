@@ -36,7 +36,7 @@ public class GroupDetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         UUID itemId = (UUID) intent.getSerializableExtra(EXTRA_ADD_DATA);
         GroupDetailsFragment fragment = GroupDetailsFragment.newInstance();
-        fragment.setPresenter(new GroupDetailsPresenter(fragment, itemId));
+        fragment.setPresenter(new GroupDetailsPresenter(this, fragment, itemId));
         if (itemId != null) mToolbar.setTitle(R.string.title_edit_group);
         else mToolbar.setTitle(R.string.title_add_group);
         setSupportActionBar(mToolbar);

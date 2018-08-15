@@ -1,5 +1,7 @@
 package by.intervale.akella266.todolist.data.local;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -7,17 +9,18 @@ import java.util.UUID;
 import by.intervale.akella266.todolist.data.ResponseSpecification;
 import by.intervale.akella266.todolist.data.interfaces.Repository;
 import by.intervale.akella266.todolist.data.interfaces.Specification;
-import by.intervale.akella266.todolist.data.interfaces.local.LocalSpecification;
-import by.intervale.akella266.todolist.data.local.specifications.RemoveTaskByGroupIdSpecification;
+import by.intervale.akella266.todolist.data.specifications.RemoveTaskByGroupIdSpecification;
 import by.intervale.akella266.todolist.data.models.Group;
 import by.intervale.akella266.todolist.data.Initializer;
 
 public class GroupLocalRepository implements Repository<Group> {
 
+    private Context mContext;
     private List<Group> mGroups;
 
-    public GroupLocalRepository() {
+    public GroupLocalRepository(Context context) {
         this.mGroups = new ArrayList<>();
+        this.mContext = context;
     }
 
     @Override
@@ -38,13 +41,11 @@ public class GroupLocalRepository implements Repository<Group> {
     @Override
     public void remove(Group item) {
         mGroups.remove(item);
-        Initializer.getTasksLocal().query(new RemoveTaskByGroupIdSpecification(item.getId()));
+        Initializer.getTasksRepo(mContext).query(new RemoveTaskByGroupIdSpecification(item.getId()));
     }
 
     @Override
-    public List<Group> query(Specification specification) {
-        LocalSpecification spec = (LocalSpecification)specification;
-
+    public List<Group> query(Specification spec) {
         ResponseSpecification resp = spec.getType();
         switch (resp.getType()){
             case GET_GROUPS:{
