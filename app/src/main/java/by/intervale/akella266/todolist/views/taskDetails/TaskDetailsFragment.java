@@ -30,7 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import by.intervale.akella266.todolist.R;
-import by.intervale.akella266.todolist.data.specifications.GetGroupByIdSpecification;
+import by.intervale.akella266.todolist.data.specifications.localJson.group.GetGroupByIdLocalSpecification;
 import by.intervale.akella266.todolist.data.models.Group;
 import by.intervale.akella266.todolist.data.Initializer;
 import by.intervale.akella266.todolist.utils.Priority;
@@ -144,7 +144,7 @@ public class TaskDetailsFragment extends Fragment
         mDateText.setText(mDateFormatter.format(item.getDate()));
         mNotes.setText(item.getNotes());
         mGroupName.setText(Initializer.getGroupsRepo(getContext())
-                .query(new GetGroupByIdSpecification(item.getGroupId())).get(0).getName());
+                .query(new GetGroupByIdLocalSpecification(item.getGroupId())).get(0).getName());
         mReminder.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {

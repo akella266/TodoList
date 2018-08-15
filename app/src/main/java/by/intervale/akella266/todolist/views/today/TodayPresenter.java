@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import by.intervale.akella266.todolist.data.interfaces.Repository;
-import by.intervale.akella266.todolist.data.specifications.GetCompletedTaskSpecification;
-import by.intervale.akella266.todolist.data.specifications.GetCurrentTasksSpecification;
+import by.intervale.akella266.todolist.data.specifications.localJson.task.GetCompletedTaskLocalSpecification;
+import by.intervale.akella266.todolist.data.specifications.localJson.task.GetCurrentTasksLocalSpecification;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 import by.intervale.akella266.todolist.data.Initializer;
 
@@ -59,8 +59,8 @@ public class TodayPresenter implements TodayContract.Presenter {
     @Override
     public List<TaskItem> getTasks() {
         List<TaskItem> items = new ArrayList<>();
-        items.addAll(mTasksRepo.query(new GetCurrentTasksSpecification()));
-        items.addAll(mTasksRepo.query(new GetCompletedTaskSpecification()));
+        items.addAll(mTasksRepo.query(new GetCurrentTasksLocalSpecification()));
+        items.addAll(mTasksRepo.query(new GetCompletedTaskLocalSpecification()));
         return items;
     }
 }

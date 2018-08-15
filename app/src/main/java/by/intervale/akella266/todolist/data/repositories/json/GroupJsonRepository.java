@@ -1,8 +1,6 @@
-package by.intervale.akella266.todolist.data.json;
+package by.intervale.akella266.todolist.data.repositories.json;
 
 import android.content.Context;
-import android.util.JsonWriter;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -13,17 +11,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
-import by.intervale.akella266.todolist.data.ResponseSpecification;
 import by.intervale.akella266.todolist.data.interfaces.Repository;
 import by.intervale.akella266.todolist.data.interfaces.Specification;
 import by.intervale.akella266.todolist.data.models.Group;
-import by.intervale.akella266.todolist.data.models.TaskItem;
+import by.intervale.akella266.todolist.data.specifications.localJson.group.DecreaseCountTasksLocalSpecification;
+import by.intervale.akella266.todolist.data.specifications.localJson.group.IncreaseCountTasksLocalSpecification;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -66,42 +62,13 @@ public class GroupJsonRepository implements Repository<Group> {
 
     @Override
     public List<Group> query(Specification spec) {
-        ResponseSpecification resp = spec.getType();
         List<Group> mGroups = readItems();
-        switch (resp.getType()){
-            case GET_GROUPS:{
-                return mGroups;
-            }
-            case GET_GROUP_BY_ID:{
-                UUID id = (UUID) resp.getArgs().get(0);
-                Group resultGroup = new Group();
-                for(Group group : mGroups)
-                    if (group.getId().equals(id)) resultGroup = group;
-                List<Group> resultList = new ArrayList<>();
-                resultList.add(resultGroup);
-                return resultList;
-            }
-            case INCREASE_COUNT_TASKS:{
-                UUID id = (UUID) resp.getArgs().get(0);
-                Group resultGroup = new Group();
-                for(Group group : mGroups)
-                    if (group.getId().equals(id)) resultGroup = group;
-                resultGroup.increaseCountTasks();
-                writeItems(mGroups);
-                return null;
-            }
-            case DECREASE_COUNT_TASKS:{
-                UUID id = (UUID) resp.getArgs().get(0);
-                Group resultGroup = new Group();
-                for(Group group : mGroups)
-                    if (group.getId().equals(id)) resultGroup = group;
-                resultGroup.decreaseCountTasks();
-                writeItems(mGroups);
-                return null;
-            }
-            default:
-                return null;
-        }
+        spec.setDataSource(mGroups);
+        List<Group> result = spec.getData();
+        if (spec instanceof DecreaseCountTasksLocalSpecification ||
+                spec instanceof IncreaseCountTasksLocalSpecification)
+            writeItems(mGroups);
+        return result;
     }
 
 

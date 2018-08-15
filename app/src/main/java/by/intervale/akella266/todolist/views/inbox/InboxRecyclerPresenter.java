@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Locale;
 
 import by.intervale.akella266.todolist.data.interfaces.Repository;
-import by.intervale.akella266.todolist.data.specifications.GetCurrentTasksSpecification;
-import by.intervale.akella266.todolist.data.specifications.GetGroupByIdSpecification;
+import by.intervale.akella266.todolist.data.specifications.localJson.task.GetCurrentTasksLocalSpecification;
+import by.intervale.akella266.todolist.data.specifications.localJson.group.GetGroupByIdLocalSpecification;
 import by.intervale.akella266.todolist.data.models.Group;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 import by.intervale.akella266.todolist.data.Initializer;
@@ -73,7 +73,7 @@ public class InboxRecyclerPresenter implements InboxRecyclerContract.Presenter {
             }
             case GROUP:{
                 return mGroupRepo.query(
-                        new GetGroupByIdSpecification(taskItem.getGroupId())).get(0).getName();
+                        new GetGroupByIdLocalSpecification(taskItem.getGroupId())).get(0).getName();
             }
             default:
                 return "";
@@ -83,7 +83,7 @@ public class InboxRecyclerPresenter implements InboxRecyclerContract.Presenter {
 
     @Override
     public List<TaskItem> getTasks() {
-        return mTasksRepo.query(new GetCurrentTasksSpecification());
+        return mTasksRepo.query(new GetCurrentTasksLocalSpecification());
     }
 
     public String dateToString(Date date){

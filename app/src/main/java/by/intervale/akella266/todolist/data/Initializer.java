@@ -7,10 +7,10 @@ import java.util.Date;
 import java.util.UUID;
 
 import by.intervale.akella266.todolist.data.interfaces.Repository;
-import by.intervale.akella266.todolist.data.json.GroupJsonRepository;
-import by.intervale.akella266.todolist.data.json.TaskItemJsonRepository;
-import by.intervale.akella266.todolist.data.local.GroupLocalRepository;
-import by.intervale.akella266.todolist.data.local.TaskItemLocalRepository;
+import by.intervale.akella266.todolist.data.repositories.json.GroupJsonRepository;
+import by.intervale.akella266.todolist.data.repositories.json.TaskItemJsonRepository;
+import by.intervale.akella266.todolist.data.repositories.local.GroupLocalRepository;
+import by.intervale.akella266.todolist.data.repositories.local.TaskItemLocalRepository;
 import by.intervale.akella266.todolist.data.models.Group;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 

@@ -5,7 +5,7 @@ import android.support.v7.widget.SearchView;
 import java.util.List;
 
 import by.intervale.akella266.todolist.data.interfaces.Repository;
-import by.intervale.akella266.todolist.data.specifications.GetTasksByNameSpecification;
+import by.intervale.akella266.todolist.data.specifications.localJson.task.GetTasksByNameLocalSpecification;
 import by.intervale.akella266.todolist.data.Initializer;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 import io.reactivex.Observable;
@@ -24,7 +24,7 @@ public class RxSearchObservable {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                List<TaskItem> items = repo.query(new GetTasksByNameSpecification(newText));
+                List<TaskItem> items = repo.query(new GetTasksByNameLocalSpecification(newText));
                 subject.onNext(items);
                 return true;
             }

@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import by.intervale.akella266.todolist.data.Initializer;
 import by.intervale.akella266.todolist.data.interfaces.Repository;
-import by.intervale.akella266.todolist.data.specifications.GetTasksByGroupIdSpecification;
+import by.intervale.akella266.todolist.data.specifications.localJson.task.GetTasksByGroupIdLocalSpecification;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 
 public class TasksGroupPresenter implements TasksGroupContract.Presenter {
@@ -26,7 +26,7 @@ public class TasksGroupPresenter implements TasksGroupContract.Presenter {
 
     @Override
     public void loadTasks() {
-        List<TaskItem> items = mTasksRepo.query(new GetTasksByGroupIdSpecification(groupId));
+        List<TaskItem> items = mTasksRepo.query(new GetTasksByGroupIdLocalSpecification(groupId));
         if (items.size() == 0) mView.showNoTasks();
         else mView.showTasks(items);
     }

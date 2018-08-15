@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import by.intervale.akella266.todolist.data.interfaces.Repository;
-import by.intervale.akella266.todolist.data.specifications.GetTaskByIdSpecification;
+import by.intervale.akella266.todolist.data.specifications.localJson.task.GetTaskByIdLocalSpecification;
 import by.intervale.akella266.todolist.data.models.Group;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 import by.intervale.akella266.todolist.data.Initializer;
@@ -34,7 +34,7 @@ public class TaskDetailsPresenter implements TaskDetailsContract.Presenter {
         }
         else {
             isEdit = true;
-            mTask = new TaskItem(mTaskRepo.query(new GetTaskByIdSpecification(itemId)).get(0));
+            mTask = new TaskItem(mTaskRepo.query(new GetTaskByIdLocalSpecification(itemId)).get(0));
         }
     }
 

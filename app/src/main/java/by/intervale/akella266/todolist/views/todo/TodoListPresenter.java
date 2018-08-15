@@ -5,7 +5,7 @@ import android.content.Context;
 import java.util.UUID;
 
 import by.intervale.akella266.todolist.data.interfaces.Repository;
-import by.intervale.akella266.todolist.data.specifications.GetGroupsSpecification;
+import by.intervale.akella266.todolist.data.specifications.localJson.group.GetGroupsLocalSpecification;
 import by.intervale.akella266.todolist.data.models.Group;
 import by.intervale.akella266.todolist.data.Initializer;
 
@@ -28,7 +28,7 @@ public class TodoListPresenter implements TodoListContract.Presenter {
 
     @Override
     public void loadGroup() {
-        mTodoListView.showGroups(mGroupRepo.query(new GetGroupsSpecification()));
+        mTodoListView.showGroups(mGroupRepo.query(new GetGroupsLocalSpecification()));
     }
 
     @Override

@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.data.interfaces.Repository;
-import by.intervale.akella266.todolist.data.specifications.GetGroupByIdSpecification;
+import by.intervale.akella266.todolist.data.specifications.localJson.group.GetGroupByIdLocalSpecification;
 import by.intervale.akella266.todolist.data.models.Group;
 import by.intervale.akella266.todolist.data.Initializer;
 
@@ -30,7 +30,7 @@ public class GroupDetailsPresenter implements GroupDetailsContract.Presenter{
         }
         else{
             isEdit = true;
-            mGroup = mGroupRepo.query(new GetGroupByIdSpecification(groupId)).get(0);
+            mGroup = mGroupRepo.query(new GetGroupByIdLocalSpecification(groupId)).get(0);
         }
     }
 

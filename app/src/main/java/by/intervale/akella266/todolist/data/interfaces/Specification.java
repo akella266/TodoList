@@ -1,7 +1,8 @@
 package by.intervale.akella266.todolist.data.interfaces;
 
-import by.intervale.akella266.todolist.data.ResponseSpecification;
+import java.util.List;
 
-public interface Specification {
-    ResponseSpecification getType();
+public interface Specification<T, K> {
+    List<T> getData();
+    void setDataSource(K dataSource);
 }

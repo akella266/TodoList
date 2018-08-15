@@ -1,15 +1,13 @@
-package by.intervale.akella266.todolist.data.local;
+package by.intervale.akella266.todolist.data.repositories.local;
 
 import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-import by.intervale.akella266.todolist.data.ResponseSpecification;
 import by.intervale.akella266.todolist.data.interfaces.Repository;
 import by.intervale.akella266.todolist.data.interfaces.Specification;
-import by.intervale.akella266.todolist.data.specifications.RemoveTaskByGroupIdSpecification;
+import by.intervale.akella266.todolist.data.specifications.localJson.task.RemoveTaskByGroupIdLocalSpecification;
 import by.intervale.akella266.todolist.data.models.Group;
 import by.intervale.akella266.todolist.data.Initializer;
 
@@ -41,27 +39,12 @@ public class GroupLocalRepository implements Repository<Group> {
     @Override
     public void remove(Group item) {
         mGroups.remove(item);
-        Initializer.getTasksRepo(mContext).query(new RemoveTaskByGroupIdSpecification(item.getId()));
+        Initializer.getTasksRepo(mContext).query(new RemoveTaskByGroupIdLocalSpecification(item.getId()));
     }
 
     @Override
     public List<Group> query(Specification spec) {
-        ResponseSpecification resp = spec.getType();
-        switch (resp.getType()){
-            case GET_GROUPS:{
-                return mGroups;
-            }
-            case GET_GROUP_BY_ID:{
-                UUID id = (UUID) resp.getArgs().get(0);
-                Group resultGroup = new Group();
-                for(Group group : mGroups)
-                    if (group.getId().equals(id)) resultGroup = group;
-                List<Group> resultList = new ArrayList<>();
-                resultList.add(resultGroup);
-                return resultList;
-            }
-            default:
-                return null;
-        }
+        spec.setDataSource(mGroups);
+        return (List<Group>) spec.getData();
     }
 }

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import by.intervale.akella266.todolist.data.interfaces.Repository;
-import by.intervale.akella266.todolist.data.local.TaskItemLocalRepository;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 import by.intervale.akella266.todolist.data.Initializer;
 import by.intervale.akella266.todolist.views.TypeData;
