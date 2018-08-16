@@ -39,7 +39,6 @@ public class GroupLocalRepository implements Repository<Group> {
     @Override
     public void remove(Group item) {
         mGroups.remove(item);
-        Initializer.getTasksRepo(mContext).query(new RemoveTaskByGroupIdLocalSpecification(item.getIdUUID()));
     }
 
     @Override

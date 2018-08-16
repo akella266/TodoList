@@ -24,23 +24,12 @@ public class TaskItemLocalRepository implements Repository<TaskItem> {
     @Override
     public void add(TaskItem item) {
         mTaskItems.add(item);
-        Initializer.getGroupsRepo(mContext)
-                .query(new GetGroupByIdLocalSpecification(item.getGroupIdUUID()))
-                .get(0).increaseCountTasks();
     }
 
     @Override
     public void update(TaskItem item) {
         for(int i = 0; i < mTaskItems.size(); i++){
             if (mTaskItems.get(i).getIdUUID().equals(item.getIdUUID())){
-                if(!mTaskItems.get(i).getGroupIdUUID().equals(item.getGroupIdUUID())) {
-                    Initializer.getGroupsRepo(mContext)
-                            .query(new GetGroupByIdLocalSpecification(mTaskItems.get(i).getGroupIdUUID()))
-                            .get(0).decreaseCountTasks();
-                    Initializer.getGroupsRepo(mContext)
-                            .query(new GetGroupByIdLocalSpecification(item.getGroupIdUUID()))
-                            .get(0).increaseCountTasks();
-                }
                 mTaskItems.set(i, item);
                 break;
             }
@@ -49,10 +38,7 @@ public class TaskItemLocalRepository implements Repository<TaskItem> {
 
     @Override
     public void remove(TaskItem item) {
-        boolean tmp = mTaskItems.remove(item);
-        Initializer.getGroupsRepo(mContext)
-                .query(new GetGroupByIdLocalSpecification(item.getGroupIdUUID()))
-                .get(0).decreaseCountTasks();
+        mTaskItems.remove(item);
     }
 
 

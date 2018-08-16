@@ -41,8 +41,6 @@ public class TaskItemJsonRepository implements Repository<TaskItem> {
     public void add(TaskItem item) {
         List<TaskItem> itemsList = readItems();
         itemsList.add(item);
-        Initializer.getGroupsRepo(mContext)
-                .query(new IncreaseCountTasksLocalSpecification(item.getGroupIdUUID()));
         writeItems(itemsList);
     }
 
@@ -51,12 +49,6 @@ public class TaskItemJsonRepository implements Repository<TaskItem> {
         List<TaskItem> items = readItems();
         for(int i = 0; i < items.size(); i++){
             if (items.get(i).getIdUUID().equals(item.getIdUUID())){
-                if(!items.get(i).getGroupIdUUID().equals(item.getGroupIdUUID())) {
-                    Initializer.getGroupsRepo(mContext)
-                            .query(new DecreaseCountTasksLocalSpecification(items.get(i).getGroupIdUUID()));
-                    Initializer.getGroupsRepo(mContext)
-                            .query(new IncreaseCountTasksLocalSpecification(item.getGroupIdUUID()));
-                }
                 items.set(i, item);
                 break;
             }
@@ -68,8 +60,6 @@ public class TaskItemJsonRepository implements Repository<TaskItem> {
     public void remove(TaskItem item) {
         List<TaskItem> items = readItems();
         items.remove(item);
-        Initializer.getGroupsRepo(mContext)
-                .query(new DecreaseCountTasksLocalSpecification(item.getGroupIdUUID()));
         writeItems(items);
     }
 
