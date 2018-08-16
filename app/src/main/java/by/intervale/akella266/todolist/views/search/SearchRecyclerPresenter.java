@@ -8,6 +8,7 @@ import java.util.List;
 import by.intervale.akella266.todolist.data.interfaces.Repository;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 import by.intervale.akella266.todolist.data.Initializer;
+import by.intervale.akella266.todolist.data.specifications.db.group.DecreaseCountTasksDbSpecification;
 import by.intervale.akella266.todolist.views.TypeData;
 import by.intervale.akella266.todolist.views.inbox.OnItemChangedListener;
 
@@ -53,7 +54,7 @@ public class SearchRecyclerPresenter implements SearchRecyclerContract.Presenter
 
     @Override
     public void openTaskDetails(TaskItem item) {
-        mRecyclerView.showTaskDetails(item.getId());
+        mRecyclerView.showTaskDetails(item.getIdUUID());
     }
 
     @Override
@@ -66,6 +67,7 @@ public class SearchRecyclerPresenter implements SearchRecyclerContract.Presenter
     @Override
     public void removeTask(TaskItem item) {
         mTasksRepo.remove(item);
+        Initializer.getGroupsRepo(mContext).query(new DecreaseCountTasksDbSpecification(item.getGroupIdUUID()));
         mOnItemChangedListener.onItemChanged();
     }
 }

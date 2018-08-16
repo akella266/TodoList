@@ -5,11 +5,12 @@ import java.util.UUID;
 
 import by.intervale.akella266.todolist.data.interfaces.Specification;
 import by.intervale.akella266.todolist.data.models.TaskItem;
+import by.intervale.akella266.todolist.data.repositories.db.dao.TaskItemDao;
 
-public class RemoveTaskByGroupIdDbSpecification implements Specification<TaskItem, List<TaskItem>> {
+public class RemoveTaskByGroupIdDbSpecification implements Specification<TaskItem, TaskItemDao> {
 
     private UUID mGroupId;
-    private List<TaskItem> mItems;
+    private TaskItemDao mTaskDao;
 
     public RemoveTaskByGroupIdDbSpecification(UUID mGroupId) {
         this.mGroupId = mGroupId;
@@ -17,17 +18,15 @@ public class RemoveTaskByGroupIdDbSpecification implements Specification<TaskIte
 
     @Override
     public List<TaskItem> getData() {
-        for(int i = 0; i < mItems.size(); i++){
-            if (mItems.get(i).getGroupId().equals(mGroupId)){
-                mItems.remove(i);
-                i--;
-            }
+        List<TaskItem> items = mTaskDao.getTasksByGroupId(mGroupId.toString());
+        for(TaskItem item : items){
+            mTaskDao.delete(item);
         }
-        return mItems;
+        return null;
     }
 
     @Override
-    public void setDataSource(List<TaskItem> dataSource) {
-        this.mItems = dataSource;
+    public void setDataSource(TaskItemDao dataSource) {
+        this.mTaskDao = dataSource;
     }
 }

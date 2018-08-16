@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import by.intervale.akella266.todolist.R;
 import by.intervale.akella266.todolist.data.interfaces.Repository;
+import by.intervale.akella266.todolist.data.specifications.db.group.GetGroupByIdDbSpecification;
+import by.intervale.akella266.todolist.data.specifications.db.task.RemoveTaskByGroupIdDbSpecification;
 import by.intervale.akella266.todolist.data.specifications.localJson.group.GetGroupByIdLocalSpecification;
 import by.intervale.akella266.todolist.data.models.Group;
 import by.intervale.akella266.todolist.data.Initializer;
@@ -30,7 +32,7 @@ public class GroupDetailsPresenter implements GroupDetailsContract.Presenter{
         }
         else{
             isEdit = true;
-            mGroup = mGroupRepo.query(new GetGroupByIdLocalSpecification(groupId)).get(0);
+            mGroup = mGroupRepo.query(new GetGroupByIdDbSpecification(groupId)).get(0);
         }
     }
 
@@ -56,7 +58,9 @@ public class GroupDetailsPresenter implements GroupDetailsContract.Presenter{
 
     @Override
     public void removeGroup() {
-        if (!isEdit)
+        if (!isEdit) {
+            Initializer.getTasksRepo(mContext).query(new RemoveTaskByGroupIdDbSpecification(mGroup.getIdUUID()));
             mGroupRepo.remove(mGroup);
+        }
     }
 }

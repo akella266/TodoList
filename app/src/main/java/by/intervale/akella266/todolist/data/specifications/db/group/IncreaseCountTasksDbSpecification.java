@@ -5,11 +5,12 @@ import java.util.UUID;
 
 import by.intervale.akella266.todolist.data.interfaces.Specification;
 import by.intervale.akella266.todolist.data.models.Group;
+import by.intervale.akella266.todolist.data.repositories.db.dao.GroupDao;
 
-public class IncreaseCountTasksDbSpecification implements Specification<Group, List<Group>> {
+public class IncreaseCountTasksDbSpecification implements Specification<Group, GroupDao> {
 
     private UUID id;
-    private List<Group> mItems;
+    private GroupDao mGroupDao;
 
     public IncreaseCountTasksDbSpecification(UUID id) {
         this.id = id;
@@ -17,15 +18,16 @@ public class IncreaseCountTasksDbSpecification implements Specification<Group, L
 
     @Override
     public List<Group> getData() {
-        Group resultGroup = new Group();
-        for(Group group : mItems)
-            if (group.getId().equals(id)) resultGroup = group;
-        resultGroup.increaseCountTasks();
-        return mItems;
+        Group item = null;
+        if ((item = mGroupDao.getGroupById(id.toString())) != null){
+            item.increaseCountTasks();
+            mGroupDao.update(item);
+        }
+        return null;
     }
 
     @Override
-    public void setDataSource(List<Group> dataSource) {
-        this.mItems = dataSource;
+    public void setDataSource(GroupDao dataSource) {
+        this.mGroupDao = dataSource;
     }
 }

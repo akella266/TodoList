@@ -1,7 +1,8 @@
 package by.intervale.akella266.todolist.data.models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 
 import java.io.Serializable;
@@ -10,26 +11,34 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
+import by.intervale.akella266.todolist.data.repositories.db.converters.DateConverter;
+import by.intervale.akella266.todolist.data.repositories.db.converters.PriorityConverter;
 import by.intervale.akella266.todolist.utils.Priority;
 
-public class TaskItem implements Comparable<TaskItem>, Serializable {
 
-    private UUID id;
+@Entity(tableName = "tasks")
+public class TaskItem  implements Comparable<TaskItem>, Serializable {
+
+    @PrimaryKey
+    @NonNull
+    private String id;
     private String title;
+    @TypeConverters(DateConverter.class)
     private Date date;
     private String notes;
+    @TypeConverters(PriorityConverter.class)
     private Priority priority;
     private boolean isComplete;
     private boolean isRemind;
-    private UUID groupId;
+    private String groupId;
 
     public TaskItem(UUID id, String title, Date date, String notes, Priority priority, UUID groupId, boolean isRemind, boolean isComplete) {
-        this.id = id;
+        this.id = id.toString();
         this.title = title;
         this.date = date;
         this.notes = notes;
         this.priority = priority;
-        this.groupId = groupId;
+        this.groupId = groupId == null ? null : groupId.toString();
         this.isRemind = isRemind;
         this.isComplete = isComplete;
     }
@@ -49,8 +58,8 @@ public class TaskItem implements Comparable<TaskItem>, Serializable {
     }
 
     public TaskItem(TaskItem another){
-        this(another.getId(), another.getTitle(),another.getDate(), another.getNotes(), another.getPriority(),
-                another.getGroupId(), another.isRemind(), another.isComplete());
+        this(another.getIdUUID(), another.getTitle(),another.getDate(), another.getNotes(), another.getPriority(),
+                another.getGroupIdUUID(), another.isRemind(), another.isComplete());
     }
 
     public String getTitle() {
@@ -77,12 +86,14 @@ public class TaskItem implements Comparable<TaskItem>, Serializable {
         this.notes = mNotes;
     }
 
-    public UUID getId() {
-        return id;
+    public UUID getIdUUID() {
+        return UUID.fromString(id);
     }
 
+    public String getId() {return id;}
+
     public void setId(UUID id) {
-        this.id = id;
+        this.id = id.toString();
     }
 
     public Priority getPriority() {
@@ -101,12 +112,16 @@ public class TaskItem implements Comparable<TaskItem>, Serializable {
         isComplete = complete;
     }
 
-    public UUID getGroupId() {
+    public UUID getGroupIdUUID() {
+        return UUID.fromString(groupId);
+    }
+
+    public String getGroupId() {
         return groupId;
     }
 
     public void setGroupId(UUID groupId) {
-        this.groupId = groupId;
+        this.groupId = groupId.toString();
     }
 
     public boolean isRemind() {
@@ -117,15 +132,23 @@ public class TaskItem implements Comparable<TaskItem>, Serializable {
         isRemind = remind;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) return false;
         else if(!(obj instanceof TaskItem)) return false;
-        else return id.compareTo(((TaskItem) obj).getId()) == 0;
+        else return UUID.fromString(id).compareTo(((TaskItem) obj).getIdUUID()) == 0;
     }
 
     @Override
     public int compareTo(@NonNull TaskItem taskItem) {
-        return id.compareTo(taskItem.getId());
+        return UUID.fromString(id).compareTo(taskItem.getIdUUID());
     }
 }

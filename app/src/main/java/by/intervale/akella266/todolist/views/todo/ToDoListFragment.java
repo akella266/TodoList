@@ -99,7 +99,7 @@ public class ToDoListFragment extends Fragment implements TodoListContract.View 
 
     @Override
     public void showGroupDetails(Group group) {
-        Intent intent = GroupDetailsActivity.getStartIntent(getContext(), group.getId());
+        Intent intent = GroupDetailsActivity.getStartIntent(getContext(), group.getIdUUID());
         startActivity(intent);
     }
 

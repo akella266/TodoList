@@ -6,11 +6,12 @@ import java.util.UUID;
 
 import by.intervale.akella266.todolist.data.interfaces.Specification;
 import by.intervale.akella266.todolist.data.models.Group;
+import by.intervale.akella266.todolist.data.repositories.db.dao.GroupDao;
 
-public class GetGroupByIdDbSpecification implements Specification<Group, List<Group>> {
+public class GetGroupByIdDbSpecification implements Specification<Group, GroupDao> {
 
     private UUID id;
-    private List<Group> mItems;
+    private GroupDao mGroupDao;
 
     public GetGroupByIdDbSpecification(UUID id) {
         this.id = id;
@@ -18,16 +19,13 @@ public class GetGroupByIdDbSpecification implements Specification<Group, List<Gr
 
     @Override
     public List<Group> getData() {
-        Group resultGroup = new Group();
-        for(Group group : mItems)
-            if (group.getId().equals(id)) resultGroup = group;
         List<Group> resultList = new ArrayList<>();
-        resultList.add(resultGroup);
+        resultList.add(mGroupDao.getGroupById(id.toString()));
         return resultList;
     }
 
     @Override
-    public void setDataSource(List<Group> dataSource) {
-        this.mItems = dataSource;
+    public void setDataSource(GroupDao dataSource) {
+        this.mGroupDao = dataSource;
     }
 }

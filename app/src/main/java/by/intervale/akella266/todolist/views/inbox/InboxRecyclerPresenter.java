@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Locale;
 
 import by.intervale.akella266.todolist.data.interfaces.Repository;
+import by.intervale.akella266.todolist.data.specifications.db.group.DecreaseCountTasksDbSpecification;
+import by.intervale.akella266.todolist.data.specifications.db.group.GetGroupByIdDbSpecification;
+import by.intervale.akella266.todolist.data.specifications.db.task.GetCurrentTasksDbSpecification;
 import by.intervale.akella266.todolist.data.specifications.localJson.task.GetCurrentTasksLocalSpecification;
 import by.intervale.akella266.todolist.data.specifications.localJson.group.GetGroupByIdLocalSpecification;
 import by.intervale.akella266.todolist.data.models.Group;
@@ -43,7 +46,7 @@ public class InboxRecyclerPresenter implements InboxRecyclerContract.Presenter {
 
     @Override
     public void openTaskDetails(TaskItem item) {
-        mRecyclerView.showTaskDetails(item.getId());
+        mRecyclerView.showTaskDetails(item.getIdUUID());
     }
 
     @Override
@@ -62,6 +65,7 @@ public class InboxRecyclerPresenter implements InboxRecyclerContract.Presenter {
     @Override
     public void removeTask(TaskItem item) {
         mTasksRepo.remove(item);
+        mGroupRepo.query(new DecreaseCountTasksDbSpecification(item.getGroupIdUUID()));
         mOnItemChangedListener.onItemChanged();
     }
 
@@ -73,17 +77,16 @@ public class InboxRecyclerPresenter implements InboxRecyclerContract.Presenter {
             }
             case GROUP:{
                 return mGroupRepo.query(
-                        new GetGroupByIdLocalSpecification(taskItem.getGroupId())).get(0).getName();
+                        new GetGroupByIdDbSpecification(taskItem.getGroupIdUUID())).get(0).getName();
             }
             default:
                 return "";
         }
     }
 
-
     @Override
     public List<TaskItem> getTasks() {
-        return mTasksRepo.query(new GetCurrentTasksLocalSpecification());
+        return mTasksRepo.query(new GetCurrentTasksDbSpecification());
     }
 
     public String dateToString(Date date){

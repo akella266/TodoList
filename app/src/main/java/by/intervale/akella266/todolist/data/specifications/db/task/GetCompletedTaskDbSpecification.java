@@ -1,25 +1,22 @@
 package by.intervale.akella266.todolist.data.specifications.db.task;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import by.intervale.akella266.todolist.data.interfaces.Specification;
 import by.intervale.akella266.todolist.data.models.TaskItem;
+import by.intervale.akella266.todolist.data.repositories.db.dao.TaskItemDao;
 
-public class GetCompletedTaskDbSpecification implements Specification<TaskItem, List<TaskItem>> {
+public class GetCompletedTaskDbSpecification implements Specification<TaskItem, TaskItemDao> {
 
-    private List<TaskItem> mItems;
+    private TaskItemDao mTaskDao;
 
     @Override
     public List<TaskItem> getData() {
-        List<TaskItem> completeTasks = new ArrayList<>();
-        for (TaskItem item : mItems)
-            if (item.isComplete()) completeTasks.add(item);
-        return completeTasks;
+        return mTaskDao.getTasksItems(true);
     }
 
     @Override
-    public void setDataSource(List<TaskItem> dataSource) {
-        this.mItems = dataSource;
+    public void setDataSource(TaskItemDao dataSource) {
+        this.mTaskDao = dataSource;
     }
 }

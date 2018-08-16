@@ -19,7 +19,7 @@ public class IncreaseCountTasksLocalSpecification implements Specification<Group
     public List<Group> getData() {
         Group resultGroup = new Group();
         for(Group group : mItems)
-            if (group.getId().equals(id)) resultGroup = group;
+            if (group.getIdUUID().equals(id)) resultGroup = group;
         resultGroup.increaseCountTasks();
         return mItems;
     }

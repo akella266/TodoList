@@ -6,7 +6,9 @@ import java.util.Date;
 import java.util.UUID;
 
 import by.intervale.akella266.todolist.data.interfaces.Repository;
-import by.intervale.akella266.todolist.data.specifications.localJson.task.GetTaskByIdLocalSpecification;
+import by.intervale.akella266.todolist.data.specifications.db.group.DecreaseCountTasksDbSpecification;
+import by.intervale.akella266.todolist.data.specifications.db.group.IncreaseCountTasksDbSpecification;
+import by.intervale.akella266.todolist.data.specifications.db.task.GetTaskByIdDbSpecification;
 import by.intervale.akella266.todolist.data.models.Group;
 import by.intervale.akella266.todolist.data.models.TaskItem;
 import by.intervale.akella266.todolist.data.Initializer;
@@ -17,6 +19,7 @@ public class TaskDetailsPresenter implements TaskDetailsContract.Presenter {
 
     private Context mContext;
     private Repository<TaskItem> mTaskRepo;
+    private Repository<Group> mGroupRepo;
     private TaskDetailsContract.View mDetailsView;
     private TaskItem mTask;
     private boolean isEdit;
@@ -26,6 +29,7 @@ public class TaskDetailsPresenter implements TaskDetailsContract.Presenter {
         this.mContext = context;
         this.mDetailsView = mDetailsView;
         mTaskRepo = Initializer.getTasksRepo(mContext);
+        mGroupRepo = Initializer.getGroupsRepo(mContext);
 
         if (itemId == null){
             isEdit = false;
@@ -34,7 +38,7 @@ public class TaskDetailsPresenter implements TaskDetailsContract.Presenter {
         }
         else {
             isEdit = true;
-            mTask = new TaskItem(mTaskRepo.query(new GetTaskByIdLocalSpecification(itemId)).get(0));
+            mTask = new TaskItem(mTaskRepo.query(new GetTaskByIdDbSpecification(itemId)).get(0));
         }
     }
 
@@ -74,6 +78,7 @@ public class TaskDetailsPresenter implements TaskDetailsContract.Presenter {
     @Override
     public void removeTask() {
         mTaskRepo.remove(mTask);
+        mGroupRepo.query(new DecreaseCountTasksDbSpecification(mTask.getGroupIdUUID()));
     }
 
     @Override
@@ -90,8 +95,16 @@ public class TaskDetailsPresenter implements TaskDetailsContract.Presenter {
 
     @Override
     public void setGroup(Group group) {
-        mTask.setGroupId(group.getId());
+        updateGroups(group);
+        mTask.setGroupId(group.getIdUUID());
         mDetailsView.showGroup(group.getName());
+    }
+
+    private void updateGroups(Group group){
+        if(!mTask.getIdUUID().equals(group.getIdUUID())) {
+            mGroupRepo.query(new DecreaseCountTasksDbSpecification(mTask.getGroupIdUUID()));
+            mGroupRepo.query(new IncreaseCountTasksDbSpecification(group.getIdUUID()));
+        }
     }
 
     @Override

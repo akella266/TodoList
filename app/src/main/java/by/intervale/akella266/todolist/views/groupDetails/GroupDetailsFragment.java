@@ -69,10 +69,12 @@ public class GroupDetailsFragment extends Fragment
             case R.id.menu_fragment_details_done:{
                 mPresenter.saveGroup(mName.getText().toString());
                 getActivity().finish();
+                return true;
             }
             case R.id.menu_fragment_details_remove:{
                 mPresenter.removeGroup();
                 getActivity().finish();
+                return true;
             }
         }
         return super.onOptionsItemSelected(item);

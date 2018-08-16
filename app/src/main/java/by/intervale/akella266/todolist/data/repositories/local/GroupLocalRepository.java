@@ -29,7 +29,7 @@ public class GroupLocalRepository implements Repository<Group> {
     @Override
     public void update(Group item) {
         for(int i = 0; i < mGroups.size(); i++){
-            if (mGroups.get(i).getId().equals(item.getId())){
+            if (mGroups.get(i).getIdUUID().equals(item.getIdUUID())){
                 mGroups.set(i, item);
                 break;
             }
@@ -39,7 +39,7 @@ public class GroupLocalRepository implements Repository<Group> {
     @Override
     public void remove(Group item) {
         mGroups.remove(item);
-        Initializer.getTasksRepo(mContext).query(new RemoveTaskByGroupIdLocalSpecification(item.getId()));
+        Initializer.getTasksRepo(mContext).query(new RemoveTaskByGroupIdLocalSpecification(item.getIdUUID()));
     }
 
     @Override

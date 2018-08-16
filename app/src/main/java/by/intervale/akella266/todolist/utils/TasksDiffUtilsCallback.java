@@ -29,7 +29,7 @@ public class TasksDiffUtilsCallback extends DiffUtil.Callback {
 
     @Override
     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-        return mOldList.get(oldItemPosition).getId().equals(mNewList.get(newItemPosition).getId());
+        return mOldList.get(oldItemPosition).getIdUUID().equals(mNewList.get(newItemPosition).getIdUUID());
     }
 
     @Override

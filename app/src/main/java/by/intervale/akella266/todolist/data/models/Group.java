@@ -1,13 +1,18 @@
 package by.intervale.akella266.todolist.data.models;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 import java.io.Serializable;
 import java.util.UUID;
 
+@Entity(tableName = "groups")
 public class Group implements Comparable<Group>, Serializable {
 
-    private UUID id;
+    @PrimaryKey
+    @NonNull
+    private String id;
     private String name;
     private int countTasks;
 
@@ -16,14 +21,16 @@ public class Group implements Comparable<Group>, Serializable {
     }
 
     public Group(String name) {
-        this.id = UUID.randomUUID();
+        this.id = UUID.randomUUID().toString();
         this.name = name;
         this.countTasks = 0;
     }
 
-    public UUID getId() {
-        return id;
+    public UUID getIdUUID() {
+        return UUID.fromString(id);
     }
+
+    public String getId() {return id;}
 
     public String getName() {
         return name;
@@ -38,7 +45,15 @@ public class Group implements Comparable<Group>, Serializable {
     }
 
     public void setId(UUID id) {
+        this.id = id.toString();
+    }
+
+    public void setId(String id) {
         this.id = id;
+    }
+
+    public void setCountTasks(int countTasks) {
+        this.countTasks = countTasks;
     }
 
     public void increaseCountTasks() {
@@ -49,6 +64,6 @@ public class Group implements Comparable<Group>, Serializable {
 
     @Override
     public int compareTo(@NonNull Group group) {
-        return id == group.getId() ? 0 : 1;
+        return UUID.fromString(id) == group.getIdUUID() ? 0 : 1;
     }
 }

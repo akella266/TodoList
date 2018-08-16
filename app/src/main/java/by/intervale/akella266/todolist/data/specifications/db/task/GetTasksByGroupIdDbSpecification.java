@@ -1,16 +1,16 @@
 package by.intervale.akella266.todolist.data.specifications.db.task;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import by.intervale.akella266.todolist.data.interfaces.Specification;
 import by.intervale.akella266.todolist.data.models.TaskItem;
+import by.intervale.akella266.todolist.data.repositories.db.dao.TaskItemDao;
 
-public class GetTasksByGroupIdDbSpecification implements Specification<TaskItem, List<TaskItem>> {
+public class GetTasksByGroupIdDbSpecification implements Specification<TaskItem, TaskItemDao> {
 
     private UUID groupId;
-    private List<TaskItem> mItems;
+    private TaskItemDao mTaskDao;
 
     public GetTasksByGroupIdDbSpecification(UUID groupId) {
         this.groupId = groupId;
@@ -18,17 +18,11 @@ public class GetTasksByGroupIdDbSpecification implements Specification<TaskItem,
 
     @Override
     public List<TaskItem> getData() {
-        List<TaskItem> tasks = new ArrayList<>();
-        for(TaskItem item : mItems){
-            if(item.getGroupId().equals(groupId)){
-                tasks.add(item);
-            }
-        }
-        return tasks;
+        return mTaskDao.getTasksByGroupId(groupId.toString());
     }
 
     @Override
-    public void setDataSource(List<TaskItem> dataSource) {
-        this.mItems = dataSource;
+    public void setDataSource(TaskItemDao dataSource) {
+        this.mTaskDao = dataSource;
     }
 }

@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import java.util.List;
 
 import by.intervale.akella266.todolist.R;
+import by.intervale.akella266.todolist.data.specifications.db.group.GetGroupsDbSpecification;
 import by.intervale.akella266.todolist.data.specifications.localJson.group.GetGroupsLocalSpecification;
 import by.intervale.akella266.todolist.data.models.Group;
 import by.intervale.akella266.todolist.data.Initializer;
@@ -22,7 +23,7 @@ public class GroupDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builderPriority = new AlertDialog.Builder(getContext());
-        final List<Group> groups = Initializer.getGroupsRepo(getContext()).query(new GetGroupsLocalSpecification());
+        final List<Group> groups = Initializer.getGroupsRepo(getContext()).query(new GetGroupsDbSpecification());
         String[] namesGroup = new String[groups.size()];
         for(int i = 0 ; i < groups.size(); i++)
             namesGroup[i] = groups.get(i).getName();

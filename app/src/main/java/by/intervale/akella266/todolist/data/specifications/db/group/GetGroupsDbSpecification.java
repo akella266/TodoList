@@ -4,18 +4,20 @@ import java.util.List;
 
 import by.intervale.akella266.todolist.data.interfaces.Specification;
 import by.intervale.akella266.todolist.data.models.Group;
+import by.intervale.akella266.todolist.data.repositories.db.dao.GroupDao;
 
-public class GetGroupsDbSpecification implements Specification<Group, List<Group>> {
+public class GetGroupsDbSpecification implements Specification<Group, GroupDao> {
 
-    private List<Group> mItems;
+    private GroupDao mGroupDao;
 
     @Override
     public List<Group> getData() {
-        return mItems;
+        return mGroupDao.getGroups();
     }
 
     @Override
-    public void setDataSource(List<Group> dataSource) {
-        this.mItems = dataSource;
+    public void setDataSource(GroupDao dataSource) {
+        this.mGroupDao = dataSource;
     }
+
 }

@@ -45,7 +45,7 @@ public class GroupJsonRepository implements Repository<Group> {
     public void update(Group item) {
         List<Group> mGroups = readItems();
         for(int i = 0; i < mGroups.size(); i++){
-            if (mGroups.get(i).getId().equals(item.getId())){
+            if (mGroups.get(i).getIdUUID().equals(item.getIdUUID())){
                 mGroups.set(i, item);
                 break;
             }

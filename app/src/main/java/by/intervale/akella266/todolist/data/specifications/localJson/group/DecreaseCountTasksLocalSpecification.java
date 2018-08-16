@@ -4,11 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import by.intervale.akella266.todolist.data.ResponseSpecification;
-import by.intervale.akella266.todolist.data.TypeOperation;
 import by.intervale.akella266.todolist.data.interfaces.Specification;
 import by.intervale.akella266.todolist.data.models.Group;
-import by.intervale.akella266.todolist.data.models.TaskItem;
 
 public class DecreaseCountTasksLocalSpecification implements Specification<Group, List<Group>> {
 
@@ -24,7 +21,7 @@ public class DecreaseCountTasksLocalSpecification implements Specification<Group
     public List<Group> getData() {
         Group resultGroup = new Group();
         for(Group group : mItems)
-            if (group.getId().equals(id)) resultGroup = group;
+            if (group.getIdUUID().equals(id)) resultGroup = group;
         resultGroup.decreaseCountTasks();
         return mItems;
     }
